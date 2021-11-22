@@ -117,6 +117,12 @@ git-tree-sha1 = "7b8f09d58294dc8aa13d91a8544b37c8a1dcbc06"
 uuid = "fb6a15b2-703c-40df-9091-08a04967cfa9"
 version = "0.1.4"
 
+[[CodeTracking]]
+deps = ["InteractiveUtils", "UUIDs"]
+git-tree-sha1 = "9aa8a5ebb6b5bf469a7e0e2b5202cf6f8c291104"
+uuid = "da1fd8a2-8d9e-5ec2-8556-3022fb5608a2"
+version = "1.0.6"
+
 [[Combinatorics]]
 git-tree-sha1 = "08c8b6831dc00bfea825826be0bc8336fc369860"
 uuid = "861a8166-3701-5b0c-9a16-15d98fcdc6aa"
@@ -343,6 +349,9 @@ git-tree-sha1 = "acebe244d53ee1b461970f8910c235b259e772ef"
 uuid = "9aa1b823-49e4-5ca5-8b0f-3971ec8bab6a"
 version = "0.3.2"
 
+[[FileWatching]]
+uuid = "7b1f6079-737a-58dc-b8bc-7a2ca5c1b5ee"
+
 [[FillArrays]]
 deps = ["LinearAlgebra", "Random", "SparseArrays", "Statistics"]
 git-tree-sha1 = "8756f9935b7ccc9064c6eef0bff0ad643df733a3"
@@ -465,6 +474,12 @@ git-tree-sha1 = "e45015cdba3dea9ce91a573079a5706e73a5e895"
 uuid = "98e50ef6-434e-11e9-1051-2b60c6c9e899"
 version = "0.19.0"
 
+[[JuliaInterpreter]]
+deps = ["CodeTracking", "InteractiveUtils", "Random", "UUIDs"]
+git-tree-sha1 = "e273807f38074f033d94207a201e6e827d8417db"
+uuid = "aa1ae85d-cabe-5617-a682-6adf51b2e16a"
+version = "0.8.21"
+
 [[LaTeXStrings]]
 git-tree-sha1 = "f2355693d6778a178ade15952b7ac47a4ff97996"
 uuid = "b964fa9f-0449-5b57-a5c2-d3ea65f4040f"
@@ -531,6 +546,12 @@ deps = ["ArrayInterface", "CPUSummary", "CloseOpenIntervals", "DocStringExtensio
 git-tree-sha1 = "9d8ce46c7727debdfd65be244f22257abf7d8739"
 uuid = "bdcacae8-1622-11e9-2a5c-532679323890"
 version = "0.12.98"
+
+[[LoweredCodeUtils]]
+deps = ["JuliaInterpreter"]
+git-tree-sha1 = "491a883c4fef1103077a7f648961adbf9c8dd933"
+uuid = "6f1432cf-f94c-5a45-995e-cdbf5db27b0b"
+version = "2.1.2"
 
 [[MacroTools]]
 deps = ["Markdown", "Random"]
@@ -800,6 +821,12 @@ deps = ["StaticArrays"]
 git-tree-sha1 = "256eeeec186fa7f26f2801732774ccf277f05db9"
 uuid = "ae5879a3-cd67-5da8-be7f-38c6eb64a37b"
 version = "1.1.1"
+
+[[Revise]]
+deps = ["CodeTracking", "Distributed", "FileWatching", "JuliaInterpreter", "LibGit2", "LoweredCodeUtils", "OrderedCollections", "Pkg", "REPL", "Requires", "UUIDs", "Unicode"]
+git-tree-sha1 = "41deb3df28ecf75307b6e492a738821b031f8425"
+uuid = "295af30f-e4ad-537b-8983-00126c2a3abe"
+version = "3.1.20"
 
 [[Rmath]]
 deps = ["Random", "Rmath_jll"]
