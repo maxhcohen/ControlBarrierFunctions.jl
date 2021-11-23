@@ -41,3 +41,27 @@ function simulate(x, u, ts, Σ::ControlSystem)
     sol = DifferentialEquations.solve(ODEProblem(Σ.rhs, x, (ts[1], ts[end]), u), saveat=ts)
     return sol[:,end]
 end
+
+"""
+    run_sim(t0, tf, dt, x, k, Σ)
+
+Simulate system under a nominal feedback control policy k(x)
+"""
+function run_sim(t0, tf, dt, x, k, Σ::ControlAffineSystem)
+    ts = t0:dt:tf
+    T = length(ts)
+    
+    # Allocate data for system trajectorys
+    xs = zeros(Σ.n, T)
+    xs[:,1] = x
+
+    # Run simulation
+    for i in 1:T-1
+        t = ts[i]
+        x = xs[:,i]
+        u = k(x)
+        xs[:,i+1] = simulate(x, u, [t, t + dt], Σ)
+    end
+
+    return ts, xs
+end
