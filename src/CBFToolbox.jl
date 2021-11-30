@@ -7,26 +7,35 @@ using Convex
 using ECOS
 
 # Export types
-export ControlAffineSystem
-export ControlLyapunovFunction
-export ControlBarrierFunction
+export 
+    ControlAffineSystem,
+    ControlLyapunovFunction,
+    ControlBarrierFunction
 
 # Export core functions
-export control
-export run_sim
+export 
+    control,
+    run_sim
 
 # Export various cases of ControlAffineSystem
-export single_integrator
-export adaptive_cruise_control
+export 
+    single_integrator,
+    adaptive_cruise_control
+
+# Export various CBFs
+export
+    cbf_obstacle
 
 # Export utility functions 
-export circle_shape
+export 
+    circle_shape
 
 # Source code
 include("systems.jl")
 include("system_library.jl")
 include("control_lyapunov_functions.jl")
 include("control_barrier_functions.jl")
+include("cbf_library.jl")
 include("utils.jl")
 
 end
