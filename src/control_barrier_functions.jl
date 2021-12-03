@@ -16,9 +16,6 @@ struct ControlBarrierFunction <: BarrierFunction
     α
 end
 
-"Evaluate CBF at state x"
-(cbf::ControlBarrierFunction)(x) = cbf.h(x)
-
 """
     ControlBarrierFunction(h; α)
 
@@ -34,6 +31,7 @@ end
     control(x, Σ::ControlAffineSystem, cbf::ControlBarrierFunction)
 
 Solve standard CBF-QP to get safe control input.
+---------------------------------------
 """
 function control(x, Σ::ControlAffineSystem, cbf::ControlBarrierFunction)
     u = Convex.Variable(Σ.m)
@@ -53,6 +51,7 @@ end
     control(x, kd, Σ::ControlAffineSystem, cbf::ControlBarrierFunction)
 
 Filter nominal policy to get safe input by solving CBF-QP.
+---------------------------------------
 """
 function control(x, kd, Σ::ControlAffineSystem, cbf::ControlBarrierFunction)
     u = Convex.Variable(Σ.m)
@@ -78,6 +77,7 @@ end
     )
 
 Solve standard CBF-CLF-QP to get safe control input, where p is the relaxation penalty.
+---------------------------------------
 """
 function control(
     x, 
@@ -104,7 +104,8 @@ end
 """
     run_sim(t0, tf, dt, x, Σ::ControlAffineSystem, cbf::ControlBarrierFunction)
 
-Simulate an open-loop system under the influence of a CBF-QP based controller
+Simulate an open-loop system under the influence of a CBF-QP based controller.
+---------------------------------------
 """
 function run_sim(t0, tf, dt, x, Σ::ControlAffineSystem, cbf::ControlBarrierFunction)
     ts = t0:dt:tf
@@ -128,7 +129,8 @@ end
 """
     run_sim(t0, tf, dt, x, k, Σ::ControlAffineSystem, cbf::ControlBarrierFunction)
 
-Simulate system with nominal policy k(x) filtered through a CBF-QP
+Simulate system with nominal policy k(x) filtered through a CBF-QP.
+---------------------------------------
 """
 function run_sim(t0, tf, dt, x, k, Σ::ControlAffineSystem, cbf::ControlBarrierFunction)
     ts = t0:dt:tf
@@ -161,7 +163,8 @@ end
         p
     )
 
-Simulate system under the influence of a CBF-CLF-QP based controller
+Simulate system under the influence of a CBF-CLF-QP based controller.
+---------------------------------------
 """
 function run_sim(
     t0, 

@@ -16,9 +16,6 @@ struct ControlLyapunovFunction <: LyapunovFunction
     α
 end
 
-"Evaluate CLF at state x"
-(clf::ControlLyapunovFunction)(x) = clf.V(x)
-
 """
     ControlLyapunovFunction(V; α)
 
@@ -34,6 +31,7 @@ end
     control(x, Σ::ControlAffineSystem, clf::ControlLyapunovFunction)
 
 Solve standard CLF-QP to get stabilizing control input.
+---------------------------------------
 """
 function control(x, Σ::ControlAffineSystem, clf::ControlLyapunovFunction)
     u = Convex.Variable(Σ.m)
@@ -52,7 +50,8 @@ end
 """
     run_sim(t0, tf, dt, x, Σ::ControlAffineSystem, clf::ControlLyapunovFunction)
 
-Simulate an open-loop system under the influence of a CLF-QP based controller
+Simulate an open-loop system under the influence of a CLF-QP based controller.
+---------------------------------------
 """
 function run_sim(t0, tf, dt, x, Σ::ControlAffineSystem, clf::ControlLyapunovFunction)
     ts = t0:dt:tf

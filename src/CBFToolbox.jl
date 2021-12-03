@@ -5,6 +5,7 @@ using DifferentialEquations
 using ForwardDiff
 using Convex
 using ECOS
+using Plots
 
 # Export types
 export 
@@ -26,9 +27,11 @@ export
 export
     cbf_obstacle
 
-# Export utility functions 
+# Export plot utility functions 
 export 
-    circle_shape
+	circle_shape,
+	custom_plots,
+	custom_colors
 
 # Source code
 include("systems.jl")
@@ -36,6 +39,6 @@ include("system_library.jl")
 include("control_lyapunov_functions.jl")
 include("control_barrier_functions.jl")
 include("cbf_library.jl")
-include("utils.jl")
+include("plot_utils.jl")
 
 end

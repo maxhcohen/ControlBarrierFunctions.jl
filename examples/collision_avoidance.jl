@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.17.1
+# v0.17.2
 
 using Markdown
 using InteractiveUtils
@@ -163,25 +163,31 @@ t, x = run_sim(t0, tf, dt, x0, k, Σ, CBF)
 # ╔═╡ 7b9bab0b-c1b5-4ade-bf3a-23959f21846b
 md"### Step 7: Plot the results"
 
+# ╔═╡ 59f39a6c-f83b-4740-b1ce-110c9549cab7
+custom_plots()
+
+# ╔═╡ ea4ce2da-de68-4b5d-9bd5-def3e1ebacc0
+mycolors = custom_colors()
+
 # ╔═╡ aa0d16c8-5ffa-4b2e-9aa3-9ac37a7a0e09
 begin
-	plot(xlabel=L"x_1", ylabel=L"x_2", fontfamily="Computer Modern", grid=false)
-	plot!(x[1,:], x[2,:], lw=3, label=L"x(t)")
-	plot!(circle_shape(y[1], y[2], r), seriestype=[:shape], fillcolor=:red, 
-			fillalpha=0.2, linecolor=:black, lw=3, edgecolor=:black, label="Obstacle")
+	plot(xlabel=L"x_1", ylabel=L"x_2")
+	plot!(x[1,:], x[2,:], label=L"x(t)")
+	plot!(circle_shape(y[1], y[2], r), seriestype=[:shape], fillcolor=mycolors[2], 
+			fillalpha=0.5, linecolor=:black, edgecolor=:black, label="Obstacle")
 end
 
 # ╔═╡ f3366d63-25d9-4c72-a78c-3b49aec5906c
 begin
-	plot(xlabel=L"t", ylabel=L"x(t)", fontfamily="Computer Modern", grid=false)
-	plot!(t, x', lw=3, label=[L"x_1" L"x_2"])
+	plot(xlabel=L"t", ylabel=L"x(t)")
+	plot!(t, x', label=[L"x_1" L"x_2"])
 end
 
 # ╔═╡ 75409a90-ef0d-490b-8faf-89cbf0a88699
 begin
-	plot(xlabel=L"t", ylabel=L"h(x(t))", fontfamily="Computer Modern", grid=false)
-	plot!(t, [h(x[:,i]) for i in 1:length(t)], lw=3, label="")
-	hline!([0.0], lw=3, ls=:dot, c=:black, label=L"h(x)=0")
+	plot(xlabel=L"t", ylabel=L"h(x(t))")
+	plot!(t, [h(x[:,i]) for i in 1:length(t)])
+	hline!([0.0], ls=:dot, c=:black, label=L"h(x)=0")
 end
 
 # ╔═╡ Cell order:
@@ -212,7 +218,9 @@ end
 # ╠═d64fa132-0df2-45bf-beac-ce3c08ff53e6
 # ╠═ee675b63-da4d-4fa6-acc2-49573a8e4b58
 # ╠═6e6d6dee-30bf-4339-b52f-873744359462
-# ╠═7b9bab0b-c1b5-4ade-bf3a-23959f21846b
+# ╟─7b9bab0b-c1b5-4ade-bf3a-23959f21846b
+# ╠═59f39a6c-f83b-4740-b1ce-110c9549cab7
+# ╠═ea4ce2da-de68-4b5d-9bd5-def3e1ebacc0
 # ╠═aa0d16c8-5ffa-4b2e-9aa3-9ac37a7a0e09
 # ╠═f3366d63-25d9-4c72-a78c-3b49aec5906c
 # ╠═75409a90-ef0d-490b-8faf-89cbf0a88699
