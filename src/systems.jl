@@ -11,24 +11,12 @@ Models a nonlinear control affine system of the form
 - `m::Int`: control dimension
 - `f`: function f(x) that models the drift dynamics
 - `g`: function g(x) that models the control directions
-- `rhs`: function rhs(x,u,t) that returns the right hand side f(x) + g(x)u at time t
 """
 struct ControlAffineSystem <: ControlSystem
     n::Int
     m::Int
     f
     g
-    rhs
-end
-
-"""
-    ControlAffineSystem(n::Int, m::Int, f, g)
-
-Construct a ControlAffineSystem given system dimension and dynamics.
-"""
-function ControlAffineSystem(n::Int, m::Int, f, g)
-    rhs(x,u,t) = f(x) + g(x)*u
-    return ControlAffineSystem(n, m, f, g, rhs)
 end
 
 """
@@ -43,24 +31,66 @@ function simulate(x, u, ts, Σ::ControlSystem)
 end
 
 """
+    step(x, u, t0, tf, Σ::ControlAffineSystem)
+    
+Integrate the dynamics of a ControlSystemAffine starting at state x under control u over 
+from t0 to tf.
+"""
+function step(x, u, t0, tf, Σ::ControlAffineSystem)
+	rhs(x, u, t) = Σ.f(x) + Σ.g(x)u
+	sol = DifferentialEquations.solve(ODEProblem(rhs, x, (t0, tf), u))
+	
+	return sol[:,end]
+end
+
+"""
     run_sim(t0, tf, dt, x, k, Σ)
 
 Simulate system under a nominal feedback control policy k(x)
 """
-function run_sim(t0, tf, dt, x, k, Σ::ControlAffineSystem)
-    ts = t0:dt:tf
-    T = length(ts)
-    
-    # Allocate data for system trajectorys
-    xs = zeros(Σ.n, T)
-    xs[:,1] = x
+function run_sim(
+	t0::Float64, 
+	tf::Float64, 
+	dt::Float64, 
+	x0::Vector{Float64}, 
+	k, 
+	Σ::ControlAffineSystem
+)
+    # Allocate data for system trajectories
+	ts = t0:dt:tf
+    xs = zeros(Σ.n, length(ts))
+    xs[:,1] = x0
 
     # Run simulation
-    for i in 1:T-1
+    for i in 1:length(ts)-1
         t = ts[i]
         x = xs[:,i]
         u = k(x)
-        xs[:,i+1] = simulate(x, u, [t, t + dt], Σ)
+		xs[:,i+1] = step(x, u, t, t+dt, Σ)
+    end
+
+    return ts, xs
+end
+
+function run_sim(
+	t0::Float64, 
+	tf::Float64, 
+	dt::Float64, 
+	x0::Float64, 
+	k, 
+	Σ::ControlAffineSystem
+)
+    # Allocate data for system trajectories
+	ts = t0:dt:tf
+    xs = zeros(length(ts))
+    xs[1] = x0
+
+    # Run simulation
+    for i in 1:length(ts)-1
+        t = ts[i]
+        x = xs[i]
+        u = k(x)
+		xs[i+1] = step(x, u, t, t+dt, Σ)
     end
 
     return ts, xs

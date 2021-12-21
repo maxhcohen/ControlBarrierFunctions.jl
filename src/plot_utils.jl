@@ -52,7 +52,8 @@ Set default values for all plot settings. It performs the following actions
 function custom_plots()
 	default(
 	grid = false,
-	linewidth = 2.5,
+	linewidth = 3.0,
+	guidefontsize = 12.0,
 	color_palette = custom_colors(),
 	fontfamily = "Computer Modern",
 	framestyle = :box,
