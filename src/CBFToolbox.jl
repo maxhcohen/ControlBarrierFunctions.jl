@@ -3,6 +3,7 @@ module CBFToolbox
 # Julia packages required for this module
 using DifferentialEquations
 using ForwardDiff
+using LinearAlgebra
 using Convex
 using ECOS
 using Plots
