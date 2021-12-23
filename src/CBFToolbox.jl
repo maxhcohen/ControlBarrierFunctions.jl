@@ -9,16 +9,17 @@ using ECOS
 using Plots
 
 # Export types
-export 
-    ControlAffineSystem,
-    ControlLyapunovFunction,
-    ControlBarrierFunction
+export ControlSystem
+export ControlAffineSystem
+export LyapunovFunction
+export ControlLyapunovFunction
+export BarrierFunction
+export ControlBarrierFunction
 
 # Export core functions
-export 
-    control,
-    run_sim,
-	step
+export control
+export run_sim
+export step
 
 # Export various cases of ControlAffineSystem
 export 
