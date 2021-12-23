@@ -23,7 +23,7 @@ Construct a CLF given V(x) and class K function α(V(x)).
 Extended classK function α() defaults to the identity i.e., α(V)=V.
 """
 function ControlLyapunovFunction(V; α=r->r)
-    ∇V(x) = ForwardDiff.gradient(V,x)'
+    ∇V(x) = gradient(V, x)[1]'
     return ControlLyapunovFunction(V, ∇V, α)
 end
 

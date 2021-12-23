@@ -23,7 +23,7 @@ Construct a CBF given h(x) and extended class K function α(h(x)).
 Extended classK function α() defaults to the identity i.e., α(h)=h.
 """
 function ControlBarrierFunction(h; α=r->r)
-    ∇h(x) = ForwardDiff.gradient(h,x)'
+    ∇h(x) = gradient(h, x)[1]'
 
     return ControlBarrierFunction(h, ∇h, α)
 end
