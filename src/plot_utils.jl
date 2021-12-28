@@ -54,6 +54,7 @@ function custom_plots()
 	grid = false,
 	linewidth = 3.0,
 	guidefontsize = 12.0,
+	legendfontsize = 10.0,
 	color_palette = custom_colors(),
 	fontfamily = "Computer Modern",
 	framestyle = :box,
