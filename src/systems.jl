@@ -20,17 +20,6 @@ struct ControlAffineSystem <: ControlSystem
 end
 
 """
-    simulate(x, u, ts, Σ::ControlSystem)
-    
-Integrate the dynamics of a ControlSystem starting at state x under control u over ts.
-This will be used to simulate the system forward one time-step within a larger sim.
-"""
-function simulate(x, u, ts, Σ::ControlSystem)
-    sol = DifferentialEquations.solve(ODEProblem(Σ.rhs, x, (ts[1], ts[end]), u), saveat=ts)
-    return sol[:,end]
-end
-
-"""
     step(x, u, t0, tf, Σ::ControlAffineSystem)
     
 Integrate the dynamics of a ControlSystemAffine starting at state x under control u over 
