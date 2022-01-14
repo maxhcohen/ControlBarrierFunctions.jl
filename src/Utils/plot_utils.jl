@@ -49,7 +49,7 @@ Set default values for all plot settings. It performs the following actions
 	- sets the frame style to :box
 	- makes the default label of any line default to nothing
 """
-function custom_plots()
+function latexify_plots()
 	default(
 	grid = false,
 	linewidth = 3.0,
@@ -68,10 +68,15 @@ end
 Constucts circle object to be used in plots.
 
 Example usage: 
-plot!(circleshape(x, y, r), seriestype=[:shape], fillcolor=:red, fillalpha=0.2, 
+plot!(circle_shape(x, y, r), seriestype=[:shape], fillcolor=:red, fillalpha=0.2, 
         linecolor=:black, lw=3, edgecolor=:black, label="")
 """
 function circle_shape(x, y, r)
     θ = LinRange(0, 2*π, 500)
     x .+ r*cos.(θ), y .+ r*sin.(θ)
+end
+
+function circle_shape(O::CircularObstacle)
+    θ = LinRange(0, 2*π, 500)
+    O.c[1] .+ O.r*cos.(θ), O.c[2] .+ O.r*sin.(θ)
 end

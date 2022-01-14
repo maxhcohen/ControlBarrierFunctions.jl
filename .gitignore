@@ -25,3 +25,5 @@ Manifest.toml
 
 # Notebooks used for testing stuff out
 scratch/
+tests/
+.vscode
