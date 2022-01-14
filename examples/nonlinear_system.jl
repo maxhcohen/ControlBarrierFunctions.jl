@@ -12,19 +12,26 @@ f(x) = [-0.6x[1] - x[2], x[1]^3]
 g(x) = [0.0, x[2]]
 Σ = ControlAffineSystem(n, m, f, g)
 
+## Construct CLF
+V(x) = (1/4)x[1]^4 + (1/2)x[2]^2
+γ(s) = s
+CLF = ControlLyapunovFunction(V, γ)
+
 ## Define safe set and CBF
 h(x) = 1 - x[1] - x[2]^2
-CBF = ControlBarrierFunction(h, α=r->r^3)
+α(s) = s^3
+CBF = ControlBarrierFunction(h, α)
+
+## Construct our control policy
+κ = CBFQP(Σ, CBF, CLF)
 
 ## Run simulation
-t0 = 0.0
-tf = 10.0
-dt = 0.005
 x0 = [-4.0, 1.0]
-t, x = run_sim(t0, tf, dt, x0, Σ, CBF)
+time = (t0 = 0.0, tf = 10.0, dt = 0.005)
+t, x = simulate(Σ, κ, x0, time)
 
 ## Plot results
-custom_plots()
+latexify_plots()
 
 ## States
 fig1 = plot(xlabel=L"t", ylabel=L"x(t)")
