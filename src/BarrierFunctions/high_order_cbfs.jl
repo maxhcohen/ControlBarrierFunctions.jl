@@ -40,6 +40,7 @@ end
 Construct a HOCBF of relative degree 2.
 """
 function second_order_hocbf(CBF::ControlBarrierFunction, Σ::ControlAffineSystem)
+	# Need to do these autodiffs separately for now...maybe we can automate this later.
 	dfdx(x) = jacobian(Σ.f, x)[1]
 	dh2dx2(x) = hessian(CBF.h, x)
 	dα(s) = gradient(CBF.α, s)[1]
