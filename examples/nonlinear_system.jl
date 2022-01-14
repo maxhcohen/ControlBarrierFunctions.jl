@@ -5,7 +5,7 @@ using LinearAlgebra
 using Plots
 using LaTeXStrings
 
-## Define system dynamics - simplified adaptive cruise control
+## Define system dynamics
 n = 2
 m = 1
 f(x) = [-0.6x[1] - x[2], x[1]^3]
