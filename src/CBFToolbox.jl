@@ -1,47 +1,62 @@
 module CBFToolbox
 
 # Julia packages required for this module
-using DifferentialEquations
-using Zygote
 using LinearAlgebra
-using Convex
-using ECOS
+using Zygote
+using JuMP
+using OSQP
 using Plots
+import DifferentialEquations: ODEProblem, solve
 
-# Export types
-export ControlSystem
+# Abstract types
+abstract type System end
+abstract type Policy end
+abstract type CertificateFunction end
+
+# Export systems
+export System
 export ControlAffineSystem
+
+# Export Certificate functions
 export LyapunovFunction
 export ControlLyapunovFunction
 export BarrierFunction
 export ControlBarrierFunction
+export HighOrderCBF
+
+# Export control policies
+export Policy
+export FeedbackPolicy
+export CLFQP
+export CBFQP
 
 # Export core functions
-export control
-export run_sim
-export step
+export simulate
 
-# Export various cases of ControlAffineSystem
-export 
-    single_integrator,
-    adaptive_cruise_control
+# Export utility functions and types
+export CircularObstacle
+export latexify_plots
+export circle_shape
+export vec2mat
 
-# Export various CBFs
-export
-    cbf_obstacle
+# System definitions
+include("Systems/control_affine_system.jl")
+include("Systems/feedback_policy.jl")
+include("Systems/system_library.jl")
 
-# Export plot utility functions 
-export 
-	circle_shape,
-	custom_plots,
-	custom_colors
+# Lyapunov functions
+include("LyapunovFunctions/control_lyapunov_functions.jl")
+include("LyapunovFunctions/clf_quadratic_programs.jl")
 
-# Source code
-include("systems.jl")
-include("system_library.jl")
-include("control_lyapunov_functions.jl")
-include("control_barrier_functions.jl")
-include("cbf_library.jl")
-include("plot_utils.jl")
+# Barrier functions
+include("BarrierFunctions/control_barrier_functions.jl")
+include("BarrierFunctions/cbf_quadratic_programs.jl")
+include("BarrierFunctions/high_order_cbfs.jl")
+include("BarrierFunctions/hocbf_quadratic_programs.jl")
+
+# Utilities
+include("Utils/data_utils.jl")
+include("Utils/cbf_utils.jl")
+include("Utils/plot_utils.jl")
 
 end
