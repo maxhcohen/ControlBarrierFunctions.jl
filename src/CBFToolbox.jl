@@ -25,6 +25,7 @@ export ControlBarrierFunction
 export HighOrderCBF
 
 # Export control policies
+export Policy
 export FeedbackPolicy
 export CLFQP
 export CBFQP
