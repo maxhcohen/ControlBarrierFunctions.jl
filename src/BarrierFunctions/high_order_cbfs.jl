@@ -5,8 +5,7 @@ High Order Control barrier function for a control affine system.
 # Fields
 - `CBF`: CBF used to derive HOCBF
 - `ψ`: highest order derivative of CBF
-- `Lfψ`: Lie derivative of ψ along f
-- `Lgψ`: Lie derivative of ψ along g
+- `∇ψ`: gradient of ψ
 """
 struct HighOrderCBF <: BarrierFunction
     ψ

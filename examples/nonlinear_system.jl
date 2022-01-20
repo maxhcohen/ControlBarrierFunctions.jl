@@ -12,7 +12,7 @@ f(x) = [-0.6x[1] - x[2], x[1]^3]
 g(x) = [0.0, x[2]]
 Σ = ControlAffineSystem(n, m, f, g)
 
-## Construct CLF
+## Define CLF
 V(x) = (1/4)x[1]^4 + (1/2)x[2]^2
 γ(s) = s
 CLF = ControlLyapunovFunction(V, γ)
@@ -22,7 +22,7 @@ h(x) = 1 - x[1] - x[2]^2
 α(s) = s^3
 CBF = ControlBarrierFunction(h, α)
 
-## Construct our control policy
+## Define our control policy
 κ = CBFQP(Σ, CBF, CLF)
 
 ## Run simulation
@@ -44,7 +44,7 @@ plot!(t, [h(x[:,i]) for i in 1:length(t)])
 hline!([0.0], ls=:dot, c=:black, label=L"h(x)=0")
 Plots.display(fig2)
 
-## Phase portrait 
+## Phase portrait
 fig3 = plot(xlabel=L"x_1", ylabel=L"x_2")
 plot!(x[1,:], x[2,:])
 h(x1, x2) = 1 - x1 - x2^2
