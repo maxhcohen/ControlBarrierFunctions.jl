@@ -33,9 +33,6 @@ export FeedbackPolicy
 export CLFQP
 export CBFQP
 
-# Export core functions
-export simulate
-
 # Export utility functions and types
 export CircularObstacle
 export latexify_plots
