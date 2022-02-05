@@ -20,23 +20,22 @@ function (κ::CBFQP)(x)
 end
 
 """
-	simulate(Σ::ControlAffineSystem, κ::CBFQP, x0, time::Tuple)
+    (sim::Simulation)((Σ::ControlAffineSystem, k::CBFQP, x0)
 
-Simulate the closed-loop trajectory of a control affine system under a CBF-based policy 
-from initial condition x0.
+Simulate the closed-loop trajectory of a control affine system under a CBFQP from
+initial condition x0.
 """
-function simulate(Σ::ControlAffineSystem, κ::CBFQP, x0, time::NamedTuple)
-	ts = time.t0:time.dt:time.tf
-	xs = Vector{typeof(x0)}(undef, length(ts))
+function (sim::Simulation)(Σ::ControlAffineSystem, k::CBFQP, x0)
+	xs = Vector{typeof(x0)}(undef, length(sim.ts))
 	xs[1] = x0
-	for i in 1:length(ts)-1
-		t = ts[i]
+	for i in 1:length(sim.ts)-1
+		t = sim.ts[i]
 		x = xs[i]
-		u = κ(x)
-		xs[i+1] = step(Σ, x, u, t, t + time.dt)
+		u = k(x)
+		xs[i+1] = step(Σ, x, u, t, t + sim.dt)
 	end
 
-	return ts, vec2mat(xs)
+	return vec2mat(xs)
 end
 
 """
@@ -71,7 +70,7 @@ function CBFQP(Σ::ControlAffineSystem, CBF::ControlBarrierFunction)
 		@objective(model, Min, (1/2)u'u)
 		@constraint(model, cbf, CBF.∇h(x)*(Σ.f(x) + Σ.g(x)*u) >= -CBF.α(CBF(x)))
 		optimize!(model)
-		
+
 		return Σ.m == 1 ? value(u) : value.(u)
 	end
 
@@ -94,7 +93,7 @@ function CBFQP(Σ::ControlAffineSystem, CBF::ControlBarrierFunction, U)
 			end
 		end
 		optimize!(model)
-		
+
 		return Σ.m == 1 ? value(u) : value.(u)
 	end
 
@@ -109,7 +108,7 @@ function CBFQP(Σ::ControlAffineSystem, CBF::ControlBarrierFunction, H, F)
 		@objective(model, Min, (1/2)u'H(x)*u + F(x)'u)
 		@constraint(model, cbf, CBF.∇h(x)*(Σ.f(x) + Σ.g(x)*u) >= -CBF.α(CBF(x)))
 		optimize!(model)
-		
+
 		return Σ.m == 1 ? value(u) : value.(u)
 	end
 
@@ -132,7 +131,7 @@ function CBFQP(Σ::ControlAffineSystem, CBF::ControlBarrierFunction, H, F, U)
 			end
 		end
 		optimize!(model)
-		
+
 		return Σ.m == 1 ? value(u) : value.(u)
 	end
 
@@ -147,7 +146,7 @@ function CBFQP(Σ::ControlAffineSystem, CBF::ControlBarrierFunction, κ::Feedbac
 		@objective(model, Min, (1/2)u'u - κ(x)'u)
 		@constraint(model, cbf, CBF.∇h(x)*(Σ.f(x) + Σ.g(x)*u) >= -CBF.α(CBF(x)))
 		optimize!(model)
-		
+
 		return Σ.m == 1 ? value(u) : value.(u)
 	end
 
@@ -170,7 +169,7 @@ function CBFQP(Σ::ControlAffineSystem, CBF::ControlBarrierFunction, κ::Feedbac
 			end
 		end
 		optimize!(model)
-		
+
 		return Σ.m == 1 ? value(u) : value.(u)
 	end
 
@@ -187,7 +186,7 @@ function CBFQP(Σ::ControlAffineSystem, CBF::ControlBarrierFunction, CLF::Contro
 		@constraint(model, cbf, CBF.∇h(x)*(Σ.f(x) + Σ.g(x)*u) >= -CBF.α(CBF(x)))
 		@constraint(model, clf, CLF.∇V(x)*(Σ.f(x) + Σ.g(x)*u) <= -CLF.α(CLF(x)) + δ)
 		optimize!(model)
-		
+
 		return Σ.m == 1 ? value(u) : value.(u)
 	end
 
@@ -212,7 +211,7 @@ function CBFQP(Σ::ControlAffineSystem, CBF::ControlBarrierFunction, CLF::Contro
 			end
 		end
 		optimize!(model)
-		
+
 		return Σ.m == 1 ? value(u) : value.(u)
 	end
 
@@ -229,7 +228,7 @@ function CBFQP(Σ::ControlAffineSystem, CBF::ControlBarrierFunction, CLF::Contro
 		@constraint(model, cbf, CBF.∇h(x)*(Σ.f(x) + Σ.g(x)*u) >= -CBF.α(CBF(x)))
 		@constraint(model, clf, CLF.∇V(x)*(Σ.f(x) + Σ.g(x)*u) <= -CLF.α(CLF(x)) + δ)
 		optimize!(model)
-		
+
 		return Σ.m == 1 ? value(u) : value.(u)
 	end
 
@@ -254,7 +253,7 @@ function CBFQP(Σ::ControlAffineSystem, CBF::ControlBarrierFunction, CLF::Contro
 			end
 		end
 		optimize!(model)
-		
+
 		return Σ.m == 1 ? value(u) : value.(u)
 	end
 
@@ -271,7 +270,7 @@ function CBFQP(Σ::ControlAffineSystem, CBFs::Vector{ControlBarrierFunction})
 			@constraint(model, CBF.∇h(x)*(Σ.f(x) + Σ.g(x)*u) >= -CBF.α(CBF(x)))
 		end
 		optimize!(model)
-		
+
 		return Σ.m == 1 ? value(u) : value.(u)
 	end
 
@@ -296,7 +295,7 @@ function CBFQP(Σ::ControlAffineSystem, CBFs::Vector{ControlBarrierFunction}, U)
 			end
 		end
 		optimize!(model)
-		
+
 		return Σ.m == 1 ? value(u) : value.(u)
 	end
 
@@ -313,7 +312,7 @@ function CBFQP(Σ::ControlAffineSystem, CBFs::Vector{ControlBarrierFunction}, H,
 			@constraint(model, CBF.∇h(x)*(Σ.f(x) + Σ.g(x)*u) >= -CBF.α(CBF(x)))
 		end
 		optimize!(model)
-		
+
 		return Σ.m == 1 ? value(u) : value.(u)
 	end
 
@@ -338,7 +337,7 @@ function CBFQP(Σ::ControlAffineSystem, CBFs::Vector{ControlBarrierFunction}, H,
 			end
 		end
 		optimize!(model)
-		
+
 		return Σ.m == 1 ? value(u) : value.(u)
 	end
 
@@ -355,7 +354,7 @@ function CBFQP(Σ::ControlAffineSystem, CBFs::Vector{ControlBarrierFunction}, κ
 			@constraint(model, CBF.∇h(x)*(Σ.f(x) + Σ.g(x)*u) >= -CBF.α(CBF(x)))
 		end
 		optimize!(model)
-		
+
 		return Σ.m == 1 ? value(u) : value.(u)
 	end
 
@@ -380,7 +379,7 @@ function CBFQP(Σ::ControlAffineSystem, CBFs::Vector{ControlBarrierFunction}, κ
 			end
 		end
 		optimize!(model)
-		
+
 		return Σ.m == 1 ? value(u) : value.(u)
 	end
 
@@ -399,7 +398,7 @@ function CBFQP(Σ::ControlAffineSystem, CBFs::Vector{ControlBarrierFunction}, CL
 		end
 		@constraint(model, clf, CLF.∇V(x)*(Σ.f(x) + Σ.g(x)*u) <= -CLF.α(CLF(x)) + δ)
 		optimize!(model)
-		
+
 		return Σ.m == 1 ? value(u) : value.(u)
 	end
 
@@ -426,7 +425,7 @@ function CBFQP(Σ::ControlAffineSystem, CBFs::Vector{ControlBarrierFunction}, CL
 			end
 		end
 		optimize!(model)
-		
+
 		return Σ.m == 1 ? value(u) : value.(u)
 	end
 
@@ -445,7 +444,7 @@ function CBFQP(Σ::ControlAffineSystem, CBFs::Vector{ControlBarrierFunction}, CL
 		end
 		@constraint(model, clf, CLF.∇V(x)*(Σ.f(x) + Σ.g(x)*u) <= -CLF.α(CLF(x)) + δ)
 		optimize!(model)
-		
+
 		return Σ.m == 1 ? value(u) : value.(u)
 	end
 
@@ -472,7 +471,7 @@ function CBFQP(Σ::ControlAffineSystem, CBFs::Vector{ControlBarrierFunction}, CL
 			end
 		end
 		optimize!(model)
-		
+
 		return Σ.m == 1 ? value(u) : value.(u)
 	end
 

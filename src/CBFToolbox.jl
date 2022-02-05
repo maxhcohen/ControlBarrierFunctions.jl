@@ -13,6 +13,9 @@ abstract type System end
 abstract type Policy end
 abstract type CertificateFunction end
 
+# Export Simulation type
+export Simulation
+
 # Export systems
 export System
 export ControlAffineSystem
@@ -38,6 +41,9 @@ export CircularObstacle
 export latexify_plots
 export circle_shape
 export vec2mat
+
+# Base simulation type
+include("Simulations/simulation.jl")
 
 # System definitions
 include("Systems/control_affine_system.jl")
