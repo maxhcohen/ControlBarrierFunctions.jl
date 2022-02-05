@@ -29,10 +29,15 @@ CBF2 = ControlBarrierFunction(O2, α)
 CBFs = [CBF1, CBF2]
 κ = CBFQP(Σ, CBFs, CLF, U)
 
+## Construct simulation object
+t0 = 0.0
+tf = 10.0
+dt = 0.01
+sim = Simulation(t0, tf, dt)
+
 ## Run closed-loop sim
 x0 = [-2.2, 2.0]
-time = (t0 = 0.0, tf = 10.0, dt = 0.01)
-t, x = simulate(Σ, κ, x0, time)
+x = sim(Σ, κ, x0)
 
 ## Plot results
 latexify_plots()

@@ -26,10 +26,15 @@ HOCBF = HighOrderCBF(CBF, Σ, 2)
 ## Construct our control policy
 κ = CBFQP(Σ, HOCBF, CLF)
 
+## Construct simulation object
+t0 = 0.0
+tf = 10.0
+dt = 0.005
+sim = Simulation(t0, tf, dt)
+
 ## Run simulation
 x0 = [-2.2, 2.0, 0.0, 0.0]
-time = (t0 = 0.0, tf = 10.0, dt = 0.005)
-t, x = simulate(Σ, κ, x0, time)
+x = sim(Σ, κ, x0)
 
 ## Plot results
 latexify_plots()

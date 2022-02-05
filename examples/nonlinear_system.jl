@@ -4,6 +4,8 @@ using CBFToolbox
 using LinearAlgebra
 using Plots
 using LaTeXStrings
+using DataFrames
+using CSV
 
 ## Define system dynamics
 n = 2
@@ -25,15 +27,21 @@ CBF = ControlBarrierFunction(h, α)
 ## Define our control policy
 κ = CBFQP(Σ, CBF, CLF)
 
+## Construct simulation object
+t0 = 0.0
+tf = 10.0
+dt = 0.005
+sim = Simulation(t0, tf, dt)
+
 ## Run simulation
 x0 = [-4.0, 1.0]
-time = (t0 = 0.0, tf = 10.0, dt = 0.005)
-t, x = simulate(Σ, κ, x0, time)
+x = sim(Σ, κ, x0)
 
 ## Plot results
 latexify_plots()
 
 ## States
+t = sim.ts
 fig1 = plot(xlabel=L"t", ylabel=L"x(t)")
 plot!(t, x')
 Plots.display(fig1)
@@ -50,3 +58,7 @@ plot!(x[1,:], x[2,:])
 h(x1, x2) = 1 - x1 - x2^2
 contour!(-4.5:0.1:1, -3:0.1:3, h, levels=[0.0], colorbar=false, c=:black)
 Plots.display(fig3)
+
+## Save data to a CSV file if you'd like
+# df = DataFrame(t=t, x1=x[1,:], x2=x[2,:], h=[h(x[:,i]) for i in 1:length(t)])
+# CSV.write("nonlinear.csv", df)

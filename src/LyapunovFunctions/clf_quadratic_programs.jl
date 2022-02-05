@@ -20,23 +20,22 @@ function (κ::CLFQP)(x)
 end
 
 """
-	simulate(Σ::ControlAffineSystem, k::CLFQP, x0, time::Tuple)
+    (sim::Simulation)((Σ::ControlAffineSystem, k::CLFQP, x0)
 
-Simulate the closed-loop trajectory of a control affine system under a CLF-based policy 
-from initial condition x0.
+Simulate the closed-loop trajectory of a control affine system under a CLFQP from
+initial condition x0.
 """
-function simulate(Σ::ControlAffineSystem, κ::CLFQP, x0, time::NamedTuple)
-	ts = time.t0:time.dt:time.tf
-	xs = Vector{typeof(x0)}(undef, length(ts))
+function (sim::Simulation)(Σ::ControlAffineSystem, k::CLFQP, x0)
+	xs = Vector{typeof(x0)}(undef, length(sim.ts))
 	xs[1] = x0
-	for i in 1:length(ts)-1
-		t = ts[i]
+	for i in 1:length(sim.ts)-1
+		t = sim.ts[i]
 		x = xs[i]
-		u = κ(x)
-		xs[i+1] = step(Σ, x, u, t, t + time.dt)
+		u = k(x)
+		xs[i+1] = step(Σ, x, u, t, t + sim.dt)
 	end
 
-	return ts, vec2mat(xs)
+	return vec2mat(xs)
 end
 
 """
@@ -52,7 +51,7 @@ function CLFQP(Σ::ControlAffineSystem, CLF::ControlLyapunovFunction)
 		@objective(model, Min, (1/2)u'u)
 		@constraint(model, clf, CLF.∇V(x)*(Σ.f(x) + Σ.g(x)*u) <= -CLF.α(CLF(x)))
 		optimize!(model)
-		
+
 		return Σ.m == 1 ? value(u) : value.(u)
 	end
 
@@ -81,7 +80,7 @@ function CLFQP(Σ::ControlAffineSystem, CLF::ControlLyapunovFunction, U)
 			end
 		end
 		optimize!(model)
-		
+
 		return Σ.m == 1 ? value(u) : value.(u)
 	end
 
