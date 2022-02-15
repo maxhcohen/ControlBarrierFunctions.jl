@@ -22,7 +22,7 @@ function CBFQP(Σ::ControlAffineSystem, HOCBF::HighOrderCBF)
 		@objective(model, Min, (1/2)u'u)
 		@constraint(model, cbf, HOCBF.∇ψ(x)*(Σ.f(x) + Σ.g(x)*u) >= -HOCBF.α(HOCBF(x)))
 		optimize!(model)
-		
+
 		return Σ.m == 1 ? value(u) : value.(u)
 	end
 
@@ -33,7 +33,7 @@ function CBFQP(Σ::ControlAffineSystem, HOCBF::HighOrderCBF, U)
 	function control(x)
 		model = Model(OSQP.Optimizer)
     	set_silent(model)
-    	Σ.m == 1 ? @variable(model, u) : @variable(model, u[1:Σ.ms])
+    	Σ.m == 1 ? @variable(model, u) : @variable(model, u[1:Σ.m])
 		@objective(model, Min, (1/2)u'u)
 		@constraint(model, cbf, HOCBF.∇ψ(x)*(Σ.f(x) + Σ.g(x)*u) >= -HOCBF.α(HOCBF(x)))
 		if Σ.m == 1
@@ -45,7 +45,7 @@ function CBFQP(Σ::ControlAffineSystem, HOCBF::HighOrderCBF, U)
 			end
 		end
 		optimize!(model)
-		
+
 		return Σ.m == 1 ? value(u) : value.(u)
 	end
 
@@ -60,7 +60,7 @@ function CBFQP(Σ::ControlAffineSystem, HOCBF::HighOrderCBF, κ::FeedbackPolicy)
 		@objective(model, Min, (1/2)u'u - κ(x)'u)
 		@constraint(model, cbf, HOCBF.∇ψ(x)*(Σ.f(x) + Σ.g(x)*u) >= -HOCBF.α(HOCBF(x)))
 		optimize!(model)
-		
+
 		return Σ.m == 1 ? value(u) : value.(u)
 	end
 
@@ -83,12 +83,51 @@ function CBFQP(Σ::ControlAffineSystem, HOCBF::HighOrderCBF, κ::FeedbackPolicy,
 			end
 		end
 		optimize!(model)
-		
+
 		return Σ.m == 1 ? value(u) : value.(u)
 	end
 
 	return CBFQP(control)
 end
+
+function CBFQP(Σ::ControlAffineSystem, HOCBF::HighOrderCBF, κ::CLFQP)
+	function control(x)
+		model = Model(OSQP.Optimizer)
+    	set_silent(model)
+    	Σ.m == 1 ? @variable(model, u) : @variable(model, u[1:Σ.m])
+		@objective(model, Min, (1/2)u'u - κ(x)'u)
+		@constraint(model, cbf, HOCBF.∇ψ(x)*(Σ.f(x) + Σ.g(x)*u) >= -HOCBF.α(HOCBF(x)))
+		optimize!(model)
+
+		return Σ.m == 1 ? value(u) : value.(u)
+	end
+
+	return CBFQP(control)
+end
+
+function CBFQP(Σ::ControlAffineSystem, HOCBF::HighOrderCBF, κ::CLFQP, U)
+	function control(x)
+		model = Model(OSQP.Optimizer)
+    	set_silent(model)
+    	Σ.m == 1 ? @variable(model, u) : @variable(model, u[1:Σ.m])
+		@objective(model, Min, (1/2)u'u - κ(x)'u)
+		@constraint(model, cbf, HOCBF.∇ψ(x)*(Σ.f(x) + Σ.g(x)*u) >= -HOCBF.α(HOCBF(x)))
+		if Σ.m == 1
+			@constraint(model, U[1] <= u <= U[2])
+		else
+			for i in 1:Σ.m
+				bound = U[i]
+				@constraint(model, bound[1] <= u[i] <= bound[2])
+			end
+		end
+		optimize!(model)
+
+		return Σ.m == 1 ? value(u) : value.(u)
+	end
+
+	return CBFQP(control)
+end
+
 
 function CBFQP(Σ::ControlAffineSystem, HOCBF::HighOrderCBF, CLF::ControlLyapunovFunction, p::Float64=10e2)
 	function control(x)
@@ -100,7 +139,7 @@ function CBFQP(Σ::ControlAffineSystem, HOCBF::HighOrderCBF, CLF::ControlLyapuno
 		@constraint(model, cbf, HOCBF.∇ψ(x)*(Σ.f(x) + Σ.g(x)*u) >= -HOCBF.α(HOCBF(x)))
 		@constraint(model, clf, CLF.∇V(x)*(Σ.f(x) + Σ.g(x)*u) <= -CLF.α(CLF(x)) + δ)
 		optimize!(model)
-		
+
 		return Σ.m == 1 ? value(u) : value.(u)
 	end
 
@@ -125,7 +164,7 @@ function CBFQP(Σ::ControlAffineSystem, HOCBF::HighOrderCBF, CLF::ControlLyapuno
 			end
 		end
 		optimize!(model)
-		
+
 		return Σ.m == 1 ? value(u) : value.(u)
 	end
 
@@ -142,7 +181,7 @@ function CBFQP(Σ::ControlAffineSystem, HOCBFs::Vector{HighOrderCBF})
 			@constraint(model, HOCBF.∇ψ(x)*(Σ.f(x) + Σ.g(x)*u) >= -HOCBF.α(HOCBF(x)))
 		end
 		optimize!(model)
-		
+
 		return Σ.m == 1 ? value(u) : value.(u)
 	end
 
@@ -167,7 +206,7 @@ function CBFQP(Σ::ControlAffineSystem, HOCBFs::Vector{HighOrderCBF}, U)
 			end
 		end
 		optimize!(model)
-		
+
 		return Σ.m == 1 ? value(u) : value.(u)
 	end
 
@@ -184,7 +223,7 @@ function CBFQP(Σ::ControlAffineSystem, HOCBFs::Vector{HighOrderCBF}, κ::Feedba
 			@constraint(model, HOCBF.∇ψ(x)*(Σ.f(x) + Σ.g(x)*u) >= -HOCBF.α(HOCBF(x)))
 		end
 		optimize!(model)
-		
+
 		return Σ.m == 1 ? value(u) : value.(u)
 	end
 
@@ -209,7 +248,7 @@ function CBFQP(Σ::ControlAffineSystem, HOCBFs::Vector{HighOrderCBF}, κ::Feedba
 			end
 		end
 		optimize!(model)
-		
+
 		return Σ.m == 1 ? value(u) : value.(u)
 	end
 
@@ -228,7 +267,7 @@ function CBFQP(Σ::ControlAffineSystem, HOCBFs::Vector{HighOrderCBF}, CLF::Contr
 		end
 		@constraint(model, clf, CLF.∇V(x)*(Σ.f(x) + Σ.g(x)*u) <= -CLF.α(CLF(x)) + δ)
 		optimize!(model)
-		
+
 		return Σ.m == 1 ? value(u) : value.(u)
 	end
 
@@ -255,7 +294,7 @@ function CBFQP(Σ::ControlAffineSystem, HOCBFs::Vector{HighOrderCBF}, CLF::Contr
 			end
 		end
 		optimize!(model)
-		
+
 		return Σ.m == 1 ? value(u) : value.(u)
 	end
 
