@@ -16,6 +16,7 @@ P = [2.0 0.0 1.0 0.0; 0.0 2.0 0.0 1.0; 1.0 0.0 1.0 0.0; 0.0 1.0 0.0 1.0]
 V(x) = x'P*x
 γ(s) = 0.5s
 CLF = ControlLyapunovFunction(V, γ)
+κCLF = CLFQP(Σ, CLF)
 
 ## Construct CBF
 O = CircularObstacle([-1.0, 1.0], 0.3)
@@ -24,12 +25,12 @@ CBF = ControlBarrierFunction(O, α)
 HOCBF = HighOrderCBF(CBF, Σ, 2)
 
 ## Construct our control policy
-κ = CBFQP(Σ, HOCBF, CLF)
+κ = CBFQP(Σ, HOCBF, κCLF)
 
 ## Construct simulation object
 t0 = 0.0
-tf = 10.0
-dt = 0.005
+tf = 20.0
+dt = 0.01
 sim = Simulation(t0, tf, dt)
 
 ## Run simulation
@@ -37,6 +38,7 @@ x0 = [-2.2, 2.0, 0.0, 0.0]
 x = sim(Σ, κ, x0)
 
 ## Plot results
+t = sim.ts
 latexify_plots()
 fig1 = plot(xlabel=L"t", ylabel=L"x(t)")
 plot!(t, x')
