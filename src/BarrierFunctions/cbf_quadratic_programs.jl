@@ -43,8 +43,10 @@ end
 	CBFQP(Σ::ControlAffineSystem, CBF::ControlBarrierFunction, U)
 	CBFQP(Σ::ControlAffineSystem, CBF::ControlBarrierFunction, H, F)
 	CBFQP(Σ::ControlAffineSystem, CBF::ControlBarrierFunction, H, F, U)
-	CBFQP(Σ::ControlAffineSystem, CBF::ControlBarrierFunction, κ::FeedbackPolicy)
+    CBFQP(Σ::ControlAffineSystem, CBF::ControlBarrierFunction, κ::FeedbackPolicy)
 	CBFQP(Σ::ControlAffineSystem, CBF::ControlBarrierFunction, κ::FeedbackPolicy, U)
+	CBFQP(Σ::ControlAffineSystem, CBF::ControlBarrierFunction, κ::CLFQP)
+	CBFQP(Σ::ControlAffineSystem, CBF::ControlBarrierFunction, κ::CLFQP, U)
 	CBFQP(Σ::ControlAffineSystem, CBF::ControlBarrierFunction, CLF::ControlLyapunovFunction, p::Float64=10e2)
 	CBFQP(Σ::ControlAffineSystem, CBF::ControlBarrierFunction, CLF::ControlLyapunovFunction, U, p::Float64=10e2)
 	CBFQP(Σ::ControlAffineSystem, CBF::ControlBarrierFunction, CLF::ControlLyapunovFunction, H, F, p::Float64=10e2)
@@ -154,6 +156,44 @@ function CBFQP(Σ::ControlAffineSystem, CBF::ControlBarrierFunction, κ::Feedbac
 end
 
 function CBFQP(Σ::ControlAffineSystem, CBF::ControlBarrierFunction, κ::FeedbackPolicy, U)
+	function control(x)
+		model = Model(OSQP.Optimizer)
+    	set_silent(model)
+    	Σ.m == 1 ? @variable(model, u) : @variable(model, u[1:Σ.m])
+		@objective(model, Min, (1/2)u'u - κ(x)'u)
+		@constraint(model, cbf, CBF.∇h(x)*(Σ.f(x) + Σ.g(x)*u) >= -CBF.α(CBF(x)))
+		if Σ.m == 1
+			@constraint(model, U[1] <= u <= U[2])
+		else
+			for i in 1:Σ.m
+				bound = U[i]
+				@constraint(model, bound[1] <= u[i] <= bound[2])
+			end
+		end
+		optimize!(model)
+
+		return Σ.m == 1 ? value(u) : value.(u)
+	end
+
+	return CBFQP(control)
+end
+
+function CBFQP(Σ::ControlAffineSystem, CBF::ControlBarrierFunction, κ::CLFQP)
+	function control(x)
+		model = Model(OSQP.Optimizer)
+    	set_silent(model)
+    	Σ.m == 1 ? @variable(model, u) : @variable(model, u[1:Σ.m])
+		@objective(model, Min, (1/2)u'u - κ(x)'u)
+		@constraint(model, cbf, CBF.∇h(x)*(Σ.f(x) + Σ.g(x)*u) >= -CBF.α(CBF(x)))
+		optimize!(model)
+
+		return Σ.m == 1 ? value(u) : value.(u)
+	end
+
+	return CBFQP(control)
+end
+
+function CBFQP(Σ::ControlAffineSystem, CBF::ControlBarrierFunction, κ::CLFQP, U)
 	function control(x)
 		model = Model(OSQP.Optimizer)
     	set_silent(model)
