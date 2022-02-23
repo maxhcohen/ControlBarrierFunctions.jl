@@ -31,18 +31,18 @@ function Base.step(Σ::ControlAffineSystem, x, u, t0::Float64, tf::Float64)
 end
 
 """
-    (S::Simulation)(Σ::ControlAffineSystem, x0)
+    (sim::Simulation)(Σ::ControlAffineSystem, x0)
 
 Simulate an open-loop trajectory of a control affine system from initial condition x0.
 """
-function (S::Simulation)(Σ::ControlAffineSystem, x0)
-    xs = Vector{typeof(x0)}(undef, length(S.ts))
+function (sim::Simulation)(Σ::ControlAffineSystem, x0)
+    xs = Vector{typeof(x0)}(undef, length(sim))
 	xs[1] = x0
-	for i in 1:length(S.ts)-1
-		t = S.ts[i]
+	for i in 1:length(sim)-1
+		t = sim.ts[i]
 		x = xs[i]
 		u = Σ.m == 1 ? 0.0 : zeros(Σ.m)
-		xs[i+1] = step(Σ, x, u, t, t + S.dt)
+		xs[i+1] = step(Σ, x, u, t, t + sim.dt)
 	end
 
 	return vec2mat(xs)

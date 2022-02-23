@@ -25,3 +25,10 @@ function Simulation(t0::Float64, tf::Float64, dt::Float64)
     ts = t0:dt:tf
     return Simulation(t0, tf, dt, ts)
 end
+
+"""
+    Base.length(sim::Simulation)
+
+Get number of timesteps in simulation.
+"""
+Base.length(sim::Simulation) = length(sim.ts)

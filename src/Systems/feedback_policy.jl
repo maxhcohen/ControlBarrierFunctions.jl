@@ -26,9 +26,9 @@ Simulate the closed-loop trajectory of a control affine system under a FeedbackP
 initial condition x0.
 """
 function (sim::Simulation)(Σ::ControlAffineSystem, k::FeedbackPolicy, x0)
-	xs = Vector{typeof(x0)}(undef, length(sim.ts))
+	xs = Vector{typeof(x0)}(undef, length(sim))
 	xs[1] = x0
-	for i in 1:length(sim.ts)-1
+	for i in 1:length(sim)-1
 		t = sim.ts[i]
 		x = xs[i]
 		u = k(x)
@@ -66,9 +66,9 @@ Simulate the closed-loop trajectory of a control affine system under a FeedbackP
 initial condition x0.
 """
 function (sim::Simulation)(Σ::ControlAffineSystem, k::TimeVaryingFeedbackPolicy, x0)
-	xs = Vector{typeof(x0)}(undef, length(sim.ts))
+	xs = Vector{typeof(x0)}(undef, length(sim))
 	xs[1] = x0
-	for i in 1:length(sim.ts)-1
+	for i in 1:length(sim)-1
 		t = sim.ts[i]
 		x = xs[i]
 		u = k(x, t)
