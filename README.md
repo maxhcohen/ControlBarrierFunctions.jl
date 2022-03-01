@@ -47,7 +47,7 @@ construct a `Policy` represented as a CBF quadratic program without and with an 
 
 where `t0`, `tf`, and `dt` represent the start time, stop time, and time-step, respectively. A simulation can then be run by calling
 
-    xs = sim(Σ, k, x0),,
+    xs = sim(Σ, k, x0)
 
 where `x0` is the initial condition, which returns the resulting state trajectory.
 
@@ -55,6 +55,7 @@ where `x0` is the initial condition, which returns the resulting state trajector
 - Generate formal documentation.
 - Generalize specification of control constraints to handle general polytopic constraints of the form Au <= b.
 - Add more concrete constructions of common systems and CBFs.
+- Provide implementations of more complex examples.
 
 ## Questions and Contributions
 If you have any questions about the toolbox, have suggestions for improvements, or would like to make your own contribution to the toolbox feel free to reach out to the repo's owner at maxcohen@bu.edu.
