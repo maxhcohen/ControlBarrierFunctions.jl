@@ -2,7 +2,7 @@
 Control barrier functions (CBFs) and control Lyapunov functions (CLFs) written in Julia.
 
 ## Overview
-This toolbox provides utilities to construct nonlinear systems and control policies based on control barrier functions and control Lyapunov functions. The utilities in this toolbox make heavy use of Julia's multiple dispatch functionality and are intended to provide a lightweight base for more complex packages that leverage CBFs and CLFs.
+This toolbox provides utilities to construct nonlinear systems and control policies based on control barrier functions and control Lyapunov functions. The utilities in this toolbox make heavy use of Julia's multiple dispatch functionality and are intended to provide a lightweight base for more complex packages that leverage CBFs and CLFs. This package is under active development, so things may change somewhat frequently.
 
 The utilities in this package are built into four main types:
 1. `ControlAffineSystem`
@@ -36,13 +36,20 @@ construct a `Policy` represented as a CLF quadratic program without any control 
     k = CBFQP(Σ, CBF)
     k = CBFQP(Σ, CBF, CLF)
 
-construct a `Policy` represented as a CBF quadratic program without and with an additional CLF constraint, respectively. Once a `Policy` is constructed, it can be evaluated by calling `u = k(x)`, which will solve the corresponding quadratic program for the control input.
+construct a `Policy` represented as a CBF quadratic program without and with an additional CLF constraint, respectively. Once a `Policy` is constructed, it can be evaluated by calling `u = k(x)`, which will solve the corresponding quadratic program for the control input. Simulating a system under a policy can be performed by first constructing a `Simulation` object as
 
-## Potential changes to be made.
-- Should we make control constraints a field of the `ControlAffineSystem` type rather than as an explicit input to the `Policy` constructor?
-- Should we generalize how control constraints are specified using `LazySets.jl`? This would add an additional dependency to the package but could be helpful.
-- Add more concrete constructions of systems and CBFs? There is some support for this currently, but could be greatly expanded.
-- Should `CLFQP` and `CBFQP` types just be one `QPPolicy` type?
+    sim = Simulation(t0, tf, dt)
+
+where `t0`, `tf`, and `dt` represent the start time, stop time, and time-step, respectively. A simulation can then be run by calling
+
+    xs = sim(Σ, k, x0),
+
+where `x0` is the initial condition, which returns the resulting state trajectory.
+
+## Various to-dos
+- Generate formal documentation.
+- Generalize specification of control constraints to handle general polytopic constraints of the form Au <= b.
+- Add more concrete constructions of common systems and CBFs.
 
 ## Questions and Contributions
 If you have any questions about the toolbox, have suggestions for improvements, or would like to make your own contribution to the toolbox feel free to reach out to the repo's owner at maxcohen@bu.edu.
