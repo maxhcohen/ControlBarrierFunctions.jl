@@ -1,6 +1,11 @@
 # CBFToolbox.jl
 Control barrier functions (CBFs) and control Lyapunov functions (CLFs) written in Julia.
 
+## Installation
+To download this package open the Julia REPL, enter the package manager (type `]` into the REPL) and run
+
+    add https://github.com/maxhcohen/CBFToolbox.jl.git
+
 ## Overview
 This toolbox provides utilities to construct nonlinear systems and control policies based on control barrier functions and control Lyapunov functions. The utilities in this toolbox make heavy use of Julia's multiple dispatch functionality and are intended to provide a lightweight base for more complex packages that leverage CBFs and CLFs. This package is under active development, so things may change somewhat frequently.
 
@@ -42,7 +47,7 @@ construct a `Policy` represented as a CBF quadratic program without and with an 
 
 where `t0`, `tf`, and `dt` represent the start time, stop time, and time-step, respectively. A simulation can then be run by calling
 
-    xs = sim(Σ, k, x0),
+    xs = sim(Σ, k, x0),,
 
 where `x0` is the initial condition, which returns the resulting state trajectory.
 
