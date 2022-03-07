@@ -1,6 +1,6 @@
 ## Import packages
 using CBFToolbox
-using Plots
+using Plots; latexify_plots()
 using LaTeXStrings
 
 ## Define a control affine system
@@ -11,9 +11,12 @@ g(x) = [1.0 0.0; 0.0 1.0]
 Σ = ControlAffineSystem(n, m, f, g)
 
 ## Control bounds
-U1 = [-2.0, 2.0]
-U2 = [-2.0, 2.0]
-U = [U1, U2]
+umax = 2.0
+A = [1.0 0.0; 0.0 1.0; -1.0 0.0; 0.0 -1.0]
+b = umax*ones(4)
+# U1 = [-2.0, 2.0]
+# U2 = [-2.0, 2.0]
+# U = [U1, U2]
 
 ## Define CLF
 V(x) = 0.5x'x
@@ -27,7 +30,7 @@ O2 = CircularObstacle([-0.5, -0.5], 0.4)
 CBF1 = ControlBarrierFunction(O1, α)
 CBF2 = ControlBarrierFunction(O2, α)
 CBFs = [CBF1, CBF2]
-κ = CBFQP(Σ, CBFs, CLF, U)
+κ = CBFQP(Σ, CBFs, CLF, A, b)
 
 ## Construct simulation object
 t0 = 0.0
@@ -40,7 +43,7 @@ x0 = [-2.2, 2.0]
 x = sim(Σ, κ, x0)
 
 ## Plot results
-latexify_plots()
+t = sim.ts
 fig = plot(t, x', xlabel=L"t", ylabel=L"x(t)")
 Plots.display(fig)
 

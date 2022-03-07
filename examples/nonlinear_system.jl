@@ -2,7 +2,7 @@
 using Revise
 using CBFToolbox
 using LinearAlgebra
-using Plots
+using Plots; default(fontfamily="Computer Modern", framestyle=:box)
 using LaTeXStrings
 using DataFrames
 using CSV

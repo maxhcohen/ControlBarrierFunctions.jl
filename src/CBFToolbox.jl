@@ -39,9 +39,6 @@ export latexify_plots
 export circle_shape
 export vec2mat
 
-# Base simulation type
-include("Simulations/simulation.jl")
-
 # System definitions
 include("Systems/control_affine_system.jl")
 include("Systems/feedback_policy.jl")
@@ -56,6 +53,9 @@ include("BarrierFunctions/control_barrier_functions.jl")
 include("BarrierFunctions/cbf_quadratic_programs.jl")
 include("BarrierFunctions/high_order_cbfs.jl")
 include("BarrierFunctions/hocbf_quadratic_programs.jl")
+
+# Base simulation type
+include("Simulations/simulation.jl")
 
 # Utilities
 include("Utils/data_utils.jl")
