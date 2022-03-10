@@ -22,6 +22,7 @@ end
 """
 	CLFQP(Σ::ControlAffineSystem, CLF::ControlLyapunovFunction)
     CLFQP(Σ::ControlAffineSystem, CLF::ControlLyapunovFunction, A, b)
+    CLFQP(Σ::ControlAffineSystem, CLF::ControlLyapunovFunction, A, b, p::Float64)
 
 Construct a CLF-QP from a ControlAffineSystem and ControlLyapunovFunction.
 """
@@ -47,6 +48,23 @@ function CLFQP(Σ::ControlAffineSystem, CLF::ControlLyapunovFunction, A, b)
     	Σ.m == 1 ? @variable(model, u) : @variable(model, u[1:Σ.m])
 		@objective(model, Min, (1/2)u'u)
 		@constraint(model, clf, CLF.∇V(x)*(Σ.f(x) + Σ.g(x)*u) <= -CLF.α(CLF(x)))
+        @constraint(model, A*u .<= b)
+		optimize!(model)
+
+	return Σ.m == 1 ? value(u) : value.(u)
+	end
+
+	return CLFQP(control)
+end
+
+function CLFQP(Σ::ControlAffineSystem, CLF::ControlLyapunovFunction, A, b, p::Float64)
+	function control(x)
+		model = Model(OSQP.Optimizer)
+    	set_silent(model)
+    	Σ.m == 1 ? @variable(model, u) : @variable(model, u[1:Σ.m])
+        @variable(model, δ)
+		@objective(model, Min, (1/2)u'u + p*δ^2)
+		@constraint(model, clf, CLF.∇V(x)*(Σ.f(x) + Σ.g(x)*u) <= -CLF.α(CLF(x)) + δ)
         @constraint(model, A*u .<= b)
 		optimize!(model)
 

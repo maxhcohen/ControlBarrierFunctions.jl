@@ -1,11 +1,8 @@
 ## Import necessary packages
 using Revise
 using CBFToolbox
-using LinearAlgebra
-using Plots; default(fontfamily="Computer Modern", framestyle=:box)
+using Plots; latexify_plots()
 using LaTeXStrings
-using DataFrames
-using CSV
 
 ## Define system dynamics
 n = 2
@@ -35,26 +32,22 @@ sim = Simulation(t0, tf, dt)
 
 ## Run simulation
 x0 = [-4.0, 1.0]
-x = sim(Σ, κ, x0)
-
-## Plot results
-latexify_plots()
+T = sim(Σ, κ, x0)
 
 ## States
-t = sim.ts
 fig1 = plot(xlabel=L"t", ylabel=L"x(t)")
-plot!(t, x')
+plot!(T.t, T.x')
 Plots.display(fig1)
 
 ## CBF
 fig2 = plot(xlabel=L"t", ylabel=L"h(x(t))")
-plot!(t, [h(x[:,i]) for i in 1:length(t)])
+plot!(T.t, [h(T.x[:,i]) for i in 1:length(sim)])
 hline!([0.0], ls=:dot, c=:black, label=L"h(x)=0")
 Plots.display(fig2)
 
 ## Phase portrait
 fig3 = plot(xlabel=L"x_1", ylabel=L"x_2")
-plot!(x[1,:], x[2,:])
+plot!(T.x[1,:], T.x[2,:])
 h(x1, x2) = 1 - x1 - x2^2
 contour!(-4.5:0.1:1, -3:0.1:3, h, levels=[0.0], colorbar=false, c=:black)
 Plots.display(fig3)

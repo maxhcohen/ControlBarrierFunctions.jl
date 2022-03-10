@@ -1,4 +1,5 @@
 ## Import packages
+using Revise
 using CBFToolbox
 using Plots; latexify_plots()
 using LaTeXStrings
@@ -14,9 +15,6 @@ g(x) = [1.0 0.0; 0.0 1.0]
 umax = 2.0
 A = [1.0 0.0; 0.0 1.0; -1.0 0.0; 0.0 -1.0]
 b = umax*ones(4)
-# U1 = [-2.0, 2.0]
-# U2 = [-2.0, 2.0]
-# U = [U1, U2]
 
 ## Define CLF
 V(x) = 0.5x'x
@@ -40,15 +38,14 @@ sim = Simulation(t0, tf, dt)
 
 ## Run closed-loop sim
 x0 = [-2.2, 2.0]
-x = sim(Σ, κ, x0)
+T = sim(Σ, κ, x0)
 
 ## Plot results
-t = sim.ts
-fig = plot(t, x', xlabel=L"t", ylabel=L"x(t)")
+fig = plot(T.t, T.x', xlabel=L"t", ylabel=L"x(t)")
 Plots.display(fig)
 
 ## Phase portrait
-fig = plot(x[1,:], x[2,:], xlabel=L"x_1", ylabel=L"x_2")
+fig = plot(T.x[1,:], T.x[2,:], xlabel=L"x_1", ylabel=L"x_2")
 plot!(circle_shape(O1), seriestype=[:shape], fillcolor=:red, fillalpha=0.2,
         linecolor=:black, lw=2, edgecolor=:black, label="")
 plot!(circle_shape(O2), seriestype=[:shape], fillcolor=:red, fillalpha=0.2,

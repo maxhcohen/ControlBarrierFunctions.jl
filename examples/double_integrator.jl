@@ -1,7 +1,7 @@
 ## Import packages
 using Revise
 using CBFToolbox
-using Plots
+using Plots; latexify_plots()
 using LaTeXStrings
 
 ## Construct a control affine system
@@ -35,16 +35,14 @@ sim = Simulation(t0, tf, dt)
 
 ## Run simulation
 x0 = [-2.2, 2.0, 0.0, 0.0]
-x = sim(Σ, κ, x0)
+T = sim(Σ, κ, x0)
 
 ## Plot results
-t = sim.ts
-latexify_plots()
 fig1 = plot(xlabel=L"t", ylabel=L"x(t)")
-plot!(t, x')
+plot!(T.t, T.x')
 Plots.display(fig1)
 
-fig2 = plot(x[1,:], x[2,:], xlabel=L"x_1", ylabel=L"x_2")
+fig2 = plot(T.x[1,:], T.x[2,:], xlabel=L"x_1", ylabel=L"x_2")
 plot!(circle_shape(O), seriestype=[:shape], fillcolor=:red, fillalpha=0.2,
         linecolor=:black, lw=2, edgecolor=:black, label="")
 Plots.display(fig2)

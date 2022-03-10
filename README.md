@@ -34,9 +34,9 @@ where `V(x)` is a function representing the Lyapunov function candidate and `γ(
 where `h(x)` is a function defining the safe set `C  ` as `C = {x ∈ ℝⁿ | h(x) ≥ 0}` and `α` is an extended class K function that specifies how quickly the system may approach the boundary of the safe set. The `Policy` type makes heavy use of multiple dispatch. For example, the commands
 
     k = CLFQP(Σ, CLF)
-    k = CLFQP(Σ, CLF, U)
+    k = CLFQP(Σ, CLF, A, b)
 
-construct a `Policy` represented as a CLF quadratic program without any control constraints and with control constraints specified by `U`, respectively. Similarly, the following commands
+construct a `Policy` represented as a CLF quadratic program without any control constraints and with control constraints specified by `Au <= b`, respectively. Similarly, the following commands
 
     k = CBFQP(Σ, CBF)
     k = CBFQP(Σ, CBF, CLF)
@@ -47,13 +47,12 @@ construct a `Policy` represented as a CBF quadratic program without and with an 
 
 where `t0`, `tf`, and `dt` represent the start time, stop time, and time-step, respectively. A simulation can then be run by calling
 
-    xs = sim(Σ, k, x0)
+    T = sim(Σ, k, x0)
 
-where `x0` is the initial condition, which returns the resulting state trajectory.
+where `x0` is the initial condition, which returns a `Trajectory` struct containing the state and control trajectories.
 
 ## Various to-dos
 - Generate formal documentation.
-- Generalize specification of control constraints to handle general polytopic constraints of the form Au <= b.
 - Add more concrete constructions of common systems and CBFs.
 - Provide implementations of more complex examples.
 
