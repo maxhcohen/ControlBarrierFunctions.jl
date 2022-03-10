@@ -1,7 +1,8 @@
 ## Import packages
 using Revise
 using CBFToolbox
-using Plots; latexify_plots()
+using Plots;
+latexify_plots();
 using LaTeXStrings
 
 ## Define a control affine system
@@ -14,7 +15,7 @@ g(x) = [1.0 0.0; 0.0 1.0]
 ## Control bounds
 umax = 2.0
 A = [1.0 0.0; 0.0 1.0; -1.0 0.0; 0.0 -1.0]
-b = umax*ones(4)
+b = umax * ones(4)
 
 ## Define CLF
 V(x) = 0.5x'x
@@ -41,13 +42,29 @@ x0 = [-2.2, 2.0]
 T = sim(Σ, κ, x0)
 
 ## Plot results
-fig = plot(T.t, T.x', xlabel=L"t", ylabel=L"x(t)")
+fig = plot(T.t, T.x'; xlabel=L"t", ylabel=L"x(t)")
 Plots.display(fig)
 
 ## Phase portrait
-fig = plot(T.x[1,:], T.x[2,:], xlabel=L"x_1", ylabel=L"x_2")
-plot!(circle_shape(O1), seriestype=[:shape], fillcolor=:red, fillalpha=0.2,
-        linecolor=:black, lw=2, edgecolor=:black, label="")
-plot!(circle_shape(O2), seriestype=[:shape], fillcolor=:red, fillalpha=0.2,
-linecolor=:black, lw=2, edgecolor=:black, label="")
+fig = plot(T.x[1, :], T.x[2, :]; xlabel=L"x_1", ylabel=L"x_2")
+plot!(
+    circle_shape(O1);
+    seriestype=[:shape],
+    fillcolor=:red,
+    fillalpha=0.2,
+    linecolor=:black,
+    lw=2,
+    edgecolor=:black,
+    label="",
+)
+plot!(
+    circle_shape(O2);
+    seriestype=[:shape],
+    fillcolor=:red,
+    fillalpha=0.2,
+    linecolor=:black,
+    lw=2,
+    edgecolor=:black,
+    label="",
+)
 Plots.display(fig)

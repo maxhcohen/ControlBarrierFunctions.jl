@@ -7,7 +7,7 @@ Struct representing a feedback control policy.
 - `control`: function u = control(x) describing the control law.
 """
 struct FeedbackPolicy <: Policy
-	control
+    control
 end
 
 """
@@ -16,7 +16,7 @@ end
 Evaluate FeedbackPolicy at state x.
 """
 function (k::FeedbackPolicy)(x)
-	return k.control(x)
+    return k.control(x)
 end
 
 """
@@ -28,7 +28,7 @@ Struct representing a non-stationary feedback control policy.
 - `control`: function u = control(x, t) describing the control law.
 """
 struct TimeVaryingFeedbackPolicy <: Policy
-	control
+    control
 end
 
 """
@@ -37,5 +37,5 @@ end
 Evaluate TimeVaryingFeedbackPolicy at state x and time t.
 """
 function (k::TimeVaryingFeedbackPolicy)(x, t)
-	return k.control(x, t)
+    return k.control(x, t)
 end

@@ -1,7 +1,8 @@
 ## Import packages
 using Revise
 using CBFToolbox
-using Plots; latexify_plots()
+using Plots;
+latexify_plots();
 using LaTeXStrings
 
 ## Construct a control affine system
@@ -13,7 +14,7 @@ g(x) = [0.0 0.0; 0.0 0.0; 1.0 0.0; 0.0 1.0]
 
 ## Define CLF
 P = [2.0 0.0 1.0 0.0; 0.0 2.0 0.0 1.0; 1.0 0.0 1.0 0.0; 0.0 1.0 0.0 1.0]
-V(x) = x'P*x
+V(x) = x'P * x
 γ(s) = 0.5s
 CLF = ControlLyapunovFunction(V, γ)
 κCLF = CLFQP(Σ, CLF)
@@ -38,11 +39,19 @@ x0 = [-2.2, 2.0, 0.0, 0.0]
 T = sim(Σ, κ, x0)
 
 ## Plot results
-fig1 = plot(xlabel=L"t", ylabel=L"x(t)")
+fig1 = plot(; xlabel=L"t", ylabel=L"x(t)")
 plot!(T.t, T.x')
 Plots.display(fig1)
 
-fig2 = plot(T.x[1,:], T.x[2,:], xlabel=L"x_1", ylabel=L"x_2")
-plot!(circle_shape(O), seriestype=[:shape], fillcolor=:red, fillalpha=0.2,
-        linecolor=:black, lw=2, edgecolor=:black, label="")
+fig2 = plot(T.x[1, :], T.x[2, :]; xlabel=L"x_1", ylabel=L"x_2")
+plot!(
+    circle_shape(O);
+    seriestype=[:shape],
+    fillcolor=:red,
+    fillalpha=0.2,
+    linecolor=:black,
+    lw=2,
+    edgecolor=:black,
+    label="",
+)
 Plots.display(fig2)

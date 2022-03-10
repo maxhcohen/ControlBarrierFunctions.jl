@@ -18,24 +18,16 @@ myMagenta = RGB{Float64}(202/255, 98/255, 159/255)
 myCyan = RGB{Float64}(114/255, 179/255, 224/255)
 """
 function custom_colors()
-	myBlue = RGB{Float64}(49/255, 114/255, 174/255)
-	myRed = RGB{Float64}(224/255, 107/255, 97/255)
-	myGreen = RGB{Float64}(68/255, 156/255, 118/255)
-	myPurple = RGB{Float64}(117/255, 112/255, 173/255)
-	myYellow = RGB{Float64}(221/255, 162/255, 66/255)
-	myMagenta = RGB{Float64}(202/255, 98/255, 159/255)
-	myCyan = RGB{Float64}(114/255, 179/255, 224/255)
-	mycolor_palette = [
-		myBlue,
-		myRed,
-		myGreen,
-		myPurple,
-		myYellow,
-		myMagenta,
-		myCyan,
-	]
+    myBlue = RGB{Float64}(49 / 255, 114 / 255, 174 / 255)
+    myRed = RGB{Float64}(224 / 255, 107 / 255, 97 / 255)
+    myGreen = RGB{Float64}(68 / 255, 156 / 255, 118 / 255)
+    myPurple = RGB{Float64}(117 / 255, 112 / 255, 173 / 255)
+    myYellow = RGB{Float64}(221 / 255, 162 / 255, 66 / 255)
+    myMagenta = RGB{Float64}(202 / 255, 98 / 255, 159 / 255)
+    myCyan = RGB{Float64}(114 / 255, 179 / 255, 224 / 255)
+    mycolor_palette = [myBlue, myRed, myGreen, myPurple, myYellow, myMagenta, myCyan]
 
-return mycolor_palette
+    return mycolor_palette
 end
 
 """
@@ -50,16 +42,16 @@ Set default values for all plot settings. It performs the following actions
 	- makes the default label of any line default to nothing
 """
 function latexify_plots()
-	default(
-	grid = false,
-	linewidth = 3.0,
-	guidefontsize = 12.0,
-	legendfontsize = 10.0,
-	color_palette = custom_colors(),
-	fontfamily = "Computer Modern",
-	framestyle = :box,
-	label = "",
-	)
+    return default(;
+        grid=false,
+        linewidth=3.0,
+        guidefontsize=12.0,
+        legendfontsize=10.0,
+        color_palette=custom_colors(),
+        fontfamily="Computer Modern",
+        framestyle=:box,
+        label="",
+    )
 end
 
 """
@@ -72,11 +64,11 @@ plot!(circle_shape(x, y, r), seriestype=[:shape], fillcolor=:red, fillalpha=0.2,
         linecolor=:black, lw=3, edgecolor=:black, label="")
 """
 function circle_shape(x, y, r)
-    θ = LinRange(0, 2*π, 500)
-    x .+ r*cos.(θ), y .+ r*sin.(θ)
+    θ = LinRange(0, 2 * π, 500)
+    return x .+ r * cos.(θ), y .+ r * sin.(θ)
 end
 
 function circle_shape(O::CircularObstacle)
-    θ = LinRange(0, 2*π, 500)
-    O.c[1] .+ O.r*cos.(θ), O.c[2] .+ O.r*sin.(θ)
+    θ = LinRange(0, 2 * π, 500)
+    return O.c[1] .+ O.r * cos.(θ), O.c[2] .+ O.r * sin.(θ)
 end

@@ -23,9 +23,9 @@ Integrate the dynamics of a ControlSystemAffine starting at state x under contro
 from t0 to tf.
 """
 function Base.step(Σ::ControlAffineSystem, x, u, t0::Float64, tf::Float64)
-	rhs(x, u, t) = Σ.f(x) + Σ.g(x)u
-	sol = solve(ODEProblem(rhs, x, (t0, tf), u))
-	xnew = Σ.n == 1 ? sol[end] : sol[:,end]
+    rhs(x, u, t) = Σ.f(x) + Σ.g(x)u
+    sol = solve(ODEProblem(rhs, x, (t0, tf), u))
+    xnew = Σ.n == 1 ? sol[end] : sol[:, end]
 
-	return xnew
+    return xnew
 end

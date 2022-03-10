@@ -32,5 +32,5 @@ end
 Evaluate CBF at state x.
 """
 function (h::ControlBarrierFunction)(x)
-	return h.h(x)
+    return h.h(x)
 end
