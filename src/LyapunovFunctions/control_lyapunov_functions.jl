@@ -32,5 +32,5 @@ end
 Evaluate CLF at state x.
 """
 function (V::ControlLyapunovFunction)(x)
-	return V.V(x)
+    return V.V(x)
 end
