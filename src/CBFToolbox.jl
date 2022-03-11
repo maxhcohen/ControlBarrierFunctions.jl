@@ -15,6 +15,7 @@ abstract type CertificateFunction end
 
 # Export Simulation type
 export Simulation
+export Trajectory
 
 # Export systems
 export System
