@@ -55,6 +55,7 @@ where `x0` is the initial condition, which returns a `Trajectory` struct contain
 - Generate formal documentation.
 - Add more concrete constructions of common systems and CBFs.
 - Provide implementations of more complex examples.
+- Should `ControlAffineSystem` be an abstract type?
 
 ## Questions and Contributions
 If you have any questions about the toolbox, have suggestions for improvements, or would like to make your own contribution to the toolbox feel free to reach out to the repo's owner at maxcohen@bu.edu.
