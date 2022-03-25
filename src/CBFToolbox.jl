@@ -20,6 +20,8 @@ export Trajectory
 # Export systems
 export System
 export ControlAffineSystem
+export step!
+export initialize!
 
 # Export Certificate functions
 export LyapunovFunction

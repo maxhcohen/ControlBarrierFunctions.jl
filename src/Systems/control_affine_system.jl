@@ -8,24 +8,51 @@ Models a nonlinear control affine system.
 - `m::Int`: control dimension
 - `f`: function f(x) that models the drift dynamics
 - `g`: function g(x) that models the control directions
+- `x0`: initial condition
+- `x`: current state of system
+- `xs`: system trajectory
 """
-struct ControlAffineSystem <: System
+mutable struct ControlAffineSystem <: System
     n::Int
     m::Int
     f
     g
+    x0
+    x
+    xs
 end
 
 """
-	Base.step(x, u, t0, tf, Σ::ControlAffineSystem)
+    ControlAffineSystem(n::Int, m::Int, f, g)
+    ControlAffineSystem(n::Int, m::Int, f, g, x0)
 
-Integrate the dynamics of a ControlSystemAffine starting at state x under control u over
-from t0 to tf.
+Construct a nonlinear control affine system.
 """
-function Base.step(Σ::ControlAffineSystem, x, u, t0::Float64, tf::Float64)
-    rhs(x, u, t) = Σ.f(x) + Σ.g(x)u
-    sol = solve(ODEProblem(rhs, x, (t0, tf), u))
-    xnew = Σ.n == 1 ? sol[end] : sol[:, end]
+ControlAffineSystem(n::Int, m::Int, f, g) = ControlAffineSystem(n, m, f, g, zeros(n), missing, missing)
+ControlAffineSystem(n::Int, m::Int, f, g, x0) = ControlAffineSystem(n, m, f, g, x0, missing, missing)
 
-    return xnew
+"""
+    initialize!(Σ::ControlAffineSystem)
+
+Set current state to initial condition and initialize system trajectory.
+"""
+function initialize!(Σ::ControlAffineSystem)
+    Σ.x = Σ.x0
+    Σ.xs = [Σ.x]
+
+    return Σ
+end
+
+"""
+    step!(Σ::ControlAffineSystem, u, dt::Float64)
+
+Integrate the dynamics of the system under control input u for dt seconds.
+"""
+function step!(Σ::ControlAffineSystem, u, dt::Float64)
+    rhs(x, u, t) = Σ.f(x) + Σ.g(x)u
+    sol = solve(ODEProblem(rhs, Σ.x, (0, dt), u))
+    Σ.x = Σ.n == 1 ? sol[end] : sol[:, end]
+    push!(Σ.xs, Σ.x)
+
+    return Σ
 end
