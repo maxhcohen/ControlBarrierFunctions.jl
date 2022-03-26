@@ -73,7 +73,7 @@ xo = [-0.5, 0.5]
 ro = 0.4
 h(x) = (x[1] - xo[1])^2 + (x[2]- xo[2])^2 - ro^2
 α(s) = s^3
-CBF = ControlLyapunovFunction(h, α)
+CBF = ControlBarrierFunction(h, α)
 
 # Construct control policy: CBF-CLF-QP
 k = CBFQP(Σ, CBF, CLF)
@@ -90,7 +90,6 @@ sim(Σ, k)
 - Generate formal documentation.
 - Add more concrete constructions of common systems and CBFs.
 - Provide implementations of more complex examples.
-- Should `ControlAffineSystem` be an abstract type?
 
 ## Questions and Contributions
 If you have any questions about the toolbox, have suggestions for improvements, or would like to make your own contribution to the toolbox feel free to reach out to the repo's owner at maxcohen@bu.edu.
