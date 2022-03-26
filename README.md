@@ -53,6 +53,9 @@ which populates the field `Σ.xs` with the resulting system trajectory.
 
 ## Simple Example
 ```julia
+# Import CBFToolbox.jl
+using CBFToolbox
+
 # Define system: single integrator
 n = 2
 m = 2
