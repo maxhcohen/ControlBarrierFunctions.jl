@@ -45,11 +45,43 @@ construct a `Policy` represented as a CBF quadratic program without and with an 
 
     sim = Simulation(t0, tf, dt)
 
-where `t0`, `tf`, and `dt` represent the start time, stop time, and time-step, respectively. A simulation can then be run by calling
+where `t0`, `tf`, and `dt` represent the start time, stop time, and time-step, respectively. A simulation can then be run by first setting the initial condition of the system as `Σ.x0 = x0` and calling
 
-    T = sim(Σ, k, x0)
+    sim(Σ, k)
 
-where `x0` is the initial condition, which returns a `Trajectory` struct containing the state and control trajectories.
+which populates the field `Σ.xs` with the resulting system trajectory.
+
+## Simple Example
+```julia
+# Define system: single integrator
+n = 2
+m = 2
+f(x) = [0.0, 0.0]
+g(x) = [1.0 0.0; 0.0 1.0]
+Σ = ControlAffineSystem(n, m, f, g)
+
+# Define Control Lyapunov Function
+V(x) = 0.5x'x
+γ(s) = s
+CLF = ControlLyapunovFunction(V, γ)
+
+# Define CBF: avoid a circular obstacle
+xo = [-0.5, 0.5]
+ro = 0.4
+h(x) = (x[1] - xo[1])^2 + (x[2]- xo[2])^2 - ro^2
+α(s) = s^3
+CBF = ControlLyapunovFunction(h, α)
+
+# Construct control policy: CBF-CLF-QP
+k = CBFQP(Σ, CBF, CLF)
+
+# Create simulation object
+sim = Simulation(20.0)
+
+# Set initial condition and run
+Σ.x0 = [-1.5, 1.0]
+sim(Σ, k)
+```
 
 ## Various to-dos
 - Generate formal documentation.
