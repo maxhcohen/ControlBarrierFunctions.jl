@@ -48,7 +48,7 @@ function (sim::Simulation)(Σ::ControlAffineSystem)
         u = Σ.m == 1 ? 0.0 : zeros(Σ.m)
         step!(Σ, u, sim.dt)
     end
-    Σ.xs = vec2mat(Σ.xs)
+    vec2mat!(Σ)
 
     return Σ
 end
@@ -59,7 +59,7 @@ function (sim::Simulation)(Σ::ControlAffineSystem, k::FeedbackPolicy)
         u = k(Σ.x)
         step!(Σ, u, sim.dt)
     end
-    Σ.xs = vec2mat(Σ.xs)
+    vec2mat!(Σ)
 
     return Σ
 end
@@ -70,7 +70,7 @@ function (sim::Simulation)(Σ::ControlAffineSystem, k::CLFQP)
         u = k(Σ.x)
         step!(Σ, u, sim.dt)
     end
-    Σ.xs = vec2mat(Σ.xs)
+    vec2mat!(Σ)
 
     return Σ
 end
@@ -81,7 +81,7 @@ function (sim::Simulation)(Σ::ControlAffineSystem, k::CBFQP)
         u = k(Σ.x)
         step!(Σ, u, sim.dt)
     end
-    Σ.xs = vec2mat(Σ.xs)
+    vec2mat!(Σ)
 
     return Σ
 end
