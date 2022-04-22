@@ -6,6 +6,7 @@ using Zygote
 using JuMP
 using OSQP
 using Plots
+using PlotThemes
 import DifferentialEquations: ODEProblem, solve
 
 # Abstract types
@@ -38,7 +39,8 @@ export CBFQP
 
 # Export utility functions and types
 export CircularObstacle
-export latexify_plots
+export custom_plots
+export custom_theme
 export circle_shape
 export vec2mat
 

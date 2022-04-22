@@ -1,57 +1,41 @@
 # Various utility functions used to make nice plots
 
-"""
-	custom_colors()
+# Custom colors
+mycolors = [
+    PlotThemes.RGB255(49, 114, 174),  # blue
+    PlotThemes.RGB255(68, 156, 118),  # green
+    PlotThemes.RGB255(117, 112, 173), # purple
+    PlotThemes.RGB255(224, 107, 97),  # red
+    PlotThemes.RGB255(221, 162, 66),  # yellow
+    PlotThemes.RGB255(202, 98, 159),  # magenta
+    PlotThemes.RGB255(114, 179, 224), # cyan
+]
 
-Construct custom color scheme based on the color scheme used in 
+# Custom theme
+mytheme = PlotThemes.PlotTheme(Dict([
+            :grid => false,
+            :fontfamily => "Computer Modern",
+            :label => "",
+            :guidefontsize => 12,
+            :titlefontsize => 12,
+            :legendfontsize => 12,
+            :tickfontsize => 8,
+            :framestyle => :box,
+            :linewidth => 3,
+            :palette => mycolors,
+            :colorgradient => :viridis,
+            :foregroundcolorlegend => nothing,
+            :backgroundcolorlegend => nothing,
+            ]))
 
-M. J. Kochenderfer, T. A. Wheeler, and K. H. Wray, "Algorithms for Decision Making."
 
-Returns a vector of the following RGB values:
-
-myBlue = RGB{Float64}(49/255, 114/255, 174/255)
-myRed = RGB{Float64}(224/255, 107/255, 97/255)
-myGreen = RGB{Float64}(68/255, 156/255, 118/255)
-myPurple = RGB{Float64}(117/255, 112/255, 173/255)
-myYellow = RGB{Float64}(221/255, 162/255, 66/255)
-myMagenta = RGB{Float64}(202/255, 98/255, 159/255)
-myCyan = RGB{Float64}(114/255, 179/255, 224/255)
-"""
-function custom_colors()
-    myBlue = RGB{Float64}(49 / 255, 114 / 255, 174 / 255)
-    myRed = RGB{Float64}(224 / 255, 107 / 255, 97 / 255)
-    myGreen = RGB{Float64}(68 / 255, 156 / 255, 118 / 255)
-    myPurple = RGB{Float64}(117 / 255, 112 / 255, 173 / 255)
-    myYellow = RGB{Float64}(221 / 255, 162 / 255, 66 / 255)
-    myMagenta = RGB{Float64}(202 / 255, 98 / 255, 159 / 255)
-    myCyan = RGB{Float64}(114 / 255, 179 / 255, 224 / 255)
-    mycolor_palette = [myBlue, myRed, myGreen, myPurple, myYellow, myMagenta, myCyan]
-
-    return mycolor_palette
+function custom_theme()
+    return mytheme
 end
 
-"""
-	custom_plots()
-
-Set default values for all plot settings. It performs the following actions
-	- turns gridlines OFF
-	- sets default linewidth to 2.5
-	- sets the default color palette to a custom one
-	- sets the default font to LaTeX style font
-	- sets the frame style to :box
-	- makes the default label of any line default to nothing
-"""
-function latexify_plots()
-    return default(;
-        grid=false,
-        linewidth=3.0,
-        guidefontsize=12.0,
-        legendfontsize=10.0,
-        color_palette=custom_colors(),
-        fontfamily="Computer Modern",
-        framestyle=:box,
-        label="",
-    )
+function custom_plots()
+    add_theme(:mytheme, custom_theme())
+    theme(:mytheme)
 end
 
 """
