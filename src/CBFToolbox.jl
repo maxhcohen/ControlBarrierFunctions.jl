@@ -38,6 +38,7 @@ export FeedbackPolicy
 export CLFQP
 export TimeVaryingCLFQP
 export CBFQP
+export TimeVaryingCBFQP
 
 # Export utility functions and types
 export CircularObstacle
@@ -62,6 +63,7 @@ include("BarrierFunctions/control_barrier_functions.jl")
 include("BarrierFunctions/cbf_quadratic_programs.jl")
 include("BarrierFunctions/high_order_cbfs.jl")
 include("BarrierFunctions/hocbf_quadratic_programs.jl")
+include("BarrierFunctions/time_varying_cbfqp.jl")
 
 # Base simulation type
 include("Simulations/simulation.jl")
