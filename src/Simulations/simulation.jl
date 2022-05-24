@@ -85,3 +85,15 @@ function (sim::Simulation)(Σ::ControlAffineSystem, k::CBFQP)
 
     return Σ
 end
+
+function (sim::Simulation)(Σ::ControlAffineSystem, k::TimeVaryingCLFQP)
+    initialize!(Σ)
+    for i in 1:(length(sim) - 1)
+        t = sim.ts[i]
+        u = k(Σ.x, t)
+        step!(Σ, u, sim.dt)
+    end
+    vec2mat!(Σ)
+
+    return Σ
+end

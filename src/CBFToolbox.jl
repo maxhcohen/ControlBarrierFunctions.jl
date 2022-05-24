@@ -27,6 +27,7 @@ export initialize!
 # Export Certificate functions
 export LyapunovFunction
 export ControlLyapunovFunction
+export TimeVaryingCLF
 export BarrierFunction
 export ControlBarrierFunction
 export HighOrderCBF
@@ -35,6 +36,7 @@ export HighOrderCBF
 export Policy
 export FeedbackPolicy
 export CLFQP
+export TimeVaryingCLFQP
 export CBFQP
 
 # Export utility functions and types
@@ -51,7 +53,9 @@ include("Systems/system_library.jl")
 
 # Lyapunov functions
 include("LyapunovFunctions/control_lyapunov_functions.jl")
+include("LyapunovFunctions/time_varying_clfs.jl")
 include("LyapunovFunctions/clf_quadratic_programs.jl")
+include("LyapunovFunctions/time_varying_clfqp.jl")
 
 # Barrier functions
 include("BarrierFunctions/control_barrier_functions.jl")
