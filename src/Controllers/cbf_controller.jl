@@ -1,25 +1,25 @@
 struct CBFController <: FeedbackController
-    h::ControlBarrierFunction
+    h::Vector{ControlBarrierFunction}
     A
     b
 end
 
-CBFController(h::ControlBarrierFunction) = CBFController(h, nothing, nothing)
+CBFController(h::ControlBarrierFunction) = CBFController([h], nothing, nothing)
+CBFController(h::Vector{ControlBarrierFunction}) = CBFController(h, nothing, nothing)
 
 function (k::CBFController)(Σ::ControlAffineSystem, x)
-    # CBF stuff
-    h = k.h
-    α = k.h.α
-    Lfh, Lgh = lie_derivatives(h, Σ, x)
-
     # Build QP and instantiate control decision variable
     model = Model(OSQP.Optimizer)
     set_silent(model)
     control_dim(Σ) == 1 ? @variable(model, u) : @variable(model, u[1:control_dim(Σ)])
     @objective(model, Min, 0.5*u'u)
 
-    # Add CBF constraint
-    @constraint(model, Lfh + Lgh*u >= -α(h(x)))
+    # Add CBF constraints
+    for h in k.h
+        α = h.α
+        Lfh, Lgh = lie_derivatives(h, Σ, x)
+        @constraint(model, Lfh + Lgh*u >= -α(h(x)))
+    end
 
     # Check if we should add control constraints
     if k.A === nothing
@@ -34,11 +34,6 @@ function (k::CBFController)(Σ::ControlAffineSystem, x)
 end
 
 function (k::CBFController)(Σ::ControlAffineSystem, x, k0)
-    # CBF stuff
-    h = k.h
-    α = k.h.α
-    Lfh, Lgh = lie_derivatives(h, Σ, x)
-
     # Build QP and instantiate control decision variable
     model = Model(OSQP.Optimizer)
     set_silent(model)
@@ -46,7 +41,12 @@ function (k::CBFController)(Σ::ControlAffineSystem, x, k0)
     @objective(model, Min, 0.5*u'u - k0'u)
 
     # Add CBF constraint
-    @constraint(model, Lfh + Lgh*u >= -α(h(x)))
+    # Add CBF constraints
+    for h in k.h
+        α = h.α
+        Lfh, Lgh = lie_derivatives(h, Σ, x)
+        @constraint(model, Lfh + Lgh*u >= -α(h(x)))
+    end
 
     # Check if we should add control constraints
     if k.A === nothing
