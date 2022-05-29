@@ -19,63 +19,33 @@ end
 Base.length(sim::Simulator) = length(sim.ts)
 
 function (sim::Simulator)(Σ::ControlAffineSystem, k::FeedbackController)
-    X = zeros(state_dim(Σ), length(sim.ts))
-    X[:,1] = sim.x0
-    for i in 1:length(sim)-1
-        x = X[:, i]
-        u = k(x)
-        X[:,i+1] = integrate(Σ, x, u, [sim.ts[i], sim.ts[i+1]])
-    end
+    rhs(x, p, t) = _f(Σ, x) + _g(Σ, x)*k(x)
+    prob = ODEProblem(rhs, sim.x0, [sim.t0, sim.tf])
+    sol = solve(prob, Tsit5())
 
-    return X
+    return sol
 end
 
-function (sim::Simulator)(Σ::ControlAffineSystem, k::CLFController)
-    X = zeros(state_dim(Σ), length(sim.ts))
-    X[:,1] = sim.x0
-    for i in 1:length(sim)-1
-        x = X[:, i]
-        u = k(Σ, x)
-        X[:,i+1] = integrate(Σ, x, u, [sim.ts[i], sim.ts[i+1]])
-    end
+function (sim::Simulator)(Σ::ControlAffineSystem, k::Union{CLFController, CBFController, CBFCLFController})
+    rhs(x, p, t) = _f(Σ, x) + _g(Σ, x)*k(Σ, x)
+    prob = ODEProblem(rhs, sim.x0, [sim.t0, sim.tf])
+    sol = solve(prob, Tsit5())
 
-    return X
-end
-
-function (sim::Simulator)(Σ::ControlAffineSystem, k::CBFController)
-    X = zeros(state_dim(Σ), length(sim.ts))
-    X[:,1] = sim.x0
-    for i in 1:length(sim)-1
-        x = X[:, i]
-        u = k(Σ, x)
-        X[:,i+1] = integrate(Σ, x, u, [sim.ts[i], sim.ts[i+1]])
-    end
-
-    return X
+    return sol
 end
 
 function (sim::Simulator)(Σ::ControlAffineSystem, k::CBFController, k0::CLFController)
-    X = zeros(state_dim(Σ), length(sim.ts))
-    X[:,1] = sim.x0
-    for i in 1:length(sim)-1
-        x = X[:, i]
-        ud = k0(Σ, x)
-        u = k(Σ, x, ud)
-        X[:,i+1] = integrate(Σ, x, u, [sim.ts[i], sim.ts[i+1]])
-    end
+    rhs(x, p, t) = _f(Σ, x) + _g(Σ, x)*k(Σ, x, k0(Σ, x))
+    prob = ODEProblem(rhs, sim.x0, [sim.t0, sim.tf])
+    sol = solve(prob, Tsit5())
 
-    return X
+    return sol
 end
 
 function (sim::Simulator)(Σ::ControlAffineSystem, k0::CLFController, k::CBFController)
-    X = zeros(state_dim(Σ), length(sim.ts))
-    X[:,1] = sim.x0
-    for i in 1:length(sim)-1
-        x = X[:, i]
-        ud = k0(Σ, x)
-        u = k(Σ, x, ud)
-        X[:,i+1] = integrate(Σ, x, u, [sim.ts[i], sim.ts[i+1]])
-    end
+    rhs(x, p, t) = _f(Σ, x) + _g(Σ, x)*k(Σ, x, k0(Σ, x))
+    prob = ODEProblem(rhs, sim.x0, [sim.t0, sim.tf])
+    sol = solve(prob, Tsit5())
 
-    return X
+    return sol
 end

@@ -46,6 +46,7 @@ export Simulator
 export LQRController
 export CLFController
 export CBFController
+export CBFCLFController
 
 # Export Simulation type
 # export Simulation
@@ -94,6 +95,7 @@ include("Controllers/control_lyapunov_function.jl")
 include("Controllers/clf_controller.jl")
 include("Controllers/control_barrier_function.jl")
 include("Controllers/cbf_controller.jl")
+include("Controllers/cbf_clf_controller.jl")
 
 # Simulator
 include("simulator.jl")
