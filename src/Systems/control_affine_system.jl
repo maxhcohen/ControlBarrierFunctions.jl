@@ -18,6 +18,7 @@ _f(Σ::ControlAffineSystem, x) = drift(Σ::ControlAffineSystem, x)
 _g(Σ::ControlAffineSystem, x) = actuation(Σ::ControlAffineSystem, x) 
 closed_loop_dynamics(Σ::ControlAffineSystem, x, u) = _f(Σ, x) + _g(Σ, x)*u
 dynamics(Σ::ControlAffineSystem, x, u) = closed_loop_dynamics(Σ::ControlAffineSystem, x, u)
+fully_actuated(Σ::ControlAffineSystem) = degrees_of_freedom(Σ) == control_dim(Σ)
 
 function dynamics(Σ::ControlAffineSystem, x)
     u = control_dim(Σ) == 1 ? 0.0 : zeros(control_dim(Σ))
@@ -43,6 +44,10 @@ function simulate(Σ::ControlAffineSystem, x, ts)
     sol = solve(prob, Tsit5())
 
     return sol
+end
+
+function drift_jacobian(Σ::ControlAffineSystem, x)
+    return jacobian(x -> _f(Σ, x), x)[1]
 end
 
 function linearize(Σ::ControlAffineSystem, x)

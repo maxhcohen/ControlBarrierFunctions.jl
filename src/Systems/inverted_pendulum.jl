@@ -10,6 +10,7 @@ InvertedPendulum(mass, len, friction) = InvertedPendulum(mass, len, friction, 9.
 
 state_dim(Σ::InvertedPendulum) = 2
 control_dim(Σ::InvertedPendulum) = 1
+degrees_of_freedom(Σ::InvertedPendulum) = 1
 
 function drift(Σ::InvertedPendulum, x)
     # Pull out states

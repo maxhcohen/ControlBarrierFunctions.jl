@@ -4,6 +4,7 @@ module CBFToolbox
 using LinearAlgebra
 using OrdinaryDiffEq
 using Zygote
+using ForwardDiff
 using JuMP
 using OSQP
 using Plots
@@ -35,6 +36,9 @@ export dynamics
 export linearize
 export integrate
 
+# Export outputs
+export ConfigurationError
+
 # Export certificate functions
 export ControlLyapunovFunction
 export ControlBarrierFunction
@@ -44,6 +48,7 @@ export Simulator
 
 # Export controllers
 export LQRController
+export FLController
 export CLFController
 export CBFController
 export CBFCLFController
@@ -86,11 +91,14 @@ include("Systems/control_affine_system.jl")
 include("Systems/single_integrator.jl")
 include("Systems/double_integrator.jl")
 include("Systems/inverted_pendulum.jl")
-# include("Systems/feedback_policy.jl")
-# include("Systems/system_library.jl")
+
+# Outputs
+include("Outputs/output.jl")
+include("Outputs/configuration_error.jl")
 
 # Controllers
 include("Controllers/lqr_controller.jl")
+include("Controllers/fl_controller.jl")
 include("Controllers/control_lyapunov_function.jl")
 include("Controllers/clf_controller.jl")
 include("Controllers/control_barrier_function.jl")
