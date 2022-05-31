@@ -57,3 +57,11 @@ function (sim::Simulator)(Σ::ControlAffineSystem, k::FLController, y::Configura
 
     return sol
 end
+
+function (sim::Simulator)(Σ::ControlAffineSystem, k::CBFController, k0::FLController, y::ConfigurationError)
+    rhs(x, p, t) = _f(Σ, x) + _g(Σ, x)*k(Σ, x, k0(Σ, y, x))
+    prob = ODEProblem(rhs, sim.x0, [sim.t0, sim.tf])
+    sol = solve(prob, Tsit5())
+
+    return sol
+end

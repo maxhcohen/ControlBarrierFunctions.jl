@@ -16,9 +16,7 @@ function (k::CBFController)(Σ::ControlAffineSystem, x)
 
     # Add CBF constraints
     for h in k.h
-        α = h.α
-        Lfh, Lgh = lie_derivatives(h, Σ, x)
-        @constraint(model, Lfh + Lgh*u >= -α(h(x)))
+        @constraint(model, cbf_condition(h, Σ, x, u) >= 0.0)
     end
 
     # Check if we should add control constraints
@@ -40,12 +38,9 @@ function (k::CBFController)(Σ::ControlAffineSystem, x, k0)
     control_dim(Σ) == 1 ? @variable(model, u) : @variable(model, u[1:control_dim(Σ)])
     @objective(model, Min, 0.5*u'u - k0'u)
 
-    # Add CBF constraint
     # Add CBF constraints
     for h in k.h
-        α = h.α
-        Lfh, Lgh = lie_derivatives(h, Σ, x)
-        @constraint(model, Lfh + Lgh*u >= -α(h(x)))
+        @constraint(model, cbf_condition(h, Σ, x, u) >= 0.0)
     end
 
     # Check if we should add control constraints

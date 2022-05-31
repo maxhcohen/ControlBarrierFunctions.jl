@@ -10,11 +10,6 @@ CLFController(V::ControlLyapunovFunction, p) = CLFController(V, nothing, nothing
 CLFController(V::ControlLyapunovFunction, A, b) = CLFController(V, A, b, nothing)
 
 function (k::CLFController)(Σ::ControlAffineSystem, x)
-    # CLF stuff
-    V = k.V
-    α = k.V.α
-    LfV, LgV = lie_derivatives(k.V, Σ, x)
-
     # Build QP and instantiate control decision variable
     model = Model(OSQP.Optimizer)
     set_silent(model)
@@ -29,7 +24,11 @@ function (k::CLFController)(Σ::ControlAffineSystem, x)
     end
 
     # Add CLF constraint
-    @constraint(model, LfV + LgV*u <= -α(V(x)))
+    if k.p === nothing
+        @constraint(model, clf_condition(k.V, Σ, x, u) <= 0.0)
+    else
+        @constraint(model, clf_condition(k.V, Σ, x, u) <= δ)
+    end
 
     # Check if we should add control constraints
     if k.A === nothing

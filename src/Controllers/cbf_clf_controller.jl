@@ -46,19 +46,14 @@ function (k::CBFCLFController)(Σ::ControlAffineSystem, x)
 
     # Add CBF constraints
     for h in k.h
-        α = h.α
-        Lfh, Lgh = lie_derivatives(h, Σ, x)
-        @constraint(model, Lfh + Lgh*u >= -α(h(x)))
+        @constraint(model, cbf_condition(h, Σ, x, u) >= 0.0)
     end
 
     # Add (relaxed) CLF constraint
-    V = k.V
-    γ = k.V.α
-    LfV, LgV = lie_derivatives(V, Σ, x)
     if k.p === nothing
-        @constraint(model, LfV + LgV*u <= -γ(V(x)))
+        @constraint(model, clf_condition(k.V, Σ, x, u) <= 0.0)
     else
-        @constraint(model, LfV + LgV*u <= -γ(V(x)) + δ)
+        @constraint(model, clf_condition(k.V, Σ, x, u) <= δ)
     end
 
     # Check if we should add control constraints

@@ -5,12 +5,26 @@ end
 
 (V::ControlLyapunovFunction)(x) = V.V(x)
 
-function lie_derivatives(V::ControlLyapunovFunction, Σ::ControlAffineSystem, x)
-    ∇V = gradient(x -> V(x), x)[1]'
-    LfV = ∇V * _f(Σ, x)
-    LgV = ∇V * _g(Σ, x)
+function _∇V(V::ControlLyapunovFunction, x)
+    _V(x) = V(x)
+    
+    return ForwardDiff.gradient(_V, x)'
+end
 
-    return LfV, LgV
+function _LfV(V::ControlLyapunovFunction, Σ::ControlAffineSystem, x)
+    return _∇V(V, x) * _f(Σ, x)
+end
+
+function _LgV(V::ControlLyapunovFunction, Σ::ControlAffineSystem, x)
+    return _∇V(V, x) * _g(Σ, x)
+end
+
+function lie_derivatives(V::ControlLyapunovFunction, Σ::ControlAffineSystem, x)
+    return _LfV(V, Σ, x), _LgV(V, Σ, x)
+end
+
+function clf_condition(V::ControlLyapunovFunction, Σ::ControlAffineSystem, x, u)
+    return _LfV(V, Σ, x) + _LgV(V, Σ, x)*u + V.α(V(x))
 end
 
 function ControlLyapunovFunction(Σ::ControlAffineSystem, Q, R, α)
