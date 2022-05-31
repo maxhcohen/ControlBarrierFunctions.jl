@@ -35,6 +35,31 @@ function actuation(Σ::DoubleIntegrator, x)
     return g
 end
 
+function regressor(Σ::DoubleIntegrator, x)
+    # Pull out states
+    N = Σ.N
+    q̇ = N == 1 ? x[2] : x[N+1:end]
+
+    # Pull out parameters
+    m = Σ.mass
+
+    # Regressor for uncertain parameters
+    F = vcat(zeros(N,N), -(1/m)*Matrix(1.0I, N, N).*q̇)
+
+    return F
+end
+
+function matched_regressor(Σ::DoubleIntegrator, x)
+    # Pull out states
+    N = Σ.N
+    q̇ = N == 1 ? x[2] : x[N+1:end]
+
+    # Matched regressor for uncertain parameters
+    φ = -1.0*Matrix(1.0I, N, N).*q̇
+
+    return φ
+end
+
 function inertia_matrix(Σ::DoubleIntegrator, q)
     return Matrix(Σ.mass*I, Σ.N, Σ.N)
 end
@@ -43,12 +68,12 @@ function coriolis_matrix(Σ::DoubleIntegrator, q, q̇)
     return zeros(Σ.N, Σ.N)
 end
 
-function viscous_friction(Σ::DoubleIntegrator, q̇)
+function damping_matrix(Σ::DoubleIntegrator)
     γ = Σ.friction
     if length(γ) == 1
-        F = γ*q̇
+        F = γ*Matrix(1.0I, Σ.N, Σ.N)
     else
-        F = [γ[i]*q̇[i] for i in 1:length(γ)]
+        F = Matrix(1.0I, Σ.N, Σ.N)*γ
     end
 
     return F

@@ -30,8 +30,12 @@ export state_dim
 export control_dim
 export drift
 export actuation
+export regressor
+export matched_regressor
 export _f
 export _g
+export _F
+export _φ
 export dynamics
 export linearize
 export integrate
@@ -50,8 +54,11 @@ export Simulator
 export LQRController
 export FLController
 export CLFController
+export ISSCLFController
 export CBFController
+export ISSCBFController
 export CBFCLFController
+export ISSCBFCLFController
 
 # System definitions
 include("Systems/control_affine_system.jl")
@@ -68,9 +75,12 @@ include("Controllers/lqr_controller.jl")
 include("Controllers/fl_controller.jl")
 include("Controllers/control_lyapunov_function.jl")
 include("Controllers/clf_controller.jl")
+include("Controllers/iss_clf_controller.jl")
 include("Controllers/control_barrier_function.jl")
 include("Controllers/cbf_controller.jl")
+include("Controllers/iss_cbf_controller.jl")
 include("Controllers/cbf_clf_controller.jl")
+include("Controllers/iss_cbf_clf_controller.jl")
 
 # Simulator
 include("simulator.jl")

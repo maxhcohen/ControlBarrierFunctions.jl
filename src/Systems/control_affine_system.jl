@@ -14,20 +14,22 @@ ControlAffineSystem should have the following methods:
 abstract type ControlAffineSystem <: System end
 
 # Define some shorthand functions for ControlAffineSystem
-_f(Σ::ControlAffineSystem, x) = drift(Σ::ControlAffineSystem, x)
-_g(Σ::ControlAffineSystem, x) = actuation(Σ::ControlAffineSystem, x) 
+_f(Σ::ControlAffineSystem, x) = drift(Σ, x)
+_g(Σ::ControlAffineSystem, x) = actuation(Σ, x)
+_F(Σ::ControlAffineSystem, x) = regressor(Σ, x)
+_φ(Σ::ControlAffineSystem, x) = matched_regressor(Σ, x)
 closed_loop_dynamics(Σ::ControlAffineSystem, x, u) = _f(Σ, x) + _g(Σ, x)*u
-dynamics(Σ::ControlAffineSystem, x, u) = closed_loop_dynamics(Σ::ControlAffineSystem, x, u)
+dynamics(Σ::ControlAffineSystem, x, u) = closed_loop_dynamics(Σ, x, u)
 fully_actuated(Σ::ControlAffineSystem) = degrees_of_freedom(Σ) == control_dim(Σ)
 
 function dynamics(Σ::ControlAffineSystem, x)
     u = control_dim(Σ) == 1 ? 0.0 : zeros(control_dim(Σ))
-    return closed_loop_dynamics(Σ::ControlAffineSystem, x, u)
+    return closed_loop_dynamics(Σ, x, u)
 end
 
 function open_loop_dynamics(Σ::ControlAffineSystem, x)
     u = control_dim(Σ) == 1 ? 0.0 : zeros(control_dim(Σ))
-    return closed_loop_dynamics(Σ::ControlAffineSystem, x, u)
+    return closed_loop_dynamics(Σ, x, u)
 end
 
 function integrate(Σ::ControlAffineSystem, x, u, ts)
