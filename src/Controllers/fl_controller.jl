@@ -38,7 +38,8 @@ end
 
 function (k::FLController)(Σ::ControlAffineSystem, y::ConfigurationError, x)
     Lf²y, LfLgy = lie_derivatives(y, Σ, x)
-    ν = size(k.K)[1] == 1 ? dot(-k.K, x) : -k.K * x
+    ξ = vcat(y(Σ, x), _Lfy(y, Σ, x))
+    ν = size(k.K)[1] == 1 ? dot(-k.K, ξ) : -k.K * ξ
     u = -inv(LfLgy)*(Lf²y - ν)
 
     return u
