@@ -60,6 +60,14 @@ function matched_regressor(Σ::DoubleIntegrator, x)
     return φ
 end
 
+function nominal_drift(Σ::DoubleIntegrator, x)
+    # Pull out states
+    N = Σ.N
+    q̇ = N == 1 ? x[2] : x[N+1:end]
+
+    return vcat(q̇, zeros(N))
+end
+
 function inertia_matrix(Σ::DoubleIntegrator, q)
     return Matrix(Σ.mass*I, Σ.N, Σ.N)
 end

@@ -19,6 +19,10 @@ function _LgV(V::ControlLyapunovFunction, Σ::ControlAffineSystem, x)
     return _∇V(V, x) * _g(Σ, x)
 end
 
+function _Lf0V(V::ControlLyapunovFunction, Σ::ControlAffineSystem, x)
+    _∇V(V, x) * _f0(Σ, x)
+end
+
 function lie_derivatives(V::ControlLyapunovFunction, Σ::ControlAffineSystem, x)
     return _LfV(V, Σ, x), _LgV(V, Σ, x)
 end

@@ -32,12 +32,24 @@ function _Lgh(h::ControlBarrierFunction, Σ::ControlAffineSystem, x)
     return _∇h(h, x) * _g(Σ, x)
 end
 
+function _Lf0h(h::ControlBarrierFunction, Σ::ControlAffineSystem, x)
+    return _∇h(h, x) * _f0(Σ, x)
+end
+
 function _dψ0(h::ControlBarrierFunction, Σ::ControlAffineSystem, x)
     return _Lfh(h, Σ, x)
 end
 
+function _dψ00(h::ControlBarrierFunction, Σ::ControlAffineSystem, x)
+    return _Lf0h(h, Σ, x)
+end
+
 function _ψ1(h::ControlBarrierFunction, Σ::ControlAffineSystem, x)
     return _dψ0(h, Σ, x) + h.α(_ψ0(h, x))
+end
+
+function _ψ10(h::ControlBarrierFunction, Σ::ControlAffineSystem, x)
+    return _dψ00(h, Σ, x) + h.α(_ψ0(h, x))
 end
 
 function _dLfh(h::ControlBarrierFunction, Σ::ControlAffineSystem, x)
@@ -46,20 +58,42 @@ function _dLfh(h::ControlBarrierFunction, Σ::ControlAffineSystem, x)
     return ForwardDiff.gradient(Lfh, x)'
 end
 
+function _dLf0h(h::ControlBarrierFunction, Σ::ControlAffineSystem, x)
+    Lfh(x) = _Lf0h(h, Σ, x)
+
+    return ForwardDiff.gradient(Lfh, x)'
+end
+
 function _Lf²h(h::ControlBarrierFunction, Σ::ControlAffineSystem, x)
     return _dLfh(h, Σ, x) * _f(Σ, x)
+end
+
+function _Lf0²h(h::ControlBarrierFunction, Σ::ControlAffineSystem, x)
+    return _dLf0h(h, Σ, x) * _f(Σ, x)
 end
 
 function _LgLfh(h::ControlBarrierFunction, Σ::ControlAffineSystem, x)
     return _dLfh(h, Σ, x) * _g(Σ, x)
 end
 
+function _LgLf0h(h::ControlBarrierFunction, Σ::ControlAffineSystem, x)
+    return _dLf0h(h, Σ, x) * _g(Σ, x)
+end
+
 function _dψ1(h::ControlBarrierFunction, Σ::ControlAffineSystem, x)
     return _Lf²h(h, Σ, x) + _dα(h, h(x))*_Lfh(h, Σ, x)
 end
 
+function _dψ10(h::ControlBarrierFunction, Σ::ControlAffineSystem, x)
+    return _Lf0²h(h, Σ, x) + _dα(h, h(x))*_Lf0h(h, Σ, x)
+end
+
 function _dψ1(h::ControlBarrierFunction, Σ::ControlAffineSystem, x, u)
     return _Lf²h(h, Σ, x) + _LgLfh(h, Σ, x)*u +  _dα(h, h(x))*_Lfh(h, Σ, x)
+end
+
+function _dψ10(h::ControlBarrierFunction, Σ::ControlAffineSystem, x, u)
+    return _Lf0²h(h, Σ, x) + _LgLf0h(h, Σ, x)*u +  _dα(h, h(x))*_Lf0h(h, Σ, x)
 end
 
 function lie_derivatives(h::ControlBarrierFunction, Σ::ControlAffineSystem, x)

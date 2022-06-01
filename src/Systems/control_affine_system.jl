@@ -18,6 +18,7 @@ _f(Σ::ControlAffineSystem, x) = drift(Σ, x)
 _g(Σ::ControlAffineSystem, x) = actuation(Σ, x)
 _F(Σ::ControlAffineSystem, x) = regressor(Σ, x)
 _φ(Σ::ControlAffineSystem, x) = matched_regressor(Σ, x)
+_f0(Σ::ControlAffineSystem, x) = nominal_drift(Σ, x)
 closed_loop_dynamics(Σ::ControlAffineSystem, x, u) = _f(Σ, x) + _g(Σ, x)*u
 dynamics(Σ::ControlAffineSystem, x, u) = closed_loop_dynamics(Σ, x, u)
 fully_actuated(Σ::ControlAffineSystem) = degrees_of_freedom(Σ) == control_dim(Σ)

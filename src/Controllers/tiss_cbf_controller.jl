@@ -1,30 +1,33 @@
-struct ISSCBFController <: FeedbackController
+struct TISSCBFController <: FeedbackController
     h::Vector{ControlBarrierFunction}
     ε
+    λ
     A
     b
 end
 
-ISSCBFController(h::ControlBarrierFunction, ε) = ISSCBFController([h], ε, nothing, nothing)
-ISSCBFController(h::Vector{ControlBarrierFunction}, ε) = ISSCBFController(h, ε, nothing, nothing)
+TISSCBFController(h::ControlBarrierFunction, ε, λ) = TISSCBFController([h], ε, λ, nothing, nothing)
+TISSCBFController(h::Vector{ControlBarrierFunction}, ε, λ) = TISSCBFController(h, ε, λ, nothing, nothing)
 
-function iss_cbf_condition(h::ControlBarrierFunction, Σ::ControlAffineSystem, ε, x, u)
+function tiss_cbf_condition(h::ControlBarrierFunction, Σ::ControlAffineSystem, ε0, λ, x, u)
     r = h.relative_degree
     if r == 1
         Lfh = _Lf0h(h, Σ, x)
         Lgh = _Lgh(h, Σ, x)
         φ = _φ(Σ, x)
+        ε = ε0*exp(λ * h(x))
         out = Lfh + Lgh*u + h.α(h(x)) - (1/ε)*norm(Lgh*φ)^2
     elseif r == 2
         φ = _φ(Σ, x)
         LgLfh = _LgLf0h(h, Σ, x)
+        ε = ε0*exp(λ * _ψ1(h, Σ, x))
         out = _dψ10(h, Σ, x, u) + h.α(_ψ10(h, Σ, x)) - (1/ε)*norm(LgLfh*φ)^2
     end
 
     return out
 end
 
-function (k::ISSCBFController)(Σ::ControlAffineSystem, x)
+function (k::TISSCBFController)(Σ::ControlAffineSystem, x)
     # Build QP and instantiate control decision variable
     model = Model(OSQP.Optimizer)
     set_silent(model)
@@ -33,7 +36,7 @@ function (k::ISSCBFController)(Σ::ControlAffineSystem, x)
 
     # Add CBF constraints
     for h in k.h
-        @constraint(model, iss_cbf_condition(h, Σ, k.ε, x, u) >= 0.0)
+        @constraint(model, tiss_cbf_condition(h, Σ, k.ε, k.λ, x, u) >= 0.0)
     end
 
     # Check if we should add control constraints
@@ -48,7 +51,7 @@ function (k::ISSCBFController)(Σ::ControlAffineSystem, x)
     return control_dim(Σ) == 1 ? value(u) : value.(u)
 end
 
-function (k::ISSCBFController)(Σ::ControlAffineSystem, x, k0)
+function (k::TISSCBFController)(Σ::ControlAffineSystem, x, k0)
     # Build QP and instantiate control decision variable
     model = Model(OSQP.Optimizer)
     set_silent(model)
@@ -57,7 +60,7 @@ function (k::ISSCBFController)(Σ::ControlAffineSystem, x, k0)
 
     # Add CBF constraints
     for h in k.h
-        @constraint(model, iss_cbf_condition(h, Σ, k.ε, x, u) >= 0.0)
+        @constraint(model, tiss_cbf_condition(h, Σ, k.ε, k.λ, x, u) >= 0.0)
     end
 
     # Check if we should add control constraints

@@ -11,7 +11,7 @@ ISSCLFController(V::ControlLyapunovFunction, ε, p) = ISSCLFController(V, ε, no
 ISSCLFController(V::ControlLyapunovFunction, ε, A, b) = ISSCLFController(V, ε, A, b, nothing)
 
 function iss_clf_condition(V::ControlLyapunovFunction, Σ::ControlAffineSystem, ε, x, u)
-    LfV = _LfV(V, Σ, x)
+    LfV = _Lf0V(V, Σ, x)
     LgV = _LgV(V, Σ, x)
     φ = _φ(Σ, x)
 
