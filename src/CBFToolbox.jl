@@ -24,6 +24,8 @@ export ControlAffineSystem
 export SingleIntegrator
 export DoubleIntegrator
 export InvertedPendulum
+export TwoLinkManipulator
+export DoublePendulum
 
 # Export functions for ControlAffineSystems
 export state_dim
@@ -59,12 +61,15 @@ export CBFController
 export ISSCBFController
 export CBFCLFController
 export ISSCBFCLFController
+export TISSCBFController
 
 # System definitions
 include("Systems/control_affine_system.jl")
 include("Systems/single_integrator.jl")
 include("Systems/double_integrator.jl")
 include("Systems/inverted_pendulum.jl")
+include("Systems/two_link_manipulator.jl")
+include("Systems/double_pendulum.jl")
 
 # Outputs
 include("Outputs/output.jl")
@@ -81,6 +86,7 @@ include("Controllers/cbf_controller.jl")
 include("Controllers/iss_cbf_controller.jl")
 include("Controllers/cbf_clf_controller.jl")
 include("Controllers/iss_cbf_clf_controller.jl")
+include("Controllers/tiss_cbf_controller.jl")
 
 # Simulator
 include("simulator.jl")

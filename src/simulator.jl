@@ -26,7 +26,7 @@ function (sim::Simulator)(Σ::ControlAffineSystem, k::FeedbackController)
     return sol
 end
 
-function (sim::Simulator)(Σ::ControlAffineSystem, k::Union{CLFController, CBFController, CBFCLFController, ISSCLFController, ISSCBFController, ISSCBFCLFController})
+function (sim::Simulator)(Σ::ControlAffineSystem, k::Union{CLFController, CBFController, CBFCLFController, ISSCLFController, ISSCBFController, ISSCBFCLFController, TISSCBFController})
     rhs(x, p, t) = _f(Σ, x) + _g(Σ, x)*k(Σ, x)
     prob = ODEProblem(rhs, sim.x0, [sim.t0, sim.tf])
     sol = solve(prob, Tsit5())
@@ -34,7 +34,7 @@ function (sim::Simulator)(Σ::ControlAffineSystem, k::Union{CLFController, CBFCo
     return sol
 end
 
-function (sim::Simulator)(Σ::ControlAffineSystem, k::Union{CBFController, ISSCBFController}, k0::Union{CLFController, ISSCLFController})
+function (sim::Simulator)(Σ::ControlAffineSystem, k::Union{CBFController, ISSCBFController, TISSCBFController}, k0::Union{CLFController, ISSCLFController})
     rhs(x, p, t) = _f(Σ, x) + _g(Σ, x)*k(Σ, x, k0(Σ, x))
     prob = ODEProblem(rhs, sim.x0, [sim.t0, sim.tf])
     sol = solve(prob, Tsit5())
@@ -42,7 +42,7 @@ function (sim::Simulator)(Σ::ControlAffineSystem, k::Union{CBFController, ISSCB
     return sol
 end
 
-function (sim::Simulator)(Σ::ControlAffineSystem, k0::Union{CLFController, ISSCLFController}, k::Union{CBFController, ISSCBFController})
+function (sim::Simulator)(Σ::ControlAffineSystem, k0::Union{CLFController, ISSCLFController}, k::Union{CBFController, ISSCBFController, TISSCBFController})
     rhs(x, p, t) = _f(Σ, x) + _g(Σ, x)*k(Σ, x, k0(Σ, x))
     prob = ODEProblem(rhs, sim.x0, [sim.t0, sim.tf])
     sol = solve(prob, Tsit5())
