@@ -26,6 +26,8 @@ export DoubleIntegrator
 export InvertedPendulum
 export TwoLinkManipulator
 export DoublePendulum
+export PlanarQuadrotor
+export AdaptiveCruiseControl
 
 # Export functions for ControlAffineSystems
 export state_dim
@@ -70,6 +72,8 @@ include("Systems/double_integrator.jl")
 include("Systems/inverted_pendulum.jl")
 include("Systems/two_link_manipulator.jl")
 include("Systems/double_pendulum.jl")
+include("Systems/adaptive_cruise_control.jl")
+include("Systems/planar_quadrotor.jl")
 
 # Outputs
 include("Outputs/output.jl")
