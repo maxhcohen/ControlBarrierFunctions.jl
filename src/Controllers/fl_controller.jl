@@ -37,10 +37,17 @@ function FLController(Σ::ControlAffineSystem, Q, R)
 end
 
 function (k::FLController)(Σ::ControlAffineSystem, y::ConfigurationError, x)
-    Lf²y, LfLgy = lie_derivatives(y, Σ, x)
-    ξ = vcat(y(Σ, x), _Lfy(y, Σ, x))
-    ν = size(k.K)[1] == 1 ? dot(-k.K, ξ) : -k.K * ξ
-    u = -inv(LfLgy)*(Lf²y - ν)
+    if y.relative_degree == 1
+        Lfy, Lgy = lie_derivatives(y, Σ, x)
+        ξ = y(Σ, x)
+        ν = size(k.K)[1] == 1 ? dot(-k.K, ξ) : -k.K * ξ
+        u = -inv(Lgy)*(Lfy - ν)
+    elseif y.relative_degree == 2
+        Lf²y, LfLgy = lie_derivatives(y, Σ, x)
+        ξ = vcat(y(Σ, x), _Lfy(y, Σ, x))
+        ν = size(k.K)[1] == 1 ? dot(-k.K, ξ) : -k.K * ξ
+        u = -inv(LfLgy)*(Lf²y - ν)
+    end
 
     return u
 end

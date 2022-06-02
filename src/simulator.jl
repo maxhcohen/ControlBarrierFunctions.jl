@@ -42,6 +42,14 @@ function (sim::Simulator)(Σ::ControlAffineSystem, k::Union{CBFController, ISSCB
     return sol
 end
 
+function (sim::Simulator)(Σ::ControlAffineSystem, k::Union{CBFController, ISSCBFController, TISSCBFController}, k0::FeedbackController)
+    rhs(x, p, t) = _f(Σ, x) + _g(Σ, x)*k(Σ, x, k0(x))
+    prob = ODEProblem(rhs, sim.x0, [sim.t0, sim.tf])
+    sol = solve(prob, Tsit5())
+
+    return sol
+end
+
 function (sim::Simulator)(Σ::ControlAffineSystem, k0::Union{CLFController, ISSCLFController}, k::Union{CBFController, ISSCBFController, TISSCBFController})
     rhs(x, p, t) = _f(Σ, x) + _g(Σ, x)*k(Σ, x, k0(Σ, x))
     prob = ODEProblem(rhs, sim.x0, [sim.t0, sim.tf])

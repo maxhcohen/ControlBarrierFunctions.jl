@@ -29,6 +29,10 @@ function _Lfy(y::ConfigurationError, Σ::ControlAffineSystem, x)
     return _dy(y, Σ, x) * _f(Σ, x)
 end
 
+function _Lgy(y::ConfigurationError, Σ::ControlAffineSystem, x)
+    return _dy(y, Σ, x) * _g(Σ, x)
+end
+
 function _dLfy(y::ConfigurationError, Σ::ControlAffineSystem, x)
     Lfy(x) = _Lfy(y, Σ, x)
     if control_dim(Σ) == 1
@@ -52,6 +56,9 @@ function lie_derivatives(y::ConfigurationError, Σ::ControlAffineSystem, x)
     if y.relative_degree == 2
         out1 = _Lf²y(y, Σ, x)
         out2 = _LgLfy(y, Σ, x)
+    elseif y.relative_degree == 1
+        out1 = _Lfy(y, Σ, x)
+        out2 = _Lgy(y, Σ, x)
     end
 
     return out1, out2
