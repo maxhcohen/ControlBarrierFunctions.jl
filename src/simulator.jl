@@ -73,3 +73,23 @@ function (sim::Simulator)(Σ::ControlAffineSystem, k::CBFController, k0::FLContr
 
     return sol
 end
+
+# function (sim::Simulator)(Σ::ControlAffineSystem, τ::ACLFParameterEstimator, k::CLFController)
+#     n = state_dim(Σ)
+#     p = parameter_dim(Σ)
+#     function rhs(X, param, t)
+#         # Unpack states
+#         x = n == 1 ? X[1] : X[1:n]
+#         θ = p == 1 ? X[n+1] : X[n+1:n+p]
+
+#         ẋ = _f(Σ, x) + _g(Σ, x)*k(Σ, τ, x, θ)
+#         θ̇ = τ(Σ, x)
+
+#         return vcat(ẋ, θ̇)
+
+#     end
+#     prob = ODEProblem(rhs, sim.x0, [sim.t0, sim.tf])
+#     sol = solve(prob, Tsit5())
+
+#     return sol
+# end

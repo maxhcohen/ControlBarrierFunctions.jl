@@ -10,6 +10,7 @@ state_dim(Σ::DoubleIntegrator) = 2*Σ.N
 control_dim(Σ::DoubleIntegrator) = Σ.N
 degrees_of_freedom(Σ::DoubleIntegrator) = Σ.N
 euler_lagrange(Σ::DoubleIntegrator) = true
+parameter_dim(Σ::DoubleIntegrator) = length(Σ.mass) + length(Σ.friction)
 
 function drift(Σ::DoubleIntegrator, x)
     # Pull out states
@@ -66,6 +67,10 @@ function nominal_drift(Σ::DoubleIntegrator, x)
     q̇ = N == 1 ? x[2] : x[N+1:end]
 
     return vcat(q̇, zeros(N))
+end
+
+function parameters(Σ::DoubleIntegrator)
+    return vcat(Σ.mass, Σ.friction)
 end
 
 function inertia_matrix(Σ::DoubleIntegrator, q)

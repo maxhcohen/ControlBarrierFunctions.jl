@@ -32,6 +32,7 @@ export AdaptiveCruiseControl
 # Export functions for ControlAffineSystems
 export state_dim
 export control_dim
+export parameter_dim
 export drift
 export actuation
 export regressor
@@ -79,13 +80,15 @@ include("Systems/planar_quadrotor.jl")
 include("Outputs/output.jl")
 include("Outputs/configuration_error.jl")
 
+# Certificate functions
+include("Controllers/control_lyapunov_function.jl")
+include("Controllers/control_barrier_function.jl")
+
 # Controllers
 include("Controllers/lqr_controller.jl")
 include("Controllers/fl_controller.jl")
-include("Controllers/control_lyapunov_function.jl")
 include("Controllers/clf_controller.jl")
 include("Controllers/iss_clf_controller.jl")
-include("Controllers/control_barrier_function.jl")
 include("Controllers/cbf_controller.jl")
 include("Controllers/iss_cbf_controller.jl")
 include("Controllers/cbf_clf_controller.jl")

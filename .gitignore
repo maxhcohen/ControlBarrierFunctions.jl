@@ -26,5 +26,11 @@ Manifest.toml
 # Notebooks used for testing stuff out
 scratch/
 tests/
+old/
 .vscode
 .DS_Store
+
+# Ignore stuff in progress
+src/ParameterEstimation
+src/Controllers/aclf_controller.jl
+
