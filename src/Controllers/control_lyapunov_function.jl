@@ -1,24 +1,54 @@
+"""
+    ControlLyapunovFunction <: CertificateFunction
+
+Control Lyapunov Function type with Lyapunov function candidate V(x) and class K function α/
+"""
 struct ControlLyapunovFunction <: CertificateFunction
     V
     α
 end
 
+"""
+    (V::ControlLyapunovFunction)(x)
+
+Evaluate CLF at state x.
+"""
 (V::ControlLyapunovFunction)(x) = V.V(x)
 
+"""
+    _∇V(V::ControlLyapunovFunction, x)
+
+Compute gradient of CLF at x.
+"""
 function _∇V(V::ControlLyapunovFunction, x)
     _V(x) = V(x)
     
     return ForwardDiff.gradient(_V, x)'
 end
 
+"""
+    _LfV(V::ControlLyapunovFunction, Σ::ControlAffineSystem, x)
+
+Compute the Lie derivative of V along the drift vector field.
+"""
 function _LfV(V::ControlLyapunovFunction, Σ::ControlAffineSystem, x)
     return _∇V(V, x) * _f(Σ, x)
 end
 
+"""
+    _LgV(V::ControlLyapunovFunction, Σ::ControlAffineSystem, x)
+
+Compute the Lie derivative of V along the vector field of control directions.
+"""
 function _LgV(V::ControlLyapunovFunction, Σ::ControlAffineSystem, x)
     return _∇V(V, x) * _g(Σ, x)
 end
 
+"""
+    _Lf0V(V::ControlLyapunovFunction, Σ::ControlAffineSystem, x)
+
+Compute the Lie derivative of V along the nominal drift dynamics. 
+"""
 function _Lf0V(V::ControlLyapunovFunction, Σ::ControlAffineSystem, x)
     _∇V(V, x) * _f0(Σ, x)
 end

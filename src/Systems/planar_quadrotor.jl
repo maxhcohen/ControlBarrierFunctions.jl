@@ -1,3 +1,8 @@
+"""
+    PlanarQuadrotor <: ControlAffineSystem
+
+ControlAffineSystem representing a quadrotor confined to a vertical plane.
+"""
 struct PlanarQuadrotor <: ControlAffineSystem
     mass
     inertia

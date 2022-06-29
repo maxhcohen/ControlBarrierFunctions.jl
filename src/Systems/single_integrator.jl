@@ -1,3 +1,8 @@
+"""
+    SingleIntegrator <: ControlAffineSystem
+
+ControlAffineSystem representing a single integrator with N states.
+"""
 struct SingleIntegrator <: ControlAffineSystem
     N
 end

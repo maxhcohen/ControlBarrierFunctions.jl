@@ -1,3 +1,13 @@
+"""
+    AdaptiveCruiseControl <: ControlAffineSystem
+
+ControlAffineSystem representing the adaptive cruise control (ACC) problem commonly used in
+the CBF literature. The defauly parameters used here are taken from
+
+A. D. Ames, J. W. Grizzle, P. Tabuada, "Control barrier function based quadratic programs
+with application to adaptive cruise control," Proceedings of the IEEE Conference on 
+Decision and Control, 2014.
+"""
 struct AdaptiveCruiseControl <: ControlAffineSystem
     m
     f0

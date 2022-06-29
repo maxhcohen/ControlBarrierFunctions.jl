@@ -1,3 +1,8 @@
+"""
+    InvertedPendulum <: ControlAffineSystem
+
+ControlAffineSystem representing an inverted pendulum.
+"""
 struct InvertedPendulum <: ControlAffineSystem
     mass
     len
@@ -5,7 +10,7 @@ struct InvertedPendulum <: ControlAffineSystem
     gravity
 end
 
-InvertedPendulum() = InvertedPendulum(1.0, 1.0, 1.0, 9.81)
+InvertedPendulum() = InvertedPendulum(1.0, 1.0, 0.0, 9.81)
 InvertedPendulum(mass, len, friction) = InvertedPendulum(mass, len, friction, 9.81)
 
 state_dim(Σ::InvertedPendulum) = 2

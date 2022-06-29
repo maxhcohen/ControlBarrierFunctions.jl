@@ -1,3 +1,11 @@
+"""
+    DoublePendulum <: ControlAffineSystem
+
+ControlAffineSystem representing a double pendulum. The parameters of the pendulum are the
+mass of the first and second links, the lengths of the first and second links, and damping
+coefficients for the first and second links. By default masses and lengths are set to 1 
+while damping coefficients are set to 0.
+"""
 struct DoublePendulum <: ControlAffineSystem
     m1
     m2

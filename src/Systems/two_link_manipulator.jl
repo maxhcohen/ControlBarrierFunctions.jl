@@ -1,3 +1,13 @@
+"""
+    TwoLinkManipulator <: ControlAffineSystem
+
+ControlAffineSystem representing a two-link planar robotic manipulator. The parameters of
+the manipulator used here are taken from
+
+A. Parikh, R. Kamalapurkar, and W. E. Dixon, "Integral concurrent learning: adaptive control
+with parameter convergence using finite excitation," International Journal of Adaptive
+Control and Signal Processing, 2019.
+"""
 struct TwoLinkManipulator <: ControlAffineSystem
     p1
     p2

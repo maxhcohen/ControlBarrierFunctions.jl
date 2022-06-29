@@ -1,3 +1,9 @@
+"""
+    DoubleIntegrator <: ControlAffineSystem
+
+ControlAffineSystem representing an double integrator with N degrees of freedom. You can 
+also add mass and friction parameters to the system dynamics.
+"""
 struct DoubleIntegrator <: ControlAffineSystem
     N
     mass
