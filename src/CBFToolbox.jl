@@ -14,7 +14,11 @@ abstract type System end
 abstract type Policy end
 abstract type CertificateFunction end
 
+# Export types and functions related to control affine system
+export ControlAffineSystem
 
+# System definitions
+include("control_affine_system.jl")
 
 # # Export Simulation type
 # export Simulation
