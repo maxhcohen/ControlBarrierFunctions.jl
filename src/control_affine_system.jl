@@ -36,8 +36,10 @@ function ControlAffineSystem(n::Int, m::Int, f::Function, g::Function)
 
     # Populate entries of A matrix
     a = [1.0, -1.0]
+    j = 1
     for i in 1:2:Nconstraints
-        A[i:i+1, i] = a
+        A[i:i+1, j] = a
+        j += 1
     end
 
     return ControlAffineSystem(n, m, f, g, A, b)
@@ -53,9 +55,10 @@ function ControlAffineSystem(n::Int, m::Int, f::Function, g::Function, U)
     a = [1.0, -1.0]
     j = 1
     for i in 1:2:Nconstraints
-        A[i:i+1, i] = a
+        A[i:i+1, j] = a
         ubounds = U[j]
-        b[j:j+1] = [ubounds[2], ubounds[1]]
+        b[i:i+1] = [ubounds[2], -ubounds[1]]
+        j += 1
     end
 
     return ControlAffineSystem(n, m, f, g, A, b)
