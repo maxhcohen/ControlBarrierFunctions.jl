@@ -11,7 +11,8 @@ import DifferentialEquations: ODEProblem, solve
 
 # Abstract types
 abstract type System end
-abstract type Policy end
+abstract type Controller end
+abstract type FeedbackController <: Controller end
 abstract type CertificateFunction end
 
 # Export types and functions related to control affine system
