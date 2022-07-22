@@ -26,5 +26,6 @@ Manifest.toml
 # Notebooks used for testing stuff out
 scratch/
 tests/
+old/
 .vscode
 .DS_Store
