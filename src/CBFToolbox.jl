@@ -17,8 +17,14 @@ abstract type CertificateFunction end
 # Export types and functions related to control affine system
 export ControlAffineSystem
 
+# Export base simulation functionality
+export Simulation
+
 # System definitions
 include("control_affine_system.jl")
+
+# Simulator
+include("simulation.jl")
 
 # # Export Simulation type
 # export Simulation
