@@ -26,6 +26,8 @@ export StateFeedbackController
 
 # Export CLF
 export ControlLyapunovFunction
+export gradient
+export CLFSontag
 export CLFQuadProg
 
 # Simulator
@@ -39,6 +41,7 @@ include("state_feedback_controller.jl")
 
 # Lyapunov function
 include("control_lyapunov_function.jl")
+include("clf_sontag.jl")
 include("clf_quad_prog.jl")
 
 # # Export Simulation type
