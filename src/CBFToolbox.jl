@@ -15,17 +15,23 @@ abstract type Controller end
 abstract type FeedbackController <: Controller end
 abstract type CertificateFunction end
 
+# Export base simulation functionality
+export Simulation
+
 # Export types and functions related to control affine system
 export ControlAffineSystem
 
-# Export base simulation functionality
-export Simulation
+# Export controller
+export StateFeedbackController
+
+# Simulator
+include("simulation.jl")
 
 # System definitions
 include("control_affine_system.jl")
 
-# Simulator
-include("simulation.jl")
+# Controllers
+include("state_feedback_controller.jl")
 
 # # Export Simulation type
 # export Simulation
