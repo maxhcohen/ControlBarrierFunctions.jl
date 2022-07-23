@@ -9,6 +9,9 @@ using Plots
 using PlotThemes
 import DifferentialEquations: ODEProblem, solve
 
+# Import various utilities from other packages
+import ControlSystems: lqr, are, Continuous
+
 # Abstract types
 abstract type System end
 abstract type Controller end
@@ -23,6 +26,7 @@ export ControlAffineSystem
 
 # Export controller
 export StateFeedbackController
+export LQRController
 
 # Export CLF
 export ControlLyapunovFunction
@@ -38,6 +42,7 @@ include("control_affine_system.jl")
 
 # Controllers
 include("state_feedback_controller.jl")
+include("lqr_controller.jl")
 
 # Lyapunov function
 include("control_lyapunov_function.jl")
