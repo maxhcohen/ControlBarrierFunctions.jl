@@ -11,7 +11,7 @@ Models a nonlinear control affine system.
 - `A`: defines control constraints of the form A*u <= b
 - `b`: defines control constraints of the form A*u <= b
 """
-mutable struct ControlAffineSystem <: System
+struct ControlAffineSystem <: System
     n::Int
     m::Int
     f::Function

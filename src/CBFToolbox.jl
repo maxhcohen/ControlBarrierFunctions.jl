@@ -2,7 +2,7 @@ module CBFToolbox
 
 # Julia packages required for this module
 using LinearAlgebra
-using Zygote
+using ForwardDiff
 using JuMP
 using OSQP
 using Plots
@@ -24,6 +24,10 @@ export ControlAffineSystem
 # Export controller
 export StateFeedbackController
 
+# Export CLF
+export ControlLyapunovFunction
+export CLFQuadProg
+
 # Simulator
 include("simulation.jl")
 
@@ -32,6 +36,10 @@ include("control_affine_system.jl")
 
 # Controllers
 include("state_feedback_controller.jl")
+
+# Lyapunov function
+include("control_lyapunov_function.jl")
+include("clf_quad_prog.jl")
 
 # # Export Simulation type
 # export Simulation
