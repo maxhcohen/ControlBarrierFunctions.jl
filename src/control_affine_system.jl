@@ -63,3 +63,34 @@ function ControlAffineSystem(n::Int, m::Int, f::Function, g::Function, U)
 
     return ControlAffineSystem(n, m, f, g, A, b)
 end
+
+############################################################################################
+#                                      Simulations                                         #
+############################################################################################
+
+"""
+    (S::Simulation)(Σ::ControlAffineSystem, x)
+
+Run open-loop simulation of control affine system from initial state x.
+"""
+function (S::Simulation)(Σ::ControlAffineSystem, x)
+    right_hand_side(x, p, t) = Σ.f(x)
+    problem = ODEProblem(right_hand_side, x, [S.t0, S.tf])
+    trajectory = solve(problem)
+
+    return trajectory
+end
+
+"""
+    (S::Simulation)(Σ::ControlAffineSystem, k::FeedbackController, x)
+
+Run closed-loop simulation of control affine system from initial state x under feedback
+control policy.
+"""
+function (S::Simulation)(Σ::ControlAffineSystem, k::FeedbackController, x)
+    right_hand_side(x, p, t) = Σ.f(x) + Σ.g(x)*k(x)
+    problem = ODEProblem(right_hand_side, x, [S.t0, S.tf])
+    trajectory = solve(problem)
+
+    return trajectory
+end

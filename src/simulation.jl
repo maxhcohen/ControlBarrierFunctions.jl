@@ -13,17 +13,5 @@ struct Simulation
     tf::Real
 end
 
-# Simulation constructor
+# Simulation constructor from simulation end time
 Simulation(T::Real) = Simulation(0.0, T)
-
-############################################################################################
-#                                      Simulations                                         #
-############################################################################################
-
-function (S::Simulation)(Σ::ControlAffineSystem, x)
-    right_hand_side(x, p, t) = Σ.f(x)
-    problem = ODEProblem(right_hand_side, x, [S.t0, S.tf])
-    trajectory = solve(problem)
-
-    return trajectory
-end
