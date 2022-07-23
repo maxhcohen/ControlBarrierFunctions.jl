@@ -32,7 +32,7 @@ function CLFQuadProg(Σ::ControlAffineSystem, CLF::ControlLyapunovFunction)
         # Compute Lie derivatives
         LfV = drift_lie_derivative(CLF, Σ, x)
         LgV = control_lie_derivative(CLF, Σ, x)
-        γ = CLF.α(CLF.V(x))
+        γ = CLF.α(x)
 
         # Check if we're relaxing the CLF constraint
         if CLF.relax
@@ -70,7 +70,7 @@ function CLFQuadProg(Σ::ControlAffineSystem, CLF::ControlLyapunovFunction, H, F
         # Compute Lie derivatives
         LfV = drift_lie_derivative(CLF, Σ, x)
         LgV = control_lie_derivative(CLF, Σ, x)
-        γ = CLF.α(CLF.V(x))
+        γ = CLF.α(x)
 
         # Check if we're relaxing the CLF constraint
         if CLF.relax
