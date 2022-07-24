@@ -6,8 +6,8 @@ Models a nonlinear control affine system.
 # Fields
 - `n::Int`: state dimension
 - `m::Int`: control dimension
-- `f`: function f(x) that models the drift dynamics
-- `g`: function g(x) that models the control directions
+- `f::Function`: function f(x) that models the drift dynamics
+- `g::Function`: function g(x) that models the control directions
 - `A`: defines control constraints of the form A*u <= b
 - `b`: defines control constraints of the form A*u <= b
 """
@@ -89,11 +89,11 @@ end
 ############################################################################################
 
 """
-    (S::Simulation)(Σ::ControlAffineSystem, x)
+    (S::Simulation)(Σ::ControlAffineSystem, x::Union{Float64, Vector{Float64}})
 
 Run open-loop simulation of control affine system from initial state x.
 """
-function (S::Simulation)(Σ::ControlAffineSystem, x)
+function (S::Simulation)(Σ::ControlAffineSystem, x::Union{Float64, Vector{Float64}})
     right_hand_side(x, p, t) = Σ.f(x)
     problem = ODEProblem(right_hand_side, x, [S.t0, S.tf])
     trajectory = solve(problem)
@@ -102,15 +102,57 @@ function (S::Simulation)(Σ::ControlAffineSystem, x)
 end
 
 """
-    (S::Simulation)(Σ::ControlAffineSystem, k::FeedbackController, x)
+    (S::Simulation)(Σ::ControlAffineSystem, k::FeedbackController, x::Union{Float64, Vector{Float64}})
 
 Run closed-loop simulation of control affine system from initial state x under feedback
 control policy.
 """
-function (S::Simulation)(Σ::ControlAffineSystem, k::FeedbackController, x)
+function (S::Simulation)(
+    Σ::ControlAffineSystem,
+    k::FeedbackController,
+    x::Union{Float64, Vector{Float64}}
+    )
     right_hand_side(x, p, t) = Σ.f(x) + Σ.g(x)*k(x)
     problem = ODEProblem(right_hand_side, x, [S.t0, S.tf])
     trajectory = solve(problem)
 
     return trajectory
+end
+
+"""
+    (S::Simulation)(Σ::ControlAffineSystem, X::Vector{Vector{Float64}})
+
+Run multiple open-loop simulations of control affine system from initial states X.
+"""
+function (S::Simulation)(Σ::ControlAffineSystem, X::Vector{Vector{Float64}})
+    trajectories = []
+    for x in X
+        right_hand_side(x, p, t) = Σ.f(x)
+        problem = ODEProblem(right_hand_side, x, [S.t0, S.tf])
+        trajectory = solve(problem)
+        push!(trajectories, trajectory)
+    end
+
+    return trajectories
+end
+
+"""
+    (S::Simulation)(Σ::ControlAffineSystem, k::FeedbackController, X::Vector{Vector{Float64}})
+
+Run multiple closed-loop simulations of a control affine system from initial states X.
+"""
+function (S::Simulation)(
+    Σ::ControlAffineSystem,
+    k::FeedbackController,
+    X::Vector{Vector{Float64}}
+    )
+    trajectories = []
+    for x in X
+        right_hand_side(x, p, t) = Σ.f(x) + Σ.g(x)*k(x)
+        problem = ODEProblem(right_hand_side, x, [S.t0, S.tf])
+        trajectory = solve(problem)
+        push!(trajectories, trajectory)
+    end
+
+    return trajectories
 end

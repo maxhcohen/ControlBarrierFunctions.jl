@@ -11,8 +11,8 @@ for a control affine system
 """
 struct CLFQuadProg <: FeedbackController
     solve::Function
-    H::Union{Real, Matrix{Real}, Function}
-    F::Union{Real, Vector{Real}, Function}
+    H::Union{Float64, Matrix{Float64}, Function}
+    F::Union{Float64, Vector{Float64}, Function}
 end
 
 "Solve `CLFQuadProg` at state `x`."
@@ -66,7 +66,7 @@ function CLFQuadProg(Σ::ControlAffineSystem, CLF::ControlLyapunovFunction)
 end
 
 function CLFQuadProg(Σ::ControlAffineSystem, CLF::ControlLyapunovFunction, 
-                     H::Union{Real, Matrix{Real}}, F::Union{Real, Vector{Real}})
+                     H::Union{Float64, Matrix{Float64}}, F::Union{Float64, Vector{Float64}})
 
     # Construct quadratic program
     function solve(x)
@@ -107,8 +107,8 @@ end
 function CLFQuadProg(
     Σ::ControlAffineSystem,
     CLF::ControlLyapunovFunction,
-    H::Union{Real, Matrix{Real}},
-    F::Union{Real, Vector{Real}}
+    H::Union{Float64, Matrix{Float64}},
+    F::Union{Float64, Vector{Float64}}
     )
 
     # Construct quadratic program
@@ -194,7 +194,7 @@ function CLFQuadProg(
     Σ::ControlAffineSystem,
     CLF::ControlLyapunovFunction,
     H::Function,
-    F::Union{Real, Vector{Real}}
+    F::Union{Float64, Vector{Float64}}
     )
 
     # Construct quadratic program
@@ -236,7 +236,7 @@ end
 function CLFQuadProg(
     Σ::ControlAffineSystem,
     CLF::ControlLyapunovFunction,
-    H::Union{Real, Matrix{Real}},
+    H::Union{Float64, Matrix{Float64}},
     F::Function
     )
 

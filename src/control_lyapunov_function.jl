@@ -13,7 +13,7 @@ struct ControlLyapunovFunction <: CertificateFunction
     V::Function
     α::Function
     relax::Bool
-    p::Real
+    p::Float64
 end
 
 "Constructors for `ControlLyapunovFunction`. If `α` not passed in, set it to `α(x)=V(x)`."
@@ -29,7 +29,7 @@ function ControlLyapunovFunction(V::Function, Σ::ControlAffineSystem)
 
     return ControlLyapunovFunction(V, α)
 end
-function ControlLyapunovFunction(V::Function, Σ::ControlAffineSystem, relax::Bool, p::Real)
+function ControlLyapunovFunction(V::Function, Σ::ControlAffineSystem, relax::Bool, p::Float64)
     CLF = ControlLyapunovFunction(V)
     a(x) = drift_lie_derivative(CLF, Σ, x)
     b(x) = control_lie_derivative(CLF, Σ, x)
