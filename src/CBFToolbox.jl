@@ -5,8 +5,6 @@ using LinearAlgebra
 using ForwardDiff
 using JuMP
 using OSQP
-using Plots
-using PlotThemes
 import DifferentialEquations: ODEProblem, solve
 
 # Import various utilities from other packages
