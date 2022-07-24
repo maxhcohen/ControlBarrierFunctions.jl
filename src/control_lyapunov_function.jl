@@ -16,11 +16,11 @@ struct ControlLyapunovFunction <: CertificateFunction
     p::Real
 end
 
-# Constructors
+"Constructors for `ControlLyapunovFunction`. If `α` not passed in, set it to `α(x)=V(x)`."
 ControlLyapunovFunction(V::Function, α::Function) = ControlLyapunovFunction(V, α, false, 0.0)
 ControlLyapunovFunction(V::Function) = ControlLyapunovFunction(V, x -> V(x), false, 0.0)
 
-# Stability margin if we were to use Sontag's formula
+"Set CLF stability margin to what we would obtain if using Sontag's formula."
 function ControlLyapunovFunction(V::Function, Σ::ControlAffineSystem)
     CLF = ControlLyapunovFunction(V)
     a(x) = drift_lie_derivative(CLF, Σ, x)
@@ -29,7 +29,6 @@ function ControlLyapunovFunction(V::Function, Σ::ControlAffineSystem)
 
     return ControlLyapunovFunction(V, α)
 end
-
 function ControlLyapunovFunction(V::Function, Σ::ControlAffineSystem, relax::Bool, p::Real)
     CLF = ControlLyapunovFunction(V)
     a(x) = drift_lie_derivative(CLF, Σ, x)
@@ -39,19 +38,22 @@ function ControlLyapunovFunction(V::Function, Σ::ControlAffineSystem, relax::Bo
     return ControlLyapunovFunction(V, α, relax, p)
 end
 
-# Compute gradient and Lie derivatives
+"Compute gradient of a CLF evaluated at `x`."
 function gradient(CLF::ControlLyapunovFunction, x)
     return ForwardDiff.gradient(CLF.V, x)'
 end
 
+"Compute Lie derivatives of CLF along system dynamics."
 function lie_derivatives(CLF::ControlLyapunovFunction, Σ::ControlAffineSystem, x)
     return [drift_lie_derivative(CLF, Σ, x), control_lie_derivative(CLF, Σ, x)]
 end
 
+"Compute Lie derivative of CLF along drift dynamics ``LfV(x) = ∇V(x) * f(x)``."
 function drift_lie_derivative(CLF::ControlLyapunovFunction, Σ::ControlAffineSystem, x)
     return gradient(CLF, x) * Σ.f(x)
 end
 
+"Compute Lie derivative of CLF along control directions ``LgV(x) = ∇V(x) * g(x)``."
 function control_lie_derivative(CLF::ControlLyapunovFunction, Σ::ControlAffineSystem, x)
     return gradient(CLF, x) * Σ.g(x)
 end

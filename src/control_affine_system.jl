@@ -24,9 +24,29 @@ end
     ControlAffineSystem(n::Int, m::Int, f::Function, g::Function)
     ControlAffineSystem(n::Int, m::Int, f::Function, g::Function, U)
 
-Construct a nonlinear control affine system. If no control bounds are passed in, set the
-bounds on each control to infinity. If passed in a list of bounds on the individual control
-inputs, convert them to the form of A*u <= b.
+Construct a nonlinear control affine system from dimensions and dynamics functions. 
+
+If no control bounds are passed in, the bounds on each control are set to infinity. If 
+passed in a list of bounds on the individual control inputs, convert them 
+to the form of `A*u <= b`.
+
+# Examples
+```julia-repl
+julia> n = 2
+2
+
+julia> m = 1
+1
+
+julia> f(x) = [x[2], 0.0]
+f (generic function with 1 method)
+
+julia> g(x) = [0.0, 1.0]
+g (generic function with 1 method)
+
+julia> Σ = ControlAffineSystem(n, m, f, g)
+ControlAffineSystem(2, 1, f, g, [1.0; -1.0;;], [Inf, Inf])
+```
 """
 function ControlAffineSystem(n::Int, m::Int, f::Function, g::Function)
     # Set unbounded control constraints
