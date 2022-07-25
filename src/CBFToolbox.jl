@@ -15,6 +15,7 @@ abstract type System end
 abstract type Controller end
 abstract type FeedbackController <: Controller end
 abstract type CertificateFunction end
+abstract type Disturbance end
 
 # Export concrete types
 export Simulation
@@ -26,6 +27,7 @@ export CLFSontag
 export CLFQuadProg
 export ControlBarrierFunction
 export CBFQuadProg
+export MatchedDisturbance
 
 # Source code
 include("simulation.jl")
@@ -37,6 +39,7 @@ include("clf_sontag.jl")
 include("clf_quad_prog.jl")
 include("control_barrier_function.jl")
 include("cbf_quad_prog.jl")
+include("matched_disturbance.jl")
 
 # # Export Simulation type
 # export Simulation

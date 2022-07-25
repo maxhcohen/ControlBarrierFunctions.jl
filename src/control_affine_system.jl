@@ -125,13 +125,12 @@ end
 Run multiple open-loop simulations of control affine system from initial states X.
 """
 function (S::Simulation)(Σ::ControlAffineSystem, X::Vector{Vector{Float64}})
-    trajectories = []
-    for x in X
-        right_hand_side(x, p, t) = Σ.f(x)
-        problem = ODEProblem(right_hand_side, x, [S.t0, S.tf])
-        trajectory = solve(problem)
-        push!(trajectories, trajectory)
-    end
+    trajectories = [S(Σ, x) for x in X]
+    # trajectories = []
+    # for x in X
+    #     trajectory = S(Σ, x)
+    #     push!(trajectories, trajectory)
+    # end
 
     return trajectories
 end
@@ -146,13 +145,11 @@ function (S::Simulation)(
     k::FeedbackController,
     X::Vector{Vector{Float64}}
     )
-    trajectories = []
-    for x in X
-        right_hand_side(x, p, t) = Σ.f(x) + Σ.g(x)*k(x)
-        problem = ODEProblem(right_hand_side, x, [S.t0, S.tf])
-        trajectory = solve(problem)
-        push!(trajectories, trajectory)
-    end
+    trajectories = [S(Σ, k, x) for x in X]
+    # for x in X
+    #     trajectory = S(Σ, k, x)
+    #     push!(trajectories, trajectory)
+    # end
 
     return trajectories
 end
