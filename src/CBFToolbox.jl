@@ -16,36 +16,27 @@ abstract type Controller end
 abstract type FeedbackController <: Controller end
 abstract type CertificateFunction end
 
-# Export base simulation functionality
+# Export concrete types
 export Simulation
-
-# Export types and functions related to control affine system
 export ControlAffineSystem
-
-# Export controller
 export StateFeedbackController
 export LQRController
-
-# Export CLF
 export ControlLyapunovFunction
-export gradient
 export CLFSontag
 export CLFQuadProg
+export ControlBarrierFunction
+export CBFQuadProg
 
-# Simulator
+# Source code
 include("simulation.jl")
-
-# System definitions
 include("control_affine_system.jl")
-
-# Controllers
 include("state_feedback_controller.jl")
 include("lqr_controller.jl")
-
-# Lyapunov function
 include("control_lyapunov_function.jl")
 include("clf_sontag.jl")
 include("clf_quad_prog.jl")
+include("control_barrier_function.jl")
+include("cbf_quad_prog.jl")
 
 # # Export Simulation type
 # export Simulation
