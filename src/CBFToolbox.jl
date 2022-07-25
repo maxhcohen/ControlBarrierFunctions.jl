@@ -28,6 +28,7 @@ export CLFQuadProg
 export ControlBarrierFunction
 export CBFQuadProg
 export MatchedDisturbance
+export InputToStateCLF
 
 # Source code
 include("simulation.jl")
@@ -40,6 +41,7 @@ include("clf_quad_prog.jl")
 include("control_barrier_function.jl")
 include("cbf_quad_prog.jl")
 include("matched_disturbance.jl")
+include("input_to_state_clf.jl")
 
 # # Export Simulation type
 # export Simulation
