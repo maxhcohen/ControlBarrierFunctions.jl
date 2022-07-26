@@ -18,7 +18,7 @@ end
 "Solve `CBFQuadProg` at state `x`."
 (k::CBFQuadProg)(x) = k.solve(x)
 
-function CBFQuadProg(Σ::ControlAffineSystem, CBF::ControlBarrierFunction)
+function CBFQuadProg(Σ::ControlAffineSystem, CBFs::Vector{ControlBarrierFunction})
     # Set parameters for objective function
     H = Σ.m == 1 ? 1.0 : Matrix(1.0I, Σ.m, Σ.m)
     F = Σ.m == 1 ? 0.0 : zeros(Σ.m)
@@ -30,13 +30,13 @@ function CBFQuadProg(Σ::ControlAffineSystem, CBF::ControlBarrierFunction)
         set_silent(model)
         Σ.m == 1 ? @variable(model, u) : @variable(model, u[1:Σ.m])
 
-        # Compute Lie derivatives
-        Lfh = drift_lie_derivative(CBF, Σ, x)
-        Lgh = control_lie_derivative(CBF, Σ, x)
-        α = CBF.α(CBF.h(x))
-
         # Set CBF constraint and objective
-        @constraint(model, Lfh + Lgh*u >= -α)
+        for CBF in CBFs
+            Lfh = drift_lie_derivative(CBF, Σ, x)
+            Lgh = control_lie_derivative(CBF, Σ, x)
+            α = CBF.α(CBF.h(x))
+            @constraint(model, Lfh + Lgh*u >= -α)
+        end
         @objective(model, Min, 0.5*u'*H*u + F'*u)
 
         # Add control bounds on system - recall these default to unbounded controls
@@ -55,7 +55,7 @@ end
 
 function CBFQuadProg(
     Σ::ControlAffineSystem, 
-    CBF::ControlBarrierFunction, 
+    CBFs::Vector{ControlBarrierFunction}, 
     k::FeedbackController
     )
     # Set parameters for objective function
@@ -69,13 +69,13 @@ function CBFQuadProg(
         set_silent(model)
         Σ.m == 1 ? @variable(model, u) : @variable(model, u[1:Σ.m])
 
-        # Compute Lie derivatives
-        Lfh = drift_lie_derivative(CBF, Σ, x)
-        Lgh = control_lie_derivative(CBF, Σ, x)
-        α = CBF.α(CBF.h(x))
-
         # Set CBF constraint and objective
-        @constraint(model, Lfh + Lgh*u >= -α)
+        for CBF in CBFs
+            Lfh = drift_lie_derivative(CBF, Σ, x)
+            Lgh = control_lie_derivative(CBF, Σ, x)
+            α = CBF.α(CBF.h(x))
+            @constraint(model, Lfh + Lgh*u >= -α)
+        end
         @objective(model, Min, 0.5*u'*H*u + F(x)'*u)
 
         # Add control bounds on system - recall these default to unbounded controls
@@ -94,7 +94,7 @@ end
 
 function CBFQuadProg(
     Σ::ControlAffineSystem, 
-    CBF::ControlBarrierFunction, 
+    CBFs::Vector{ControlBarrierFunction}, 
     k::FeedbackController,
     H::Union{Float64, Matrix{Float64}}
     )
@@ -108,13 +108,13 @@ function CBFQuadProg(
         set_silent(model)
         Σ.m == 1 ? @variable(model, u) : @variable(model, u[1:Σ.m])
 
-        # Compute Lie derivatives
-        Lfh = drift_lie_derivative(CBF, Σ, x)
-        Lgh = control_lie_derivative(CBF, Σ, x)
-        α = CBF.α(CBF.h(x))
-
         # Set CBF constraint and objective
-        @constraint(model, Lfh + Lgh*u >= -α)
+        for CBF in CBFs
+            Lfh = drift_lie_derivative(CBF, Σ, x)
+            Lgh = control_lie_derivative(CBF, Σ, x)
+            α = CBF.α(CBF.h(x))
+            @constraint(model, Lfh + Lgh*u >= -α)
+        end
         @objective(model, Min, 0.5*u'*H*u + F(x)'*u)
 
         # Add control bounds on system - recall these default to unbounded controls
@@ -133,7 +133,7 @@ end
 
 function CBFQuadProg(
     Σ::ControlAffineSystem, 
-    CBF::ControlBarrierFunction, 
+    CBFs::Vector{ControlBarrierFunction}, 
     k::FeedbackController,
     H::Function
     )
@@ -147,13 +147,13 @@ function CBFQuadProg(
         set_silent(model)
         Σ.m == 1 ? @variable(model, u) : @variable(model, u[1:Σ.m])
 
-        # Compute Lie derivatives
-        Lfh = drift_lie_derivative(CBF, Σ, x)
-        Lgh = control_lie_derivative(CBF, Σ, x)
-        α = CBF.α(CBF.h(x))
-
         # Set CBF constraint and objective
-        @constraint(model, Lfh + Lgh*u >= -α)
+        for CBF in CBFs
+            Lfh = drift_lie_derivative(CBF, Σ, x)
+            Lgh = control_lie_derivative(CBF, Σ, x)
+            α = CBF.α(CBF.h(x))
+            @constraint(model, Lfh + Lgh*u >= -α)
+        end
         @objective(model, Min, 0.5*u'*H(x)*u + F(x)'*u)
 
         # Add control bounds on system - recall these default to unbounded controls
@@ -172,7 +172,7 @@ end
 
 function CBFQuadProg(
     Σ::ControlAffineSystem, 
-    CBF::ControlBarrierFunction, 
+    CBFs::Vector{ControlBarrierFunction}, 
     H::Function,
     F::Function
     )
@@ -183,13 +183,13 @@ function CBFQuadProg(
         set_silent(model)
         Σ.m == 1 ? @variable(model, u) : @variable(model, u[1:Σ.m])
 
-        # Compute Lie derivatives
-        Lfh = drift_lie_derivative(CBF, Σ, x)
-        Lgh = control_lie_derivative(CBF, Σ, x)
-        α = CBF.α(CBF.h(x))
-
         # Set CBF constraint and objective
-        @constraint(model, Lfh + Lgh*u >= -α)
+        for CBF in CBFs
+            Lfh = drift_lie_derivative(CBF, Σ, x)
+            Lgh = control_lie_derivative(CBF, Σ, x)
+            α = CBF.α(CBF.h(x))
+            @constraint(model, Lfh + Lgh*u >= -α)
+        end
         @objective(model, Min, 0.5*u'*H(x)*u + F(x)'*u)
 
         # Add control bounds on system - recall these default to unbounded controls
@@ -208,7 +208,7 @@ end
 
 function CBFQuadProg(
     Σ::ControlAffineSystem, 
-    CBF::ControlBarrierFunction, 
+    CBFs::Vector{ControlBarrierFunction}, 
     H::Union{Float64, Matrix{Float64}},
     F::Union{Float64, Vector{Float64}}
     )
@@ -219,13 +219,13 @@ function CBFQuadProg(
         set_silent(model)
         Σ.m == 1 ? @variable(model, u) : @variable(model, u[1:Σ.m])
 
-        # Compute Lie derivatives
-        Lfh = drift_lie_derivative(CBF, Σ, x)
-        Lgh = control_lie_derivative(CBF, Σ, x)
-        α = CBF.α(CBF.h(x))
-
         # Set CBF constraint and objective
-        @constraint(model, Lfh + Lgh*u >= -α)
+        for CBF in CBFs
+            Lfh = drift_lie_derivative(CBF, Σ, x)
+            Lgh = control_lie_derivative(CBF, Σ, x)
+            α = CBF.α(CBF.h(x))
+            @constraint(model, Lfh + Lgh*u >= -α)
+        end
         @objective(model, Min, 0.5*u'*H*u + F'*u)
 
         # Add control bounds on system - recall these default to unbounded controls
@@ -244,7 +244,7 @@ end
 
 function CBFQuadProg(
     Σ::ControlAffineSystem, 
-    CBF::ControlBarrierFunction, 
+    CBFs::Vector{ControlBarrierFunction}, 
     H::Function,
     F::Union{Float64, Vector{Float64}}
     )
@@ -255,13 +255,13 @@ function CBFQuadProg(
         set_silent(model)
         Σ.m == 1 ? @variable(model, u) : @variable(model, u[1:Σ.m])
 
-        # Compute Lie derivatives
-        Lfh = drift_lie_derivative(CBF, Σ, x)
-        Lgh = control_lie_derivative(CBF, Σ, x)
-        α = CBF.α(CBF.h(x))
-
         # Set CBF constraint and objective
-        @constraint(model, Lfh + Lgh*u >= -α)
+        for CBF in CBFs
+            Lfh = drift_lie_derivative(CBF, Σ, x)
+            Lgh = control_lie_derivative(CBF, Σ, x)
+            α = CBF.α(CBF.h(x))
+            @constraint(model, Lfh + Lgh*u >= -α)
+        end
         @objective(model, Min, 0.5*u'*H(x)*u + F'*u)
 
         # Add control bounds on system - recall these default to unbounded controls
@@ -280,7 +280,7 @@ end
 
 function CBFQuadProg(
     Σ::ControlAffineSystem, 
-    CBF::ControlBarrierFunction, 
+    CBFs::Vector{ControlBarrierFunction}, 
     H::Union{Float64, Matrix{Float64}},
     F::Function
     )
@@ -291,13 +291,13 @@ function CBFQuadProg(
         set_silent(model)
         Σ.m == 1 ? @variable(model, u) : @variable(model, u[1:Σ.m])
 
-        # Compute Lie derivatives
-        Lfh = drift_lie_derivative(CBF, Σ, x)
-        Lgh = control_lie_derivative(CBF, Σ, x)
-        α = CBF.α(CBF.h(x))
-
         # Set CBF constraint and objective
-        @constraint(model, Lfh + Lgh*u >= -α)
+        for CBF in CBFs
+            Lfh = drift_lie_derivative(CBF, Σ, x)
+            Lgh = control_lie_derivative(CBF, Σ, x)
+            α = CBF.α(CBF.h(x))
+            @constraint(model, Lfh + Lgh*u >= -α)
+        end
         @objective(model, Min, 0.5*u'*H*u + F(x)'*u)
 
         # Add control bounds on system - recall these default to unbounded controls
@@ -312,4 +312,69 @@ function CBFQuadProg(
     end
 
     return CBFQuadProg(solve, H, F)
+end
+
+# If a single CBF passed in pack it into a vector and then call constructor
+CBFQuadProg(Σ::ControlAffineSystem, CBF::ControlBarrierFunction) = CBFQuadProg(Σ, [CBF])
+
+function CBFQuadProg(
+    Σ::ControlAffineSystem,
+    CBF::ControlBarrierFunction, 
+    k::FeedbackController
+    )
+    return CBFQuadProg(Σ, [CBF], k)
+end
+
+function CBFQuadProg(
+    Σ::ControlAffineSystem, 
+    CBF::ControlBarrierFunction, 
+    k::FeedbackController,
+    H::Union{Float64, Matrix{Float64}}
+    )
+    return CBFQuadProg(Σ, [CBF], k, H)
+end
+
+function CBFQuadProg(
+    Σ::ControlAffineSystem, 
+    CBF::ControlBarrierFunction,
+    k::FeedbackController,
+    H::Function
+    )
+    return CBFQuadProg(Σ, [CBF], k, H)
+end
+
+function CBFQuadProg(
+    Σ::ControlAffineSystem, 
+    CBF::ControlBarrierFunction,
+    H::Function,
+    F::Function
+    )
+    return CBFQuadProg(Σ, [CBF], H, F)
+end
+
+function CBFQuadProg(
+    Σ::ControlAffineSystem, 
+    CBF::ControlBarrierFunction,
+    H::Union{Float64, Matrix{Float64}},
+    F::Union{Float64, Vector{Float64}}
+    )
+    return CBFQuadProg(Σ, [CBF], H, F)
+end
+
+function CBFQuadProg(
+    Σ::ControlAffineSystem, 
+    CBF::ControlBarrierFunction, 
+    H::Function,
+    F::Union{Float64, Vector{Float64}}
+    )
+    return CBFQuadProg(Σ, [CBF], H, F)
+end
+
+function CBFQuadProg(
+    Σ::ControlAffineSystem, 
+    CBF::ControlBarrierFunction,
+    H::Union{Float64, Matrix{Float64}},
+    F::Function
+    )
+    return CBFQuadProg(Σ, [CBF], H, F)
 end
