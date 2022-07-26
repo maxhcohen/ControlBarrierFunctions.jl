@@ -6,6 +6,7 @@ using ForwardDiff
 using JuMP
 using OSQP
 using Plots
+using VectorFieldPlots
 
 # Import various utilities from other packages
 import ControlSystems: lqr, are, Continuous
