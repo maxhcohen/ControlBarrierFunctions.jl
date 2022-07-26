@@ -5,10 +5,11 @@ using LinearAlgebra
 using ForwardDiff
 using JuMP
 using OSQP
-import DifferentialEquations: ODEProblem, solve
+using Plots
 
 # Import various utilities from other packages
 import ControlSystems: lqr, are, Continuous
+import DifferentialEquations: ODEProblem, solve
 
 # Abstract types
 abstract type System end
@@ -30,6 +31,12 @@ export CBFQuadProg
 export MatchedDisturbance
 export InputToStateCLF
 
+# Plotting functions
+export plot_vector_field
+export plot_vector_field!
+export plot_circle
+export plot_circle!
+
 # Source code
 include("simulation.jl")
 include("control_affine_system.jl")
@@ -42,6 +49,7 @@ include("control_barrier_function.jl")
 include("cbf_quad_prog.jl")
 include("matched_disturbance.jl")
 include("input_to_state_clf.jl")
+include("plots.jl")
 
 # # Export Simulation type
 # export Simulation
