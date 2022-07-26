@@ -49,8 +49,8 @@ end
 Sontag's universal CLF formula parameterized by `(a,b)`.
 """
 function clf_universal_formula(a::Float64, b::Union{Float64, Vector{Float64}})
-    if b == zeros(Σ.m)
-        u = zeros(Σ.m)
+    if b == zeros(length(b))
+        u = zeros(length(b))
     else
         u = -((a + sqrt(a^2 + norm(b)^4))/norm(b)^2) * b
     end
