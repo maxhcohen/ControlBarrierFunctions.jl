@@ -1239,7 +1239,7 @@ version = "0.1.2"
 
 [[deps.VectorFieldPlots]]
 deps = ["LaTeXStrings", "LinearAlgebra", "OrdinaryDiffEq", "Plots"]
-git-tree-sha1 = "58761f8faa3a33cd334a8092eedf2b4a3cead01f"
+git-tree-sha1 = "61c1f35eb67c8be369e51f35a2feded2aefd43bb"
 repo-rev = "main"
 repo-url = "https://github.com/maxhcohen/VectorFieldPlots.jl.git"
 uuid = "65c20475-cd4d-480f-b9de-e911d7154609"
