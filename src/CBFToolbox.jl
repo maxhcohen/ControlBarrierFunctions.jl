@@ -38,6 +38,10 @@ export plot_phase_portrait
 export plot_phase_portrait!
 export plot_circle
 export plot_circle!
+export plot_safe_set
+export plot_safe_set!
+export plot_constraint_set
+export plot_constraint_set!
 
 # Source code
 include("simulation.jl")

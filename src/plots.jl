@@ -261,3 +261,59 @@ function circle_shape(x, y, r; samples=500)
 
     return xs, ys
 end
+
+"""
+    plot_safe_set(xs, ys, CBF::ControlBarrierFunction; c=:black, lw=1, colorbar=true)
+    plot_safe_set(xs, ys, HOCBF::SecondOrderCBF; c=:black, lw=1, colorbar=true)
+
+Plot the zero superlevel set of the function `h(x)` defining a CBF.
+"""
+function plot_safe_set(xs, ys, CBF::ControlBarrierFunction; c=:black, lw=1, colorbar=true)
+    h(x1, x2) = CBF.h([x1, x2])
+    return contour(xs, ys, h, levels=[0.0], c=c, lw=lw, colorbar=colorbar)
+end
+
+function plot_safe_set(xs, ys, HOCBF::SecondOrderCBF; c=:black, lw=1, colorbar=true)
+    ψ0(x1, x2) = HOCBF.h([x1, x2])
+    ψ1(x1, x2) = HOCBF.ψ1([x1, x2])
+    ψ(x1, x2) = min(ψ0(x1, x2), ψ1(x1, x2))
+    return contour(xs, ys, ψ, levels=[0.0], c=c, lw=lw, colorbar=colorbar)
+end
+
+"""
+    plot_safe_set!(xs, ys, CBF::ControlBarrierFunction; c=:black, lw=1, colorbar=true)
+    plot_safe_set!(xs, ys, HOCBF::SecondOrderCBF; c=:black, lw=1, colorbar=true)
+
+Plot the zero superlevel set of the function `h(x)` defining a CBF.
+"""
+function plot_safe_set!(xs, ys, CBF::ControlBarrierFunction; c=:black, lw=1, colorbar=true)
+    h(x1, x2) = CBF.h([x1, x2])
+    return contour!(xs, ys, h, levels=[0.0], c=c, lw=lw, colorbar=colorbar)
+end
+
+function plot_safe_set!(xs, ys, HOCBF::SecondOrderCBF; c=:black, lw=1, colorbar=true)
+    ψ0(x1, x2) = HOCBF.h([x1, x2])
+    ψ1(x1, x2) = HOCBF.ψ1([x1, x2])
+    ψ(x1, x2) = min(ψ0(x1, x2), ψ1(x1, x2))
+    return contour!(xs, ys, ψ, levels=[0.0], c=c, lw=lw, colorbar=colorbar)
+end
+
+"""
+    plot_constraint_set(xs, ys, HOCBF::SecondOrderCBF; c=:black, lw=1, colorbar=true)
+
+Plot the zero superlevel set of the constraaint function `h(x)` defining a HOCBF.
+"""
+function plot_constraint_set(xs, ys, HOCBF::SecondOrderCBF; c=:black, lw=1, colorbar=true)
+    h(x1, x2) = HOCBF.h([x1, x2])
+    return contour(xs, ys, h, levels=[0.0], c=c, lw=lw, colorbar=colorbar)
+end
+
+"""
+    plot_constraint_set!(xs, ys, HOCBF::SecondOrderCBF; c=:black, lw=1, colorbar=true)
+
+Plot the zero superlevel set of the constraaint function `h(x)` defining a HOCBF.
+"""
+function plot_constraint_set!(xs, ys, HOCBF::SecondOrderCBF; c=:black, lw=1, colorbar=true)
+    h(x1, x2) = HOCBF.h([x1, x2])
+    return contour!(xs, ys, h, levels=[0.0], c=c, lw=lw, colorbar=colorbar)
+end
