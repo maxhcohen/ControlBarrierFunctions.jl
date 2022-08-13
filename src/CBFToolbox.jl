@@ -6,8 +6,8 @@ using OrdinaryDiffEq
 using ForwardDiff
 using JuMP
 using OSQP
-# using Plots
-# using VectorFieldPlots
+using Plots
+using VectorFieldPlots
 
 # Abstract types
 abstract type System end
@@ -32,10 +32,10 @@ export MatchedDisturbance
 export InputToStateCLF
 
 # Plotting functions
-# export plot_vector_field
-# export plot_vector_field!
-# export plot_circle
-# export plot_circle!
+export plot_vector_field
+export plot_vector_field!
+export plot_circle
+export plot_circle!
 
 # Source code
 include("simulation.jl")
@@ -51,6 +51,6 @@ include("cbf_quad_prog.jl")
 include("hocbf_quad_prog.jl")
 include("matched_disturbance.jl")
 include("input_to_state_clf.jl")
-# include("plots.jl")
+include("plots.jl")
 
 end

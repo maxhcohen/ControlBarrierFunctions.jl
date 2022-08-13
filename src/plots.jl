@@ -1,7 +1,6 @@
 """
     plot_vector_field(xs, ys, Σ::ControlAffineSystem; scale=0.15, lw=1)
     plot_vector_field(xs, ys, Σ::ControlAffineSystem, k::FeedbackController; scale=0.15, lw=1)
-    plot_vector_field(xs, ys, f::Function; scale=0.15, lw=1)
 
 Plot the vector field of a open or closed-loop `ControlAffineSystem`.
 """
@@ -17,21 +16,9 @@ function plot_vector_field(xs, ys, Σ::ControlAffineSystem, k::FeedbackControlle
     return VectorFieldPlots.plot_vector_field(xs, ys, f, scale=scale, lw=lw)
 end
 
-# function plot_vector_field(xs, ys, f::Function; scale=0.15, lw=1)
-#     Xs = [x for x in xs for y in ys]
-#     Ys = [y for x in xs for y in ys]
-#     dfs = scale * normalize.(f.(Xs, Ys))
-#     dx = [df[1] for df in dfs]
-#     dy = [df[2] for df in dfs]
-#     c = vector_field_colors(Xs, Ys, f)
-    
-#     return quiver(Xs, Ys, quiver=(dx, dy), line_z=c, lw=lw, c=:viridis, colorbar=true)
-# end
-
 """
     plot_vector_field!(xs, ys, Σ::ControlAffineSystem; scale=0.15, lw=1)
     plot_vector_field!(xs, ys, Σ::ControlAffineSystem, k::FeedbackController; scale=0.15, lw=1)
-    plot_vector_field!(xs, ys, f::Function; scale=0.15, lw=1)
 
 Plot the vector field of a open or closed-loop `ControlAffineSystem` on an existing figure.
 """
@@ -46,18 +33,6 @@ function  plot_vector_field!(xs, ys, Σ::ControlAffineSystem, k::FeedbackControl
 
     return VectorFieldPlots.plot_vector_field!(xs, ys, f, scale=scale, lw=lw)
 end
-
-# function plot_vector_field!(xs, ys, f::Function; scale=0.15, lw=1)
-#     Xs = [x for x in xs for y in ys]
-#     Ys = [y for x in xs for y in ys]
-#     dfs = scale * normalize.(f.(Xs, Ys))
-#     dx = [df[1] for df in dfs]
-#     dy = [df[2] for df in dfs]
-#     c = vector_field_colors(Xs, Ys, f)
-#     fig = Plots.current()
-#     # return quiver!(fig, Xs, Ys, quiver=(dx, dy))
-#     return quiver!(fig, Xs, Ys, quiver=(dx, dy), line_z=c, lw=lw, c=:viridis, colorbar=true)
-# end
 
 """
     vector_field_colors(Xs, Ys, f::Function)
