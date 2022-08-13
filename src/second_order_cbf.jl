@@ -5,7 +5,7 @@ High order control barrier function (HOCBF) with relative degree 2.
 
 # Fields
 - `h::function` : constraint function representing the constraint set
-- `ψ1::Function` : dynamically extended constrraint function
+- `ψ1::Function` : dynamically extended constraint function
 - `α1::Function` : extended class K function
 - `α2::Function` : extended class K function
 """
