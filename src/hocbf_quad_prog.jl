@@ -260,7 +260,7 @@ end
 
 function CBFQuadProg(
     Σ::ControlAffineSystem, 
-    CBFs::Vector{ControlBarrierFunction}, 
+    HOCBFs::Vector{SecondOrderCBF},
     H::Union{Float64, Matrix{Float64}},
     F::Function
     )
