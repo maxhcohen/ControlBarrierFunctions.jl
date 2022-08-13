@@ -16,7 +16,7 @@ struct SecondOrderCBF <: HighOrderCBF
     α2::Function
 end
 
-# Constructors
+"SecondSecondOrderCBF constructors."
 function SecondOrderCBF(Σ::ControlAffineSystem, h::Function, α1::Function, α2::Function)
     ψ1(x) = ForwardDiff.gradient(h, x)' * Σ.f(x) + α1(h(x))
 
