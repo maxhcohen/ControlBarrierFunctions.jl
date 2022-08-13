@@ -96,7 +96,7 @@ Run open-loop simulation of control affine system from initial state x.
 function (S::Simulation)(Σ::ControlAffineSystem, x::Union{Float64, Vector{Float64}})
     right_hand_side(x, p, t) = Σ.f(x)
     problem = ODEProblem(right_hand_side, x, [S.t0, S.tf])
-    trajectory = solve(problem)
+    trajectory = solve(problem, Tsit5())
 
     return trajectory
 end
@@ -114,7 +114,7 @@ function (S::Simulation)(
     )
     right_hand_side(x, p, t) = Σ.f(x) + Σ.g(x)*k(x)
     problem = ODEProblem(right_hand_side, x, [S.t0, S.tf])
-    trajectory = solve(problem)
+    trajectory = solve(problem, Tsit5())
 
     return trajectory
 end
