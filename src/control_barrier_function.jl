@@ -11,7 +11,6 @@ struct ControlBarrierFunction <: CertificateFunction
 end
 
 """
-
 Construct a `ControlBarrierFunction` from  functions `h(x)` and `α(h(x))`.
 
 If no extended class K function is passed in default it to `α(s)=s`.
