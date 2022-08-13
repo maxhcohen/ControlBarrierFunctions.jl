@@ -34,6 +34,8 @@ export InputToStateCLF
 # Plotting functions
 export plot_vector_field
 export plot_vector_field!
+export plot_phase_portrait
+export plot_phase_portrait!
 export plot_circle
 export plot_circle!
 

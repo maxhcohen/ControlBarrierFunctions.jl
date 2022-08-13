@@ -35,20 +35,198 @@ function  plot_vector_field!(xs, ys, Σ::ControlAffineSystem, k::FeedbackControl
 end
 
 """
-    vector_field_colors(Xs, Ys, f::Function)
+    plot_phase_portrait(X0::Vector{Vector{Float64}}, Σ::ControlAffineSystem, T::Float64; lw=1)
+    plot_phase_portrait(X0::Vector{Float64}, Σ::ControlAffineSystem, T::Float64; lw=1)
+    plot_phase_portrait(X0::Vector{Vector{Float64}}, Σ::ControlAffineSystem, k::FeedbackController, T::Float64; lw=1)
+    plot_phase_portrait(X0::Vector{Float64}, Σ::ControlAffineSystem, k::FeedbackController, T::Float64; lw=1)
+    plot_phase_portrait(xs::Vector{Float64}, ys::Vector{Float64}, Σ::ControlAffineSystem, T::Float64; lw=1)
+    plot_phase_portrait(xs::Vector{Float64}, ys::Vector{Float64}, Σ::ControlAffineSystem, k::FeedbackController, T::Float64; lw=1)
+    plot_phase_portrait(xs::Union{StepRangeLen, LinRange}, ys::Union{StepRangeLen, LinRange}, Σ::ControlAffineSystem, T::Float64; lw=1)
+    plot_phase_portrait(xs::Union{StepRangeLen, LinRange}, ys::Union{StepRangeLen, LinRange}, Σ::ControlAffineSystem, k::FeedbackController, T::Float64; lw=1)
 
-Map the magnitude of a vector to a color.
-
-To make this work you have to do some weird stuff. I don't know why, and the answer is taken
-from https://discourse.julialang.org/t/quiver-plot-plots-pyplot-with-different-colors-depending-on-the-length-of-the-arrow/59577/5
+Plot the phase portraint of a control affine system.
 """
-# function vector_field_colors(Xs, Ys, f::Function)
-#     c = norm.(f.(Xs, Ys))
-#     c = [c c]'
-#     c = repeat([c...], inner=2)
+function plot_phase_portrait(
+    X0::Vector{Vector{Float64}}, 
+    Σ::ControlAffineSystem, 
+    T::Float64; 
+    lw=1
+    )
+    f(x1, x2) = Σ.f([x1, x2])
 
-#     return c
-# end
+    return VectorFieldPlots.plot_phase_portrait(X0, f, T, lw=lw)
+end
+
+function plot_phase_portrait(X0::Vector{Float64}, Σ::ControlAffineSystem, T::Float64; lw=1)
+    return plot_phase_portrait([X0], Σ, T, lw=lw)
+end
+
+function plot_phase_portrait(
+    X0::Vector{Vector{Float64}}, 
+    Σ::ControlAffineSystem, 
+    k::FeedbackController, 
+    T::Float64; 
+    lw=1
+    )
+    f(x1, x2) = Σ.f([x1, x2]) + Σ.g([x1, x2])*k([x1, x2])
+
+    return VectorFieldPlots.plot_phase_portrait(X0, f, T, lw=lw)
+end
+
+function plot_phase_portrait(
+    X0::Vector{Float64}, 
+    Σ::ControlAffineSystem, 
+    k::FeedbackController, 
+    T::Float64; 
+    lw=1
+    )
+    return plot_phase_portrait([X0], Σ, k, T, lw=lw)
+end
+
+function plot_phase_portrait(
+    xs::Vector{Float64}, 
+    ys::Vector{Float64}, 
+    Σ::ControlAffineSystem, 
+    T::Float64; 
+    lw=1
+    )
+    f(x1, x2) = Σ.f([x1, x2])
+
+    return VectorFieldPlots.plot_phase_portrait(xs, ys, f, T, lw=lw)
+end
+
+function plot_phase_portrait(
+    xs::Vector{Float64}, 
+    ys::Vector{Float64}, 
+    Σ::ControlAffineSystem, 
+    k::FeedbackController, 
+    T::Float64; 
+    lw=1
+    )
+    f(x1, x2) = Σ.f([x1, x2]) + Σ.g([x1, x2])*k([x1, x2])
+
+    return VectorFieldPlots.plot_phase_portrait(xs, ys, f, T, lw=lw)
+end
+
+function plot_phase_portrait(
+    xs::Union{StepRangeLen, LinRange}, 
+    ys::Union{StepRangeLen, LinRange}, 
+    Σ::ControlAffineSystem, 
+    T::Float64; 
+    lw=1
+    )
+    f(x1, x2) = Σ.f([x1, x2])
+    return VectorFieldPlots.plot_phase_portrait(xs, ys, f, T, lw=lw)
+end
+
+function plot_phase_portrait(
+    xs::Union{StepRangeLen, LinRange}, 
+    ys::Union{StepRangeLen, LinRange}, 
+    Σ::ControlAffineSystem, 
+    k::FeedbackController,
+    T::Float64; 
+    lw=1
+    )
+    f(x1, x2) = Σ.f([x1, x2]) + Σ.g([x1, x2])*k([x1, x2])
+    return VectorFieldPlots.plot_phase_portrait(xs, ys, f, T, lw=lw)
+end
+
+"""
+    plot_phase_portrait!(X0::Vector{Vector{Float64}}, Σ::ControlAffineSystem, T::Float64; lw=1)
+    plot_phase_portrait!(X0::Vector{Float64}, Σ::ControlAffineSystem, T::Float64; lw=1)
+    plot_phase_portrait!(X0::Vector{Vector{Float64}}, Σ::ControlAffineSystem, k::FeedbackController, T::Float64; lw=1)
+    plot_phase_portrait!(X0::Vector{Float64}, Σ::ControlAffineSystem, k::FeedbackController, T::Float64; lw=1)
+    plot_phase_portrait!(xs::Vector{Float64}, ys::Vector{Float64}, Σ::ControlAffineSystem, T::Float64; lw=1)
+    plot_phase_portrait!(xs::Vector{Float64}, ys::Vector{Float64}, Σ::ControlAffineSystem, k::FeedbackController, T::Float64; lw=1)
+    plot_phase_portrait!(xs::Union{StepRangeLen, LinRange}, ys::Union{StepRangeLen, LinRange}, Σ::ControlAffineSystem, T::Float64; lw=1)
+    plot_phase_portrait!(xs::Union{StepRangeLen, LinRange}, ys::Union{StepRangeLen, LinRange}, Σ::ControlAffineSystem, k::FeedbackController, T::Float64; lw=1)
+
+Plot the phase portraint of a control affine system.
+"""
+function plot_phase_portrait!(
+    X0::Vector{Vector{Float64}}, 
+    Σ::ControlAffineSystem, 
+    T::Float64; 
+    lw=1
+    )
+    f(x1, x2) = Σ.f([x1, x2])
+
+    return VectorFieldPlots.plot_phase_portrait!(X0, f, T, lw=lw)
+end
+
+function plot_phase_portrait!(X0::Vector{Float64}, Σ::ControlAffineSystem, T::Float64; lw=1)
+    return plot_phase_portrait!([X0], Σ, T, lw=lw)
+end
+
+function plot_phase_portrait!(
+    X0::Vector{Vector{Float64}}, 
+    Σ::ControlAffineSystem, 
+    k::FeedbackController, 
+    T::Float64; 
+    lw=1
+    )
+    f(x1, x2) = Σ.f([x1, x2]) + Σ.g([x1, x2])*k([x1, x2])
+
+    return VectorFieldPlots.plot_phase_portrait!(X0, f, T, lw=lw)
+end
+
+function plot_phase_portrait!(
+    X0::Vector{Float64}, 
+    Σ::ControlAffineSystem, 
+    k::FeedbackController, 
+    T::Float64; 
+    lw=1
+    )
+    return plot_phase_portrait!([X0], Σ, k, T, lw=lw)
+end
+
+function plot_phase_portrait!(
+    xs::Vector{Float64}, 
+    ys::Vector{Float64}, 
+    Σ::ControlAffineSystem, 
+    T::Float64; 
+    lw=1
+    )
+    f(x1, x2) = Σ.f([x1, x2])
+
+    return VectorFieldPlots.plot_phase_portrait!(xs, ys, f, T, lw=lw)
+end
+
+function plot_phase_portrait!(
+    xs::Vector{Float64}, 
+    ys::Vector{Float64}, 
+    Σ::ControlAffineSystem, 
+    k::FeedbackController, 
+    T::Float64; 
+    lw=1
+    )
+    f(x1, x2) = Σ.f([x1, x2]) + Σ.g([x1, x2])*k([x1, x2])
+
+    return VectorFieldPlots.plot_phase_portrait!(xs, ys, f, T, lw=lw)
+end
+
+function plot_phase_portrait!(
+    xs::Union{StepRangeLen, LinRange}, 
+    ys::Union{StepRangeLen, LinRange}, 
+    Σ::ControlAffineSystem, 
+    T::Float64; 
+    lw=1
+    )
+    f(x1, x2) = Σ.f([x1, x2])
+    return VectorFieldPlots.plot_phase_portrait!(xs, ys, f, T, lw=lw)
+end
+
+function plot_phase_portrait!(
+    xs::Union{StepRangeLen, LinRange}, 
+    ys::Union{StepRangeLen, LinRange}, 
+    Σ::ControlAffineSystem, 
+    k::FeedbackController,
+    T::Float64; 
+    lw=1
+    )
+    f(x1, x2) = Σ.f([x1, x2]) + Σ.g([x1, x2])*k([x1, x2])
+    return VectorFieldPlots.plot_phase_portrait!(xs, ys, f, T, lw=lw)
+end
 
 """
     plot_circle(x, y, r; samples=500, lw=1.0, c=:black, fillalpha=0.2)
