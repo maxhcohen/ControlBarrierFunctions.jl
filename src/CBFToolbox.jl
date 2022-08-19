@@ -25,6 +25,7 @@ export StateFeedbackController
 export ControlLyapunovFunction
 export CLFSontag
 export CLFQuadProg
+export ISSCLFQuadProg
 export ControlBarrierFunction
 export SecondOrderCBF
 export CBFQuadProg
@@ -47,10 +48,10 @@ export plot_constraint_set!
 include("simulation.jl")
 include("control_affine_system.jl")
 include("state_feedback_controller.jl")
-# include("lqr_controller.jl")
 include("control_lyapunov_function.jl")
 include("clf_sontag.jl")
 include("clf_quad_prog.jl")
+include("iss_clf_quad_prog.jl")
 include("control_barrier_function.jl")
 include("second_order_cbf.jl")
 include("cbf_quad_prog.jl")
