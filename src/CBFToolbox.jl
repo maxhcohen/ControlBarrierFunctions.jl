@@ -2,75 +2,61 @@ module CBFToolbox
 
 # Julia packages required for this module
 using LinearAlgebra
-using Zygote
+using OrdinaryDiffEq
+using ForwardDiff
 using JuMP
 using OSQP
 using Plots
-using PlotThemes
-import DifferentialEquations: ODEProblem, solve
+using VectorFieldPlots
 
 # Abstract types
 abstract type System end
-abstract type Policy end
+abstract type Controller end
+abstract type FeedbackController <: Controller end
 abstract type CertificateFunction end
+abstract type HighOrderCBF <: CertificateFunction end
+abstract type Disturbance end
 
-# Export Simulation type
+# Export concrete types
 export Simulation
-export Trajectory
-
-# Export systems
-export System
 export ControlAffineSystem
-export step!
-export initialize!
-
-# Export Certificate functions
-export LyapunovFunction
+export StateFeedbackController
+# export LQRController
 export ControlLyapunovFunction
-export TimeVaryingCLF
-export BarrierFunction
+export CLFSontag
+export CLFQuadProg
 export ControlBarrierFunction
-export HighOrderCBF
+export SecondOrderCBF
+export CBFQuadProg
+export MatchedDisturbance
+export InputToStateCLF
 
-# Export control policies
-export Policy
-export FeedbackPolicy
-export CLFQP
-export TimeVaryingCLFQP
-export CBFQP
-export TimeVaryingCBFQP
+# Plotting functions
+export plot_vector_field
+export plot_vector_field!
+export plot_phase_portrait
+export plot_phase_portrait!
+export plot_circle
+export plot_circle!
+export plot_safe_set
+export plot_safe_set!
+export plot_constraint_set
+export plot_constraint_set!
 
-# Export utility functions and types
-export CircularObstacle
-export custom_plots
-export custom_theme
-export circle_shape
-export vec2mat
-
-# System definitions
-include("Systems/control_affine_system.jl")
-include("Systems/feedback_policy.jl")
-include("Systems/system_library.jl")
-
-# Lyapunov functions
-include("LyapunovFunctions/control_lyapunov_functions.jl")
-include("LyapunovFunctions/time_varying_clfs.jl")
-include("LyapunovFunctions/clf_quadratic_programs.jl")
-include("LyapunovFunctions/time_varying_clfqp.jl")
-
-# Barrier functions
-include("BarrierFunctions/control_barrier_functions.jl")
-include("BarrierFunctions/cbf_quadratic_programs.jl")
-include("BarrierFunctions/high_order_cbfs.jl")
-include("BarrierFunctions/hocbf_quadratic_programs.jl")
-include("BarrierFunctions/time_varying_cbfqp.jl")
-
-# Base simulation type
-include("Simulations/simulation.jl")
-
-# Utilities
-include("Utils/data_utils.jl")
-include("Utils/cbf_utils.jl")
-include("Utils/plot_utils.jl")
+# Source code
+include("simulation.jl")
+include("control_affine_system.jl")
+include("state_feedback_controller.jl")
+# include("lqr_controller.jl")
+include("control_lyapunov_function.jl")
+include("clf_sontag.jl")
+include("clf_quad_prog.jl")
+include("control_barrier_function.jl")
+include("second_order_cbf.jl")
+include("cbf_quad_prog.jl")
+include("hocbf_quad_prog.jl")
+include("matched_disturbance.jl")
+include("input_to_state_clf.jl")
+include("plots.jl")
 
 end
