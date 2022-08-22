@@ -21,7 +21,6 @@ abstract type Disturbance end
 export Simulation
 export ControlAffineSystem
 export StateFeedbackController
-# export LQRController
 export ControlLyapunovFunction
 export CLFSontag
 export CLFQuadProg
@@ -29,8 +28,8 @@ export ISSCLFQuadProg
 export ControlBarrierFunction
 export SecondOrderCBF
 export CBFQuadProg
+export ISSfCBFQuadProg
 export MatchedDisturbance
-export InputToStateCLF
 
 # Plotting functions
 export plot_vector_field
@@ -56,8 +55,9 @@ include("control_barrier_function.jl")
 include("second_order_cbf.jl")
 include("cbf_quad_prog.jl")
 include("hocbf_quad_prog.jl")
+include("issf_cbf_quad_prog.jl")
+include("hoissfcbf_quad_prog.jl")
 include("matched_disturbance.jl")
-include("input_to_state_clf.jl")
 include("plots.jl")
 
 end

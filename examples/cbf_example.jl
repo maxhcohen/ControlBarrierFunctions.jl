@@ -50,11 +50,13 @@ yy_phase = -1.0:1.0:3.0
 T = 20.0
 
 # Plot vector field and phase portrait
-fig = plot(xlabel=L"x_1", ylabel=L"x_2", dpi=200)
-plot_phase_portrait!(xx_phase, yy_phase, Σ, k, T, lw=2)
-plot_vector_field!(xx, yy, Σ, k)
-plot_circle!(xo[1], xo[2], ro)
-plot_circle!(xo2[1], xo2[2], ro2)
-xlims!(-3.1, 1.0)
-display(fig)
+begin
+    fig = plot(xlabel=L"x_1", ylabel=L"x_2", dpi=200)
+    plot_phase_portrait!(xx_phase, yy_phase, Σ, k, T, lw=2)
+    plot_vector_field!(xx, yy, Σ, k)
+    plot_circle!(xo[1], xo[2], ro)
+    plot_circle!(xo2[1], xo2[2], ro2)
+    xlims!(-3.1, 1.0)
+    display(fig)
+end
 # savefig(fig, "cbf_example.png")

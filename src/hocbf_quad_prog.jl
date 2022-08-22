@@ -1,3 +1,49 @@
+"""
+    CBFQuadProg(Σ::ControlAffineSystem, HOCBFs::Vector{SecondOrderCBF})
+    CBFQuadProg(
+        Σ::ControlAffineSystem, 
+        HOCBFs::Vector{SecondOrderCBF}, 
+        k::FeedbackController
+        )
+    CBFQuadProg(
+        Σ::ControlAffineSystem, 
+        HOCBFs::Vector{SecondOrderCBF}, 
+        k::FeedbackController,
+        H::Union{Float64, Matrix{Float64}}
+        )
+    CBFQuadProg(
+        Σ::ControlAffineSystem, 
+        HOCBFs::Vector{SecondOrderCBF}, 
+        k::FeedbackController,
+        H::Function
+        )
+    CBFQuadProg(
+        Σ::ControlAffineSystem, 
+        HOCBFs::Vector{SecondOrderCBF}, 
+        H::Function,
+        F::Function
+        )
+    CBFQuadProg(
+        Σ::ControlAffineSystem, 
+        HOCBFs::Vector{SecondOrderCBF}, 
+        H::Union{Float64, Matrix{Float64}},
+        F::Union{Float64, Vector{Float64}}
+        )
+    CBFQuadProg(
+        Σ::ControlAffineSystem, 
+        HOCBFs::Vector{SecondOrderCBF}, 
+        H::Function,
+        F::Union{Float64, Vector{Float64}}
+        )
+    CBFQuadProg(
+        Σ::ControlAffineSystem, 
+        HOCBFs::Vector{SecondOrderCBF},
+        H::Union{Float64, Matrix{Float64}},
+        F::Function
+        )
+
+Construct a high order control barrier function quadratic program.
+"""
 function CBFQuadProg(Σ::ControlAffineSystem, HOCBFs::Vector{SecondOrderCBF})
     # Set parameters for objective function
     H = Σ.m == 1 ? 1.0 : Matrix(1.0I, Σ.m, Σ.m)
