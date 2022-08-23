@@ -40,7 +40,7 @@ end
 
 "Compute gradient of a CLF evaluated at `x`."
 function gradient(CLF::ControlLyapunovFunction, x)
-    return ForwardDiff.gradient(CLF.V, x)'
+    return length(x) == 1 ? ForwardDiff.derivative(CLF.V, x) : ForwardDiff.gradient(CLF.V, x)'
 end
 
 "Compute Lie derivatives of CLF along system dynamics."

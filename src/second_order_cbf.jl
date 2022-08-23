@@ -18,7 +18,8 @@ end
 
 "SecondSecondOrderCBF constructors."
 function SecondOrderCBF(Σ::ControlAffineSystem, h::Function, α1::Function, α2::Function)
-    ψ1(x) = ForwardDiff.gradient(h, x)' * Σ.f(x) + α1(h(x))
+    ∇h(x) = Σ.n == 1 ? ForwardDiff.derivative(h, x) : ForwardDiff.gradient(h, x)'
+    ψ1(x) = ∇h(x) * Σ.f(x) + α1(h(x))
 
     return SecondOrderCBF(h, ψ1, α1, α2)
 end
@@ -39,7 +40,7 @@ end
 
 "Compute gradient of a HOCBF evaluated at `x`."
 function gradient(HOCBF::SecondOrderCBF, x)
-    return ForwardDiff.gradient(HOCBF.ψ1, x)'
+    return length(x) == 1 ? ForwardDiff.derivative(HOCBF.ψ1, x) : ForwardDiff.gradient(HOCBF.ψ1, x)'
 end
 
 "Compute Lie derivative of HOCBF along drift dynamics."

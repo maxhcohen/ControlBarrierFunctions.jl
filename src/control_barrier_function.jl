@@ -19,7 +19,7 @@ ControlBarrierFunction(h::Function) = ControlBarrierFunction(h, s -> s)
 
 "Compute gradient of a CBF evaluated at `x`."
 function gradient(CBF::ControlBarrierFunction, x)
-    return ForwardDiff.gradient(CBF.h, x)'
+    return length(x) == 1 ? ForwardDiff.derivative(CBF.h, x) : ForwardDiff.gradient(CBF.h, x)'
 end
 
 "Compute Lie derivatives of CBF along system dynamics."
