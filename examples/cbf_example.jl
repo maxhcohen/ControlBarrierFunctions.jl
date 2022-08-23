@@ -4,7 +4,8 @@ using CBFToolbox
 using LinearAlgebra
 using Plots
 using LaTeXStrings
-default(grid=false, framestyle=:box, fontfamily="Computer Modern", label="")
+julia_palette = deleteat!(distinguishable_colors(10, [c for c in palette(:julia)]), 5:6)
+default(fontfamily="Computer Modern", grid=false, framestyle=:box, lw=2, label="", palette=julia_palette)
 
 # First we need to define a control affine system
 

@@ -3,7 +3,8 @@ using CBFToolbox
 using LinearAlgebra
 using Plots
 using LaTeXStrings
-default(grid=false, framestyle=:box, fontfamily="Computer Modern", label="")
+julia_palette = deleteat!(distinguishable_colors(10, [c for c in palette(:julia)]), 5:6)
+default(fontfamily="Computer Modern", grid=false, framestyle=:box, lw=2, label="", palette=julia_palette)
 
 # Define system
 n = 4
@@ -36,7 +37,7 @@ S = Simulation(T)
 x = S(Σ, k, x0)
 
 # Plot results
-fig = plot(x, vars=(1,2), lw=2, label="")
+fig = plot(x, idxs=(1,2), lw=2, label="")
 plot_circle!(xo[1], xo[2], ro)
 xlabel!(L"x_1")
 ylabel!(L"x_2")
