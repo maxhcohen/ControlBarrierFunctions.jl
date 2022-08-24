@@ -99,7 +99,7 @@ function (S::Simulation)(Σ::ControlAffineSystem, x::Union{Float64, Vector{Float
     rhs(x, p, t) = Σ.f(x)
 
     function rhs!(dx, x, p, t)
-        dx = Σ.f(x)
+        dx .= Σ.f(x)
         nothing
     end
 
@@ -134,7 +134,7 @@ function (S::Simulation)(
     rhs(x, p, t) = Σ.f(x) + Σ.g(x)*k(x)
 
     function rhs!(dx, x, p, t)
-        dx = Σ.f(x) + Σ.g(x)*k(x)
+        dx .= Σ.f(x) + Σ.g(x)*k(x)
         nothing
     end
 
