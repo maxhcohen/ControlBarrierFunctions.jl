@@ -11,7 +11,9 @@ dynamical system from an initial condition under a specified control policy.
 struct Simulation
     t0::Float64
     tf::Float64
+    inplace::Bool
 end
 
 # Simulation constructor from simulation end time
-Simulation(T::Float64) = Simulation(0.0, T)
+Simulation(T::Float64) = Simulation(0.0, T, true)
+Simulation(T::Float64, inplace::Bool) = Simulation(0.0, T, inplace)

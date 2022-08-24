@@ -27,5 +27,6 @@ Manifest.toml
 scratch/
 tests/
 old/
+benchmarking/
 .vscode
 .DS_Store
