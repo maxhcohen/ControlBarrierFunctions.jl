@@ -2,7 +2,7 @@
 
 julia_version = "1.8.0"
 manifest_format = "2.0"
-project_hash = "5d0485ac5ca3b85e52b0f50fbe50326d0ba74963"
+project_hash = "33792381d00127c37172f0634ef460b0f3e98272"
 
 [[deps.Adapt]]
 deps = ["LinearAlgebra"]
@@ -1253,14 +1253,6 @@ version = "0.4.1"
 git-tree-sha1 = "34db80951901073501137bdbc3d5a8e7bbd06670"
 uuid = "41fe7b60-77ed-43a1-b4f0-825fd5a5650d"
 version = "0.1.2"
-
-[[deps.VectorFieldPlots]]
-deps = ["LaTeXStrings", "LinearAlgebra", "OrdinaryDiffEq", "Plots"]
-git-tree-sha1 = "fa5282b0ecc21a7e0e966ecf19893ec22cf520ff"
-repo-rev = "main"
-repo-url = "https://github.com/maxhcohen/VectorFieldPlots.jl.git"
-uuid = "65c20475-cd4d-480f-b9de-e911d7154609"
-version = "0.1.0"
 
 [[deps.VectorizationBase]]
 deps = ["ArrayInterface", "CPUSummary", "HostCPUFeatures", "IfElse", "LayoutPointers", "Libdl", "LinearAlgebra", "SIMDTypes", "Static"]

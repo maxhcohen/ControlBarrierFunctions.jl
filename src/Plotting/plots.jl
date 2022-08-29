@@ -7,13 +7,13 @@ Plot the vector field of a open or closed-loop `ControlAffineSystem`.
 function plot_vector_field(xs, ys, Σ::ControlAffineSystem; scale=0.15, lw=1)
     f(x1, x2) = Σ.f([x1, x2])
 
-    return VectorFieldPlots.plot_vector_field(xs, ys, f, scale=scale, lw=lw)
+    return plot_vector_field(xs, ys, f, scale=scale, lw=lw)
 end
 
 function plot_vector_field(xs, ys, Σ::ControlAffineSystem, k::FeedbackController; scale=0.15, lw=1)
     f(x1, x2) = Σ.f([x1, x2]) + Σ.g([x1, x2])*k([x1, x2])
 
-    return VectorFieldPlots.plot_vector_field(xs, ys, f, scale=scale, lw=lw)
+    return plot_vector_field(xs, ys, f, scale=scale, lw=lw)
 end
 
 """
@@ -25,13 +25,13 @@ Plot the vector field of a open or closed-loop `ControlAffineSystem` on an exist
 function plot_vector_field!(xs, ys, Σ::ControlAffineSystem; scale=0.15, lw=1)
     f(x1, x2) = Σ.f([x1, x2])
 
-    return VectorFieldPlots.plot_vector_field!(xs, ys, f, scale=scale, lw=lw)
+    return plot_vector_field!(xs, ys, f, scale=scale, lw=lw)
 end
 
 function  plot_vector_field!(xs, ys, Σ::ControlAffineSystem, k::FeedbackController; scale=0.15, lw=1)
     f(x1, x2) = Σ.f([x1, x2]) + Σ.g([x1, x2])*k([x1, x2])
 
-    return VectorFieldPlots.plot_vector_field!(xs, ys, f, scale=scale, lw=lw)
+    return plot_vector_field!(xs, ys, f, scale=scale, lw=lw)
 end
 
 """
@@ -54,7 +54,7 @@ function plot_phase_portrait(
     )
     f(x1, x2) = Σ.f([x1, x2])
 
-    return VectorFieldPlots.plot_phase_portrait(X0, f, T, lw=lw)
+    return plot_phase_portrait(X0, f, T, lw=lw)
 end
 
 function plot_phase_portrait(X0::Vector{Float64}, Σ::ControlAffineSystem, T::Float64; lw=1)
@@ -70,7 +70,7 @@ function plot_phase_portrait(
     )
     f(x1, x2) = Σ.f([x1, x2]) + Σ.g([x1, x2])*k([x1, x2])
 
-    return VectorFieldPlots.plot_phase_portrait(X0, f, T, lw=lw)
+    return plot_phase_portrait(X0, f, T, lw=lw)
 end
 
 function plot_phase_portrait(
@@ -92,7 +92,7 @@ function plot_phase_portrait(
     )
     f(x1, x2) = Σ.f([x1, x2])
 
-    return VectorFieldPlots.plot_phase_portrait(xs, ys, f, T, lw=lw)
+    return plot_phase_portrait(xs, ys, f, T, lw=lw)
 end
 
 function plot_phase_portrait(
@@ -105,7 +105,7 @@ function plot_phase_portrait(
     )
     f(x1, x2) = Σ.f([x1, x2]) + Σ.g([x1, x2])*k([x1, x2])
 
-    return VectorFieldPlots.plot_phase_portrait(xs, ys, f, T, lw=lw)
+    return plot_phase_portrait(xs, ys, f, T, lw=lw)
 end
 
 function plot_phase_portrait(
@@ -116,7 +116,7 @@ function plot_phase_portrait(
     lw=1
     )
     f(x1, x2) = Σ.f([x1, x2])
-    return VectorFieldPlots.plot_phase_portrait(xs, ys, f, T, lw=lw)
+    return plot_phase_portrait(xs, ys, f, T, lw=lw)
 end
 
 function plot_phase_portrait(
@@ -128,7 +128,7 @@ function plot_phase_portrait(
     lw=1
     )
     f(x1, x2) = Σ.f([x1, x2]) + Σ.g([x1, x2])*k([x1, x2])
-    return VectorFieldPlots.plot_phase_portrait(xs, ys, f, T, lw=lw)
+    return plot_phase_portrait(xs, ys, f, T, lw=lw)
 end
 
 """
@@ -151,7 +151,7 @@ function plot_phase_portrait!(
     )
     f(x1, x2) = Σ.f([x1, x2])
 
-    return VectorFieldPlots.plot_phase_portrait!(X0, f, T, lw=lw)
+    return plot_phase_portrait!(X0, f, T, lw=lw)
 end
 
 function plot_phase_portrait!(X0::Vector{Float64}, Σ::ControlAffineSystem, T::Float64; lw=1)
@@ -167,7 +167,7 @@ function plot_phase_portrait!(
     )
     f(x1, x2) = Σ.f([x1, x2]) + Σ.g([x1, x2])*k([x1, x2])
 
-    return VectorFieldPlots.plot_phase_portrait!(X0, f, T, lw=lw)
+    return plot_phase_portrait!(X0, f, T, lw=lw)
 end
 
 function plot_phase_portrait!(
@@ -189,7 +189,7 @@ function plot_phase_portrait!(
     )
     f(x1, x2) = Σ.f([x1, x2])
 
-    return VectorFieldPlots.plot_phase_portrait!(xs, ys, f, T, lw=lw)
+    return plot_phase_portrait!(xs, ys, f, T, lw=lw)
 end
 
 function plot_phase_portrait!(
@@ -202,7 +202,7 @@ function plot_phase_portrait!(
     )
     f(x1, x2) = Σ.f([x1, x2]) + Σ.g([x1, x2])*k([x1, x2])
 
-    return VectorFieldPlots.plot_phase_portrait!(xs, ys, f, T, lw=lw)
+    return plot_phase_portrait!(xs, ys, f, T, lw=lw)
 end
 
 function plot_phase_portrait!(
@@ -213,7 +213,7 @@ function plot_phase_portrait!(
     lw=1
     )
     f(x1, x2) = Σ.f([x1, x2])
-    return VectorFieldPlots.plot_phase_portrait!(xs, ys, f, T, lw=lw)
+    return plot_phase_portrait!(xs, ys, f, T, lw=lw)
 end
 
 function plot_phase_portrait!(
@@ -225,7 +225,7 @@ function plot_phase_portrait!(
     lw=1
     )
     f(x1, x2) = Σ.f([x1, x2]) + Σ.g([x1, x2])*k([x1, x2])
-    return VectorFieldPlots.plot_phase_portrait!(xs, ys, f, T, lw=lw)
+    return plot_phase_portrait!(xs, ys, f, T, lw=lw)
 end
 
 """

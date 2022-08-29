@@ -7,7 +7,6 @@ using ForwardDiff
 using JuMP
 using OSQP
 using Plots
-using VectorFieldPlots
 
 # Abstract types
 abstract type System end
@@ -58,6 +57,10 @@ include("Barrier/hocbf_quad_prog.jl")
 include("Barrier/issf_cbf_quad_prog.jl")
 include("Barrier/hoissfcbf_quad_prog.jl")
 include("Systems/matched_disturbance.jl")
+include("Plotting/meshgrid.jl")
+include("Plotting/vector_field_colors.jl")
+include("Plotting/plot_vector_field.jl")
+include("Plotting/plot_phase_portrait.jl")
 include("Plotting/plots.jl")
 
 end
