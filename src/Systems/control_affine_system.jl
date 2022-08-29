@@ -103,7 +103,7 @@ function (S::Simulation)(Σ::ControlAffineSystem, x::Union{Float64, Vector{Float
     end
 
     problem = S.inplace ? ODEProblem(rhs!, x, S.tf) :  ODEProblem(rhs, x, S.tf)
-    trajectory = solve(problem, Tsit5())
+    trajectory = solve(problem)
 
     return trajectory
 end
@@ -129,7 +129,7 @@ function (S::Simulation)(
     end
 
     problem = S.inplace ? ODEProblem(rhs!, x, S.tf) :  ODEProblem(rhs, x, S.tf)
-    trajectory = solve(problem, Tsit5())
+    trajectory = solve(problem)
 
     return trajectory
 end

@@ -96,5 +96,5 @@ function simulate(f::Function, x, T::Float64)
     rhs(x, p, t) = f(x[1], x[2])
     problem = ODEProblem(rhs, x, [0.0, T])
 
-    return solve(problem, Tsit5())
+    return solve(problem)
 end

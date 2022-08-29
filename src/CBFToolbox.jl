@@ -2,11 +2,11 @@ module CBFToolbox
 
 # Julia packages required for this module
 using LinearAlgebra
-using OrdinaryDiffEq
 using ForwardDiff
 using JuMP
 using OSQP
 using Plots
+import DifferentialEquations: solve, ODEProblem
 
 # Abstract types
 abstract type System end
