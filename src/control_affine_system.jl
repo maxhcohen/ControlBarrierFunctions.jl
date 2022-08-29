@@ -90,7 +90,6 @@ end
 
 """
     (S::Simulation)(Σ::ControlAffineSystem, x::Union{Float64, Vector{Float64}})
-    (S::Simulation)(Σ::ControlAffineSystem, x::SVector)
 
 Run open-loop simulation of control affine system from initial state x.
 """
@@ -109,17 +108,8 @@ function (S::Simulation)(Σ::ControlAffineSystem, x::Union{Float64, Vector{Float
     return trajectory
 end
 
-function (S::Simulation)(Σ::ControlAffineSystem, x::SVector)
-    right_hand_side(x, p, t) = Σ.f(x)
-    problem = ODEProblem(right_hand_side, x, S.tf)
-    trajectory = solve(problem, Tsit5())
-
-    return trajectory
-end
-
 """
     (S::Simulation)(Σ::ControlAffineSystem, k::FeedbackController, x::Union{Float64, Vector{Float64}})
-    (S::Simulation)(Σ::ControlAffineSystem, k::FeedbackController, x::SVector)
 
 Run closed-loop simulation of control affine system from initial state x under feedback
 control policy.
@@ -139,18 +129,6 @@ function (S::Simulation)(
     end
 
     problem = S.inplace ? ODEProblem(rhs!, x, S.tf) :  ODEProblem(rhs, x, S.tf)
-    trajectory = solve(problem, Tsit5())
-
-    return trajectory
-end
-
-function (S::Simulation)(
-    Σ::ControlAffineSystem,
-    k::FeedbackController,
-    x::SVector,
-    )
-    right_hand_side(x, p, t) = SVector{Σ.n}(Σ.f(x) + Σ.g(x)*k(x))
-    problem = ODEProblem(right_hand_side, x, S.tf)
     trajectory = solve(problem, Tsit5())
 
     return trajectory

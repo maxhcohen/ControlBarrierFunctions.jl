@@ -3,7 +3,6 @@ module CBFToolbox
 # Julia packages required for this module
 using LinearAlgebra
 using OrdinaryDiffEq
-using StaticArrays
 using ForwardDiff
 using JuMP
 using OSQP
