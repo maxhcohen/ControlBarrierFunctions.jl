@@ -1,5 +1,5 @@
 """
-    QPSafetyFilter
+    QPSafetyFilter <: SafetyFilter
 
 Controller that solves a control barrier function-based quadratic program (CBF-QP).
 

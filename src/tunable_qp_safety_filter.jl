@@ -1,5 +1,5 @@
 """
-    TunableQPSafetyFilter
+    TunableQPSafetyFilter <: SafetyFilter
 
 Controller that solves a control barrier function-based quadratic program (CBF-QP) with tunable class K functions.
 
