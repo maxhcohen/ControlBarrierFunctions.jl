@@ -13,6 +13,7 @@ export ControlBarrierFunction
 export ExplicitSafetyFilter
 export QPSafetyFilter
 export TunableQPSafetyFilter
+export SmoothSafetyFilter
 
 # Export core functions
 export simulate
@@ -24,5 +25,6 @@ include("safety_filter.jl")
 include("explicit_safety_filter.jl")
 include("qp_safety_filter.jl")
 include("tunable_qp_safety_filter.jl")
+include("smooth_safety_filter.jl")
 
 end

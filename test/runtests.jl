@@ -72,11 +72,36 @@ sol = simulate(Σ, kQP, x0, T)
 
 # Test standard QP
 ktQP = TunableQPSafetyFilter(cbf, Σ, kd)
-ktQP(x0)
 sol = simulate(Σ, ktQP, x0, T)
 @test minimum(h.(sol.(ts))) ≥ 0.0
 
 # Test with time-varying controller
 ktQP = TunableQPSafetyFilter(cbf, Σ, (x,t) -> kd(x))
 sol = simulate(Σ, ktQP, x0, T)
+@test minimum(h.(sol.(ts))) ≥ 0.0
+
+### Test functionality for SmoothSafetyFilter
+kHalfSontag = SmoothSafetyFilter(cbf, Σ, kd)
+sol = simulate(Σ, kHalfSontag, x0, T)
+@test minimum(h.(sol.(ts))) ≥ 0.0
+
+kSontag = SmoothSafetyFilter(cbf, Σ, kd, formula="sontag")
+sol = simulate(Σ, kSontag, x0, T)
+@test minimum(h.(sol.(ts))) ≥ 0.0
+
+kSoftplus = SmoothSafetyFilter(cbf, Σ, kd, formula="softplus")
+sol = simulate(Σ, kSoftplus, x0, T)
+@test minimum(h.(sol.(ts))) ≥ 0.0
+
+# Make sure time-varying controllers work as well
+kHalfSontag = SmoothSafetyFilter(cbf, Σ, (x,t) -> kd(x))
+sol = simulate(Σ, kHalfSontag, x0, T)
+@test minimum(h.(sol.(ts))) ≥ 0.0
+
+kSontag = SmoothSafetyFilter(cbf, Σ, (x,t) -> kd(x), formula="sontag")
+sol = simulate(Σ, kSontag, x0, T)
+@test minimum(h.(sol.(ts))) ≥ 0.0
+
+kSoftplus = SmoothSafetyFilter(cbf, Σ, (x,t) -> kd(x), formula="softplus")
+sol = simulate(Σ, kSoftplus, x0, T)
 @test minimum(h.(sol.(ts))) ≥ 0.0
