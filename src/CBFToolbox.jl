@@ -14,6 +14,7 @@ export ExplicitSafetyFilter
 export QPSafetyFilter
 export TunableQPSafetyFilter
 export SmoothSafetyFilter
+export ISSfSmoothSafetyFilter
 
 # Export core functions
 export simulate
@@ -26,5 +27,6 @@ include("explicit_safety_filter.jl")
 include("qp_safety_filter.jl")
 include("tunable_qp_safety_filter.jl")
 include("smooth_safety_filter.jl")
+include("issf_smooth_safety_filter.jl")
 
 end

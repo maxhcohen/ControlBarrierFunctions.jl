@@ -105,3 +105,30 @@ sol = simulate(Σ, kSontag, x0, T)
 kSoftplus = SmoothSafetyFilter(cbf, Σ, (x,t) -> kd(x), formula="softplus")
 sol = simulate(Σ, kSoftplus, x0, T)
 @test minimum(h.(sol.(ts))) ≥ 0.0
+
+### Test functionality for ISSfSmoothSafetyFilter
+ε = 1.0
+kHalfSontagISSf = ISSfSmoothSafetyFilter(cbf, Σ, kd, ε)
+sol = simulate(Σ, kHalfSontagISSf, x0, T)
+@test minimum(h.(sol.(ts))) ≥ 0.0
+
+kSontagISSf = ISSfSmoothSafetyFilter(cbf, Σ, kd, formula="sontag", ε)
+sol = simulate(Σ, kSontagISSf, x0, T)
+@test minimum(h.(sol.(ts))) ≥ 0.0
+
+kSoftplusISSf = ISSfSmoothSafetyFilter(cbf, Σ, kd, formula="softplus", ε)
+sol = simulate(Σ, kSoftplusISSf, x0, T)
+@test minimum(h.(sol.(ts))) ≥ 0.0
+
+# Make sure time-varying controllers work as well
+kHalfSontagISSf = ISSfSmoothSafetyFilter(cbf, Σ, (x,t) -> kd(x), ε)
+sol = simulate(Σ, kHalfSontagISSf, x0, T)
+@test minimum(h.(sol.(ts))) ≥ 0.0
+
+kSontagISSf = ISSfSmoothSafetyFilter(cbf, Σ, (x,t) -> kd(x), formula="sontag", ε)
+sol = simulate(Σ, kSontagISSf, x0, T)
+@test minimum(h.(sol.(ts))) ≥ 0.0
+
+kSoftplusISSf = ISSfSmoothSafetyFilter(cbf, Σ, (x,t) -> kd(x), formula="softplus", ε)
+sol = simulate(Σ, kSoftplusISSf, x0, T)
+@test minimum(h.(sol.(ts))) ≥ 0.0
