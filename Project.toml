@@ -1,6 +1,6 @@
 name = "CBFToolbox"
 uuid = "9bb58977-20e0-447d-80ed-b4444e16eeb9"
-authors = ["Max Cohen <maxcohen@bu.edu>"]
+authors = ["Max Cohen <maxcohen@caltech.edu>"]
 version = "0.1.0"
 
 [deps]
