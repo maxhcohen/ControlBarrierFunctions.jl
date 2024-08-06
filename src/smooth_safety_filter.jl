@@ -27,43 +27,65 @@ Functors for evaluating smooth safety filter
 
 Construct an SmoothSafetyFilter from a cbf and a desired controller.
 """
-function SmoothSafetyFilter(cbf::ControlBarrierFunction, Σ::ControlAffineSystem, kd::Function; formula="half sontag", σ=0.1)
+function SmoothSafetyFilter(
+    cbf::ControlBarrierFunction,
+    Σ::ControlAffineSystem,
+    kd::Function;
+    formula="half sontag",
+    σ=0.1,
+)
     try
         kd(Σ.n == 1 ? rand() : rand(Σ.n), 0.0)
     catch e
         if isa(e, MethodError)
-            a(x) = cbf.Lfh(x) + cbf.Lgh(x)*kd(x) + cbf.α(cbf(x))
+            a(x) = cbf.Lfh(x) + cbf.Lgh(x) * kd(x) + cbf.α(cbf(x))
             b(x) = norm(cbf.Lgh(x))^2
             if formula == "half sontag"
-                return SmoothSafetyFilter(formula, σ, x -> kd(x) + λHalfSontag(a(x), b(x), σ)*cbf.Lgh(x)')
+                return SmoothSafetyFilter(
+                    formula, σ, x -> kd(x) + λHalfSontag(a(x), b(x), σ) * cbf.Lgh(x)'
+                )
             elseif formula == "sontag"
-                return SmoothSafetyFilter(formula, σ, x -> kd(x) + λSontag(a(x), b(x), σ)*cbf.Lgh(x)')
+                return SmoothSafetyFilter(
+                    formula, σ, x -> kd(x) + λSontag(a(x), b(x), σ) * cbf.Lgh(x)'
+                )
             elseif formula == "softplus"
-                return SmoothSafetyFilter(formula, σ, x -> kd(x) + λSoftplus(a(x), b(x), σ)*cbf.Lgh(x)')
+                return SmoothSafetyFilter(
+                    formula, σ, x -> kd(x) + λSoftplus(a(x), b(x), σ) * cbf.Lgh(x)'
+                )
             else
                 @warn "No valid formula provided, defaulting to Half Sontag formula."
-                return SmoothSafetyFilter(formula, σ, x -> kd(x) + λHalfSontag(a(x), b(x), σ)*cbf.Lgh(x)')
+                return SmoothSafetyFilter(
+                    formula, σ, x -> kd(x) + λHalfSontag(a(x), b(x), σ) * cbf.Lgh(x)'
+                )
             end
         else
-           return e
+            return e
         end
     else
-        a(x, t) = cbf.Lfh(x) + cbf.Lgh(x)*kd(x, t) + cbf.α(cbf(x))
+        a(x, t) = cbf.Lfh(x) + cbf.Lgh(x) * kd(x, t) + cbf.α(cbf(x))
         b(x) = norm(cbf.Lgh(x))^2
         if formula == "half sontag"
-            return SmoothSafetyFilter(formula, σ, (x,t) -> kd(x, t) + λHalfSontag(a(x, t), b(x), σ)*cbf.Lgh(x)')
+            return SmoothSafetyFilter(
+                formula, σ, (x, t) -> kd(x, t) + λHalfSontag(a(x, t), b(x), σ) * cbf.Lgh(x)'
+            )
         elseif formula == "sontag"
-            return SmoothSafetyFilter(formula, σ, (x,t) -> kd(x, t) + λSontag(a(x, t), b(x), σ)*cbf.Lgh(x)')
+            return SmoothSafetyFilter(
+                formula, σ, (x, t) -> kd(x, t) + λSontag(a(x, t), b(x), σ) * cbf.Lgh(x)'
+            )
         elseif formula == "softplus"
-            return SmoothSafetyFilter(formula, σ, (x,t) -> kd(x, t) + λSoftplus(a(x, t), b(x), σ)*cbf.Lgh(x)')
+            return SmoothSafetyFilter(
+                formula, σ, (x, t) -> kd(x, t) + λSoftplus(a(x, t), b(x), σ) * cbf.Lgh(x)'
+            )
         else
             @warn "No valid formula provided, defaulting to Half Sontag formula."
-            return SmoothSafetyFilter(formula, σ, (x, t) -> kd(x,t) + λHalfSontag(a(x, t), b(x), σ)*cbf.Lgh(x)')
+            return SmoothSafetyFilter(
+                formula, σ, (x, t) -> kd(x, t) + λHalfSontag(a(x, t), b(x), σ) * cbf.Lgh(x)'
+            )
         end
     end
 end
 
 # Smooth universal formulas, we always default to half Sontag
-λSontag(a, b, σ) = b == 0.0 ? 0.0 : (-a + sqrt(a^2 + σ*b^2))/b
-λHalfSontag(a, b, σ) = 0.5*λSontag(a, b, σ)
-λSoftplus(a,b, σ) = b ≤ 0.0 ? 0.0 : σ*log(1.0 + exp(-a/(b*σ)))
+λSontag(a, b, σ) = b == 0.0 ? 0.0 : (-a + sqrt(a^2 + σ * b^2)) / b
+λHalfSontag(a, b, σ) = 0.5 * λSontag(a, b, σ)
+λSoftplus(a, b, σ) = b ≤ 0.0 ? 0.0 : σ * log(1.0 + exp(-a / (b * σ)))

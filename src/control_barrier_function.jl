@@ -32,8 +32,8 @@ Construct a CBF from a function `h`, a control affine system `Σ`, and an extend
 """
 function ControlBarrierFunction(h::Function, Σ::ControlAffineSystem, α::Function)
     ∇h(x) = Σ.n == 1 ? ForwardDiff.derivative(h, x) : ForwardDiff.gradient(h, x)
-    Lfh(x) = ∇h(x)'*Σ.f(x)
-    Lgh(x) = ∇h(x)'*Σ.g(x)
+    Lfh(x) = ∇h(x)' * Σ.f(x)
+    Lgh(x) = ∇h(x)' * Σ.g(x)
 
     return ControlBarrierFunction(h, α, ∇h, Lfh, Lgh)
 end
@@ -43,4 +43,5 @@ end
 
 If no extended class K function provided, default to the identify function.
 """
-ControlBarrierFunction(h::Function, Σ::ControlAffineSystem) = ControlBarrierFunction(h, Σ, r -> r)
+ControlBarrierFunction(h::Function, Σ::ControlAffineSystem) =
+    ControlBarrierFunction(h, Σ, r -> r)

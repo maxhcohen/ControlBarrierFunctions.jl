@@ -23,7 +23,8 @@ end
 
 Construct a control affine system. Name defaults to `missing` if not provided.
 """
-ControlAffineSystem(n::Int, m::Int, f::Function, g::Function) = ControlAffineSystem(missing, n, m, f, g)
+ControlAffineSystem(n::Int, m::Int, f::Function, g::Function) =
+    ControlAffineSystem(missing, n, m, f, g)
 
 """
     dynamics(Σ::ControlAffineSystem, x)
@@ -32,7 +33,7 @@ ControlAffineSystem(n::Int, m::Int, f::Function, g::Function) = ControlAffineSys
 Compute the dynamics `ẋ` of a control affine system
 """
 dynamics(Σ::ControlAffineSystem, x) = Σ.f(x)
-dynamics(Σ::ControlAffineSystem, x, u) = Σ.f(x) + Σ.g(x)*u
+dynamics(Σ::ControlAffineSystem, x, u) = Σ.f(x) + Σ.g(x) * u
 
 """
     simulate(Σ::ControlAffineSystem, x0, T::Float64)
@@ -41,10 +42,10 @@ Simulate a control affine system from initial condition `x0` for `T` seconds.
 """
 function simulate(Σ::ControlAffineSystem, x0, T::Float64)
     function odefun(dx, x, p, t)
-        dx[1:Σ.n] .= dynamics(Σ, x)
+        return dx[1:(Σ.n)] .= dynamics(Σ, x)
     end
 
-    return solve(ODEProblem(odefun, x0, (0,T)))
+    return solve(ODEProblem(odefun, x0, (0, T)))
 end
 
 """
@@ -58,18 +59,18 @@ function simulate(Σ::ControlAffineSystem, k::Function, x0, T::Float64)
     catch e
         if isa(e, MethodError)
             function odefun(dx, x, p, t)
-                dx[1:Σ.n] .= dynamics(Σ, x, k(x))
+                return dx[1:(Σ.n)] .= dynamics(Σ, x, k(x))
             end
 
-            return solve(ODEProblem(odefun, x0, (0,T)))
+            return solve(ODEProblem(odefun, x0, (0, T)))
         else
-           return e
+            return e
         end
     else
         function odefun(dx, x, p, t)
-            dx[1:Σ.n] .= dynamics(Σ, x, k(x, t))
+            return dx[1:(Σ.n)] .= dynamics(Σ, x, k(x, t))
         end
 
-        return solve(ODEProblem(odefun, x0, (0,T)))
+        return solve(ODEProblem(odefun, x0, (0, T)))
     end
 end

@@ -23,23 +23,25 @@ Functors for evaluating explicit safety filter
 
 Construct an ExplicitSafetyFilter from a cbf and a desired controller.
 """
-function ExplicitSafetyFilter(cbf::ControlBarrierFunction, Σ::ControlAffineSystem, kd::Function)
+function ExplicitSafetyFilter(
+    cbf::ControlBarrierFunction, Σ::ControlAffineSystem, kd::Function
+)
     try
         kd(Σ.n == 1 ? rand() : rand(Σ.n), 0.0)
     catch e
         if isa(e, MethodError)
-            a(x) = cbf.Lfh(x) + cbf.Lgh(x)*kd(x) + cbf.α(cbf(x))
+            a(x) = cbf.Lfh(x) + cbf.Lgh(x) * kd(x) + cbf.α(cbf(x))
             b(x) = norm(cbf.Lgh(x))^2
-            k(x) = kd(x) + λQP(a(x), b(x))*cbf.Lgh(x)'
+            k(x) = kd(x) + λQP(a(x), b(x)) * cbf.Lgh(x)'
 
             return ExplicitSafetyFilter(k)
         else
-           return e
+            return e
         end
     else
-        a(x, t) = cbf.Lfh(x) + cbf.Lgh(x)*kd(x, t) + cbf.α(cbf(x))
+        a(x, t) = cbf.Lfh(x) + cbf.Lgh(x) * kd(x, t) + cbf.α(cbf(x))
         b(x) = norm(cbf.Lgh(x))^2
-        k(x, t) = kd(x, t) + λQP(a(x, t), b(x))*cbf.Lgh(x)'
+        k(x, t) = kd(x, t) + λQP(a(x, t), b(x)) * cbf.Lgh(x)'
 
         return ExplicitSafetyFilter(k)
     end
@@ -58,4 +60,4 @@ end
 
 # Some helper functions
 ReLU(x::Float64) = max(0.0, x)
-λQP(a::Float64, b::Float64) = b == 0.0 ? 0.0 : ReLU(-a/b)
+λQP(a::Float64, b::Float64) = b == 0.0 ? 0.0 : ReLU(-a / b)

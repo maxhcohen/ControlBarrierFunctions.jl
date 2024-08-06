@@ -28,17 +28,19 @@ Construct an QPSafetyFilter from a cbf and a desired controller.
 # Keywork arguments
 - `tunable::Bool` : boolean to decide if coefficients on extended class K functions should be decision variables
 """
-function QPSafetyFilter(cbfs::Vector{ControlBarrierFunction}, Σ::ControlAffineSystem, kd::Function)
+function QPSafetyFilter(
+    cbfs::Vector{ControlBarrierFunction}, Σ::ControlAffineSystem, kd::Function
+)
     try
         kd(Σ.n == 1 ? rand() : rand(Σ.n), 0.0) # See if desired controller is time-varying
     catch e
         if isa(e, MethodError) # If controller is not time-varying 
             return QPSafetyFilter(x -> solve_cbf_qp(x, Σ, cbfs, kd))
         else
-           return e
+            return e
         end
     else # If controller is time-varying
-        return QPSafetyFilter((x,t) -> solve_time_varying_cbf_qp(x, t, Σ, cbfs, kd))
+        return QPSafetyFilter((x, t) -> solve_time_varying_cbf_qp(x, t, Σ, cbfs, kd))
     end
 end
 
@@ -47,20 +49,23 @@ end
 
 Add ability to pass in single CBF.
 """
-QPSafetyFilter(cbf::ControlBarrierFunction, Σ::ControlAffineSystem, kd::Function) = QPSafetyFilter([cbf], Σ, kd)
+QPSafetyFilter(cbf::ControlBarrierFunction, Σ::ControlAffineSystem, kd::Function) =
+    QPSafetyFilter([cbf], Σ, kd)
 
 """
     solve_cbf_qp(x, Σ::ControlAffineSystem, cbfs::Vector{ControlBarrierFunction}, kd::Function)
 
 Solve CBF-QP
 """
-function solve_cbf_qp(x, Σ::ControlAffineSystem, cbfs::Vector{ControlBarrierFunction}, kd::Function)
+function solve_cbf_qp(
+    x, Σ::ControlAffineSystem, cbfs::Vector{ControlBarrierFunction}, kd::Function
+)
     model = Model(OSQP.Optimizer)
     set_silent(model)
-    u = Σ.m == 1 ? @variable(model, u) : @variable(model, u[1:Σ.m])
-    @objective(model, Min, 0.5*(u - kd(x))'*(u - kd(x)))
+    u = Σ.m == 1 ? @variable(model, u) : @variable(model, u[1:(Σ.m)])
+    @objective(model, Min, 0.5 * (u - kd(x))' * (u - kd(x)))
     for cbf in cbfs
-        @constraint(model, cbf.Lfh(x) + cbf.Lgh(x)*u ≥ -cbf.α(cbf(x)))
+        @constraint(model, cbf.Lfh(x) + cbf.Lgh(x) * u ≥ -cbf.α(cbf(x)))
     end
     optimize!(model)
 
@@ -72,13 +77,15 @@ end
 
 Solve CBF-QP where desired controller is time-varying
 """
-function solve_time_varying_cbf_qp(x, t, Σ::ControlAffineSystem, cbfs::Vector{ControlBarrierFunction}, kd::Function)
+function solve_time_varying_cbf_qp(
+    x, t, Σ::ControlAffineSystem, cbfs::Vector{ControlBarrierFunction}, kd::Function
+)
     model = Model(OSQP.Optimizer)
     set_silent(model)
-    u = Σ.m == 1 ? @variable(model, u) : @variable(model, u[1:Σ.m])
-    @objective(model, Min, 0.5*(u - kd(x,t))'*(u - kd(x,t)))
+    u = Σ.m == 1 ? @variable(model, u) : @variable(model, u[1:(Σ.m)])
+    @objective(model, Min, 0.5 * (u - kd(x, t))' * (u - kd(x, t)))
     for cbf in cbfs
-        @constraint(model, cbf.Lfh(x) + cbf.Lgh(x)*u ≥ -cbf.α(cbf(x)))
+        @constraint(model, cbf.Lfh(x) + cbf.Lgh(x) * u ≥ -cbf.α(cbf(x)))
     end
     optimize!(model)
 
