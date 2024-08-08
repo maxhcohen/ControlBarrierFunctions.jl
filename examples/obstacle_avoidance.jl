@@ -1,19 +1,3 @@
-# CBFToolbox.jl
-A package for implementing control barrier functions (CBFs) in Julia.
-
-## Overview
-This toolbox provides utilities to construct nonlinear systems and control policies based on control barrier functions (CBFs).
-
-## Installation
-To download this package open the Julia REPL, enter the package manager (type `]` into the REPL) and run
-
-```julia
-using Pkg
-Pkg.add("https://github.com/maxhcohen/CBFToolbox.jl")
-```
-
-## Usage
-```julia
 # Load in packages
 using CBFToolbox
 using LinearAlgebra
@@ -50,5 +34,3 @@ default(fontfamily="Computer Modern", palette=:tab10, framestyle=:box, grid=fals
 # Plot trajectory
 plot(sol, idxs=(1,2), label="")
 contour!(-1.5:0.01:-0.5, 0.5:0.01:1.5, (x,y) -> h([x,y]), levels=[0.0], colorbar=false, c="black")
-```
- 
