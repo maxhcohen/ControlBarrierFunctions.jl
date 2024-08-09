@@ -13,4 +13,8 @@ makedocs(
         "Controllers" => "controllers.md",
         "Index" => "api.md",
     ]
-    )
+)
+
+# deploydocs(
+#     repo = "github.com/maxhcohen/CBFToolbox.jl",
+# )
