@@ -31,8 +31,7 @@ function ExplicitSafetyFilter(
     catch e
         if isa(e, MethodError)
             a(x) = cbf.Lfh(x) + cbf.Lgh(x) * kd(x) + cbf.α(cbf(x))
-            b(x) = norm(cbf.Lgh(x))^2
-            k(x) = kd(x) + λQP(a(x), b(x)) * cbf.Lgh(x)'
+            k(x) = kd(x) + λQP(a(x), norm(cbf.Lgh(x))^2) * cbf.Lgh(x)'
 
             return ExplicitSafetyFilter(k)
         else
@@ -40,8 +39,7 @@ function ExplicitSafetyFilter(
         end
     else
         a(x, t) = cbf.Lfh(x) + cbf.Lgh(x) * kd(x, t) + cbf.α(cbf(x))
-        b(x) = norm(cbf.Lgh(x))^2
-        k(x, t) = kd(x, t) + λQP(a(x, t), b(x)) * cbf.Lgh(x)'
+        k(x, t) = kd(x, t) + λQP(a(x, t), norm(cbf.Lgh(x))^2) * cbf.Lgh(x)'
 
         return ExplicitSafetyFilter(k)
     end

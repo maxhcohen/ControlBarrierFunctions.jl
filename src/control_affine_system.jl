@@ -58,19 +58,19 @@ function simulate(Σ::ControlAffineSystem, k::Function, x0, T::Float64)
         k(Σ.n == 1 ? rand() : rand(Σ.n), 0.0)
     catch e
         if isa(e, MethodError)
-            function odefun(dx, x, p, t)
+            function odefun1(dx, x, p, t)
                 return dx[1:(Σ.n)] .= dynamics(Σ, x, k(x))
             end
 
-            return solve(ODEProblem(odefun, x0, (0, T)))
+            return solve(ODEProblem(odefun1, x0, (0, T)))
         else
             return e
         end
     else
-        function odefun(dx, x, p, t)
+        function odefun2(dx, x, p, t)
             return dx[1:(Σ.n)] .= dynamics(Σ, x, k(x, t))
         end
 
-        return solve(ODEProblem(odefun, x0, (0, T)))
+        return solve(ODEProblem(odefun2, x0, (0, T)))
     end
 end
