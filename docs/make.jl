@@ -15,6 +15,6 @@ makedocs(
     ]
 )
 
-# deploydocs(
-#     repo = "github.com/maxhcohen/CBFToolbox.jl",
-# )
+deploydocs(
+    repo = "github.com/maxhcohen/CBFToolbox.jl",
+)
