@@ -68,6 +68,18 @@ kQP = QPSafetyFilter(cbf, Σ, (x, t) -> kd(x))
 sol = simulate(Σ, kQP, x0, T)
 @test minimum(h.(sol.(ts))) ≥ 0.0
 
+# Test with input bounds QP
+umin = -1.0
+umax = 1.0
+ktQP1 = QPSafetyFilter(cbf, Σ, kd, umin, umax)
+sol = simulate(Σ, ktQP1, x0, T)
+@test minimum(h.(sol.(ts))) ≥ 0.0
+
+# Test with input bounds QP again
+ktQP2 = QPSafetyFilter(cbf, Σ, kd, umin * ones(2), umax * ones(2))
+sol = simulate(Σ, ktQP2, x0, T)
+@test minimum(h.(sol.(ts))) ≥ 0.0
+
 ### Test functionality for TunableQPSafetyFilter
 
 # Test standard QP
@@ -112,11 +124,11 @@ kHalfSontagISSf = ISSfSmoothSafetyFilter(cbf, Σ, kd, ε)
 sol = simulate(Σ, kHalfSontagISSf, x0, T)
 @test minimum(h.(sol.(ts))) ≥ 0.0
 
-kSontagISSf = ISSfSmoothSafetyFilter(cbf, Σ, kd; formula="sontag", ε)
+kSontagISSf = ISSfSmoothSafetyFilter(cbf, Σ, kd, ε; formula="sontag")
 sol = simulate(Σ, kSontagISSf, x0, T)
 @test minimum(h.(sol.(ts))) ≥ 0.0
 
-kSoftplusISSf = ISSfSmoothSafetyFilter(cbf, Σ, kd; formula="softplus", ε)
+kSoftplusISSf = ISSfSmoothSafetyFilter(cbf, Σ, kd, ε; formula="softplus")
 sol = simulate(Σ, kSoftplusISSf, x0, T)
 @test minimum(h.(sol.(ts))) ≥ 0.0
 
@@ -125,10 +137,10 @@ kHalfSontagISSf = ISSfSmoothSafetyFilter(cbf, Σ, (x, t) -> kd(x), ε)
 sol = simulate(Σ, kHalfSontagISSf, x0, T)
 @test minimum(h.(sol.(ts))) ≥ 0.0
 
-kSontagISSf = ISSfSmoothSafetyFilter(cbf, Σ, (x, t) -> kd(x); formula="sontag", ε)
+kSontagISSf = ISSfSmoothSafetyFilter(cbf, Σ, (x, t) -> kd(x), ε; formula="sontag")
 sol = simulate(Σ, kSontagISSf, x0, T)
 @test minimum(h.(sol.(ts))) ≥ 0.0
 
-kSoftplusISSf = ISSfSmoothSafetyFilter(cbf, Σ, (x, t) -> kd(x); formula="softplus", ε)
+kSoftplusISSf = ISSfSmoothSafetyFilter(cbf, Σ, (x, t) -> kd(x), ε; formula="softplus")
 sol = simulate(Σ, kSoftplusISSf, x0, T)
 @test minimum(h.(sol.(ts))) ≥ 0.0
