@@ -29,8 +29,15 @@ T = 15.0
 sol = simulate(Σ, k, x0, T)
 
 # Set up plots
-default(fontfamily="Computer Modern", palette=:tab10, framestyle=:box, grid=false, lw=2)
+default(; fontfamily="Computer Modern", palette=:tab10, framestyle=:box, grid=false, lw=2)
 
 # Plot trajectory
-plot(sol, idxs=(1,2), label="")
-contour!(-1.5:0.01:-0.5, 0.5:0.01:1.5, (x,y) -> h([x,y]), levels=[0.0], colorbar=false, c="black")
+plot(sol; idxs=(1, 2), label="")
+contour!(
+    -1.5:0.01:-0.5,
+    0.5:0.01:1.5,
+    (x, y) -> h([x, y]);
+    levels=[0.0],
+    colorbar=false,
+    c="black",
+)

@@ -41,20 +41,28 @@ function SmoothSafetyFilter(
             a(x) = cbf.Lfh(x) + cbf.Lgh(x) * kd(x) + cbf.α(cbf(x))
             if formula == "half sontag"
                 return SmoothSafetyFilter(
-                    formula, σ, x -> kd(x) + λHalfSontag(a(x), norm(cbf.Lgh(x))^2, σ) * cbf.Lgh(x)'
+                    formula,
+                    σ,
+                    x -> kd(x) + λHalfSontag(a(x), norm(cbf.Lgh(x))^2, σ) * cbf.Lgh(x)',
                 )
             elseif formula == "sontag"
                 return SmoothSafetyFilter(
-                    formula, σ, x -> kd(x) + λSontag(a(x), norm(cbf.Lgh(x))^2, σ) * cbf.Lgh(x)'
+                    formula,
+                    σ,
+                    x -> kd(x) + λSontag(a(x), norm(cbf.Lgh(x))^2, σ) * cbf.Lgh(x)',
                 )
             elseif formula == "softplus"
                 return SmoothSafetyFilter(
-                    formula, σ, x -> kd(x) + λSoftplus(a(x), norm(cbf.Lgh(x))^2, σ) * cbf.Lgh(x)'
+                    formula,
+                    σ,
+                    x -> kd(x) + λSoftplus(a(x), norm(cbf.Lgh(x))^2, σ) * cbf.Lgh(x)',
                 )
             else
                 @warn "No valid formula provided, defaulting to Half Sontag formula."
                 return SmoothSafetyFilter(
-                    formula, σ, x -> kd(x) + λHalfSontag(a(x), norm(cbf.Lgh(x))^2, σ) * cbf.Lgh(x)'
+                    formula,
+                    σ,
+                    x -> kd(x) + λHalfSontag(a(x), norm(cbf.Lgh(x))^2, σ) * cbf.Lgh(x)',
                 )
             end
         else
@@ -64,20 +72,31 @@ function SmoothSafetyFilter(
         a(x, t) = cbf.Lfh(x) + cbf.Lgh(x) * kd(x, t) + cbf.α(cbf(x))
         if formula == "half sontag"
             return SmoothSafetyFilter(
-                formula, σ, (x, t) -> kd(x, t) + λHalfSontag(a(x, t), norm(cbf.Lgh(x))^2, σ) * cbf.Lgh(x)'
+                formula,
+                σ,
+                (x, t) ->
+                    kd(x, t) + λHalfSontag(a(x, t), norm(cbf.Lgh(x))^2, σ) * cbf.Lgh(x)',
             )
         elseif formula == "sontag"
             return SmoothSafetyFilter(
-                formula, σ, (x, t) -> kd(x, t) + λSontag(a(x, t), norm(cbf.Lgh(x))^2, σ) * cbf.Lgh(x)'
+                formula,
+                σ,
+                (x, t) -> kd(x, t) + λSontag(a(x, t), norm(cbf.Lgh(x))^2, σ) * cbf.Lgh(x)',
             )
         elseif formula == "softplus"
             return SmoothSafetyFilter(
-                formula, σ, (x, t) -> kd(x, t) + λSoftplus(a(x, t), norm(cbf.Lgh(x))^2, σ) * cbf.Lgh(x)'
+                formula,
+                σ,
+                (x, t) ->
+                    kd(x, t) + λSoftplus(a(x, t), norm(cbf.Lgh(x))^2, σ) * cbf.Lgh(x)',
             )
         else
             @warn "No valid formula provided, defaulting to Half Sontag formula."
             return SmoothSafetyFilter(
-                formula, σ, (x, t) -> kd(x, t) + λHalfSontag(a(x, t), norm(cbf.Lgh(x))^2, σ) * cbf.Lgh(x)'
+                formula,
+                σ,
+                (x, t) ->
+                    kd(x, t) + λHalfSontag(a(x, t), norm(cbf.Lgh(x))^2, σ) * cbf.Lgh(x)',
             )
         end
     end

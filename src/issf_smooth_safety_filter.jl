@@ -50,20 +50,32 @@ function ISSfSmoothSafetyFilter(
             b(x) = norm(cbf.Lgh(x))^2
             if formula == "half sontag"
                 return ISSfSmoothSafetyFilter(
-                    formula, σ, x -> kd(x) + λHalfSontag(a(x), norm(cbf.Lgh(x))^2, σ) * cbf.Lgh(x)', ε
+                    formula,
+                    σ,
+                    x -> kd(x) + λHalfSontag(a(x), norm(cbf.Lgh(x))^2, σ) * cbf.Lgh(x)',
+                    ε,
                 )
             elseif formula == "sontag"
                 return ISSfSmoothSafetyFilter(
-                    formula, σ, x -> kd(x) + λSontag(a(x), norm(cbf.Lgh(x))^2, σ) * cbf.Lgh(x)', ε
+                    formula,
+                    σ,
+                    x -> kd(x) + λSontag(a(x), norm(cbf.Lgh(x))^2, σ) * cbf.Lgh(x)',
+                    ε,
                 )
             elseif formula == "softplus"
                 return ISSfSmoothSafetyFilter(
-                    formula, σ, x -> kd(x) + λSoftplus(a(x), norm(cbf.Lgh(x))^2, σ) * cbf.Lgh(x)', ε
+                    formula,
+                    σ,
+                    x -> kd(x) + λSoftplus(a(x), norm(cbf.Lgh(x))^2, σ) * cbf.Lgh(x)',
+                    ε,
                 )
             else
                 @warn "No valid formula provided, defaulting to Half Sontag formula."
                 return ISSfSmoothSafetyFilter(
-                    formula, σ, x -> kd(x) + λHalfSontag(a(x), norm(cbf.Lgh(x))^2, σ) * cbf.Lgh(x)', ε
+                    formula,
+                    σ,
+                    x -> kd(x) + λHalfSontag(a(x), norm(cbf.Lgh(x))^2, σ) * cbf.Lgh(x)',
+                    ε,
                 )
             end
         else
@@ -78,18 +90,23 @@ function ISSfSmoothSafetyFilter(
             return ISSfSmoothSafetyFilter(
                 formula,
                 σ,
-                (x, t) -> kd(x, t) + λHalfSontag(a(x, t), norm(cbf.Lgh(x))^2, σ) * cbf.Lgh(x)',
+                (x, t) ->
+                    kd(x, t) + λHalfSontag(a(x, t), norm(cbf.Lgh(x))^2, σ) * cbf.Lgh(x)',
                 ε,
             )
         elseif formula == "sontag"
             return ISSfSmoothSafetyFilter(
-                formula, σ, (x, t) -> kd(x, t) + λSontag(a(x, t), norm(cbf.Lgh(x))^2, σ) * cbf.Lgh(x)', ε
+                formula,
+                σ,
+                (x, t) -> kd(x, t) + λSontag(a(x, t), norm(cbf.Lgh(x))^2, σ) * cbf.Lgh(x)',
+                ε,
             )
         elseif formula == "softplus"
             return ISSfSmoothSafetyFilter(
                 formula,
                 σ,
-                (x, t) -> kd(x, t) + λSoftplus(a(x, t), norm(cbf.Lgh(x))^2, σ) * cbf.Lgh(x)',
+                (x, t) ->
+                    kd(x, t) + λSoftplus(a(x, t), norm(cbf.Lgh(x))^2, σ) * cbf.Lgh(x)',
                 ε,
             )
         else
@@ -97,7 +114,8 @@ function ISSfSmoothSafetyFilter(
             return ISSfSmoothSafetyFilter(
                 formula,
                 σ,
-                (x, t) -> kd(x, t) + λHalfSontag(a(x, t), norm(cbf.Lgh(x))^2, σ) * cbf.Lgh(x)',
+                (x, t) ->
+                    kd(x, t) + λHalfSontag(a(x, t), norm(cbf.Lgh(x))^2, σ) * cbf.Lgh(x)',
                 ε,
             )
         end
