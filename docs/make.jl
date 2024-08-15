@@ -1,9 +1,9 @@
+push!(LOAD_PATH, "../src/")
 using Pkg
 Pkg.activate(".")
 using Documenter
 using CBFToolbox
 
-push!(LOAD_PATH, "../src/")
 makedocs(;
     sitename="CBFToolbox.jl",
     pages=[
@@ -15,4 +15,4 @@ makedocs(;
     ],
 )
 
-# deploydocs(; repo="github.com/maxhcohen/CBFToolbox.jl.git", devbranch="burn-it-down")
+# deploydocs(; repo="github.com/maxhcohen/CBFToolbox.jl")
