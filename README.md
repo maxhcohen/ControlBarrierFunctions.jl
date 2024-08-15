@@ -1,3 +1,6 @@
+[![Build status (Github Actions)](https://github.com/maxhcohen/CBFToolbox.jl/workflows/CI/badge.svg)](https://github.com/maxhcohen/CBFToolbox.jl/actions)
+[![codecov.io](http://codecov.io/github/maxhcohen/CBFToolbox.jl/coverage.svg?branch=main)](http://codecov.io/github/maxhcohen/CBFToolbox.jl?branch=main)
+
 # CBFToolbox.jl
 A package for implementing control barrier functions (CBFs) in Julia.
 
