@@ -24,7 +24,7 @@ end
 Construct a control affine system. Name defaults to `missing` if not provided.
 """
 ControlAffineSystem(n::Int, m::Int, f::Function, g::Function) =
-    ControlAffineSystem(missing, n, m, f, g)
+    ControlAffineSystem("", n, m, f, g)
 
 """
     dynamics(Σ::ControlAffineSystem, x)
