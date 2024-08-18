@@ -1,6 +1,6 @@
 # Load in packages
 using Revise
-using CBFToolbox
+using ControlBarrierFunctions
 using LinearAlgebra
 using Plots
 
