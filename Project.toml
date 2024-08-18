@@ -1,5 +1,5 @@
-name = "CBFToolbox"
-uuid = "9bb58977-20e0-447d-80ed-b4444e16eeb9"
+name = "ControlBarrierFunctions"
+uuid = "e4acb5c7-ee58-4719-8a40-5cc01da1b2a4"
 authors = ["Max Cohen <maxcohen@caltech.edu>"]
 version = "0.1.0"
 

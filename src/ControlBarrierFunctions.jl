@@ -1,4 +1,4 @@
-module CBFToolbox
+module ControlBarrierFunctions
 
 # Julia packages required for this module
 using LinearAlgebra

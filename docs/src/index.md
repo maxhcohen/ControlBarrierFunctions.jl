@@ -1,4 +1,4 @@
-# CBFToolbox.jl
+# ControlBarrierFunctions.jl
 A package for implementing control barrier functions (CBFs) in Julia.
 
 ## Overview
@@ -8,13 +8,13 @@ This toolbox provides utilities to construct nonlinear systems and control polic
 To download this package open the Julia REPL, enter the package manager (type `]` into the REPL) and run
 ```julia
 using Pkg
-Pkg.add("https://github.com/maxhcohen/CBFToolbox.jl")
+Pkg.add("https://github.com/maxhcohen/ControlBarrierFunctions.jl")
 ```
 
 ## Usage
 ```julia
 # Load in packages
-using CBFToolbox
+using ControlBarrierFunctions
 using LinearAlgebra
 using Plots
 

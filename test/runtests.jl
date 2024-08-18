@@ -1,5 +1,5 @@
 using Test
-using CBFToolbox
+using ControlBarrierFunctions
 using LinearAlgebra
 using ForwardDiff
 
@@ -16,6 +16,14 @@ g(x) = [1.0 0.0; 0.0 1.0]
 @test Σ.m == m
 @test Σ.f(zeros(2)) == f(zeros(2))
 @test Σ.g(zeros(2)) == g(zeros(2))
+
+# Do it again without specifying name
+Σ1 = ControlAffineSystem(n, m, f, g)
+@test Σ1.name == ""
+@test Σ1.n == n
+@test Σ1.m == m
+@test Σ1.f(zeros(2)) == f(zeros(2))
+@test Σ1.g(zeros(2)) == g(zeros(2))
 
 # Make sure we can simulate a simple system
 x0 = [-1.0, 1.0]

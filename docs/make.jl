@@ -3,10 +3,10 @@ using Pkg
 Pkg.activate(".")
 Pkg.instantiate()
 using Documenter
-using CBFToolbox
+using ControlBarrierFunctions
 
 makedocs(;
-    sitename="CBFToolbox.jl",
+    sitename="ControlBarrierFunctions.jl",
     pages=[
         "Home" => "index.md",
         "Systems" => "systems.md",
@@ -16,4 +16,4 @@ makedocs(;
     ],
 )
 
-deploydocs(; repo="github.com/maxhcohen/CBFToolbox.jl", devbranch="main")
+deploydocs(; repo="github.com/maxhcohen/ControlBarrierFunctions.jl", devbranch="main")
