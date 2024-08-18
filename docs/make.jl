@@ -3,7 +3,7 @@ using Pkg
 Pkg.activate(".")
 Pkg.instantiate()
 using Documenter
-using CBFToolbox
+using ControlBarrierFunctions
 
 makedocs(;
     sitename="ControlBarrierFunctions.jl",
@@ -16,4 +16,4 @@ makedocs(;
     ],
 )
 
-# deploydocs(; repo="github.com/maxhcohen/ControlBarrierFunctions.jl", devbranch="main")
+deploydocs(; repo="github.com/maxhcohen/ControlBarrierFunctions.jl", devbranch="main")
