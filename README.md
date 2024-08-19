@@ -1,5 +1,5 @@
 [![Build status (Github Actions)](https://github.com/maxhcohen/ControlBarrierFunctions.jl/workflows/CI/badge.svg)](https://github.com/maxhcohen/ControlBarrierFunctions.jl/actions)
-[![codecov.io](http://codecov.io/github/maxhcohen/ControlBarrierFunctions.jl/coverage.svg?branch=main)](http://codecov.io/github/maxhcohen/CBFToolbox.jl?branch=main)
+[![codecov.io](http://codecov.io/github/maxhcohen/ControlBarrierFunctions.jl/coverage.svg?branch=main)](http://codecov.io/github/maxhcohen/ControlBarrierFunctions.jl?branch=main)
 [![](https://img.shields.io/badge/docs-dev-blue.svg)](https://maxhcohen.github.io/ControlBarrierFunctions.jl/dev)
 
 # ControlBarrierFunctions.jl
