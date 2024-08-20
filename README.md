@@ -13,7 +13,7 @@ To download this package open the Julia REPL, enter the package manager (type `]
 
 ```julia
 using Pkg
-Pkg.add("https://github.com/maxhcohen/ControlBarrierFunctions.jl")
+Pkg.add(url="https://github.com/maxhcohen/ControlBarrierFunctions.jl")
 ```
 
 ## Usage
@@ -55,4 +55,4 @@ default(fontfamily="Computer Modern", palette=:tab10, framestyle=:box, grid=fals
 plot(sol, idxs=(1,2), label="")
 contour!(-1.5:0.01:-0.5, 0.5:0.01:1.5, (x,y) -> h([x,y]), levels=[0.0], colorbar=false, c="black")
 ```
- 
+
