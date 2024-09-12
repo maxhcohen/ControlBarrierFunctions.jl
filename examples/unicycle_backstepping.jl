@@ -45,7 +45,7 @@ Kψ = 3
 qd = [0.0, 0.0]
 k0norm(x) = normalize(k0(x)) # Convert safe velocity into safe speed
 ψ0(x) = atan(k0norm(x)[2], k0norm(x)[1]) # Convert safe velocity into safe heading
-kd(x) = [Kp * norm(x[1:2] - qd), -Kψ * (sin(x[3]) - sin(ψ0(x[1:2])))]
+kd(x) = [Kp * norm(x[1:2] - qd), -Kψ * (sin(x[3] - ψ0(x[1:2])))]
 
 # Safety filter for unicycle
 k = ExplicitSafetyFilter(cbf, Σ, kd);
