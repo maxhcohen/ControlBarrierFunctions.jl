@@ -12,6 +12,7 @@ makedocs(;
         "Systems" => "systems.md",
         "Barrier Functions" => "barriers.md",
         "Controllers" => "controllers.md",
+        "Simulations" => "simulation.md",
         "Index" => "api.md",
     ],
 )

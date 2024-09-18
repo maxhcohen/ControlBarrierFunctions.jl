@@ -7,8 +7,7 @@ This toolbox provides utilities to construct nonlinear systems and control polic
 ## Installation
 To download this package open the Julia REPL, enter the package manager (type `]` into the REPL) and run
 ```julia
-using Pkg
-Pkg.add("https://github.com/maxhcohen/ControlBarrierFunctions.jl")
+add ControlBarrierFunctions
 ```
 
 ## Usage
