@@ -10,6 +10,7 @@ using DifferentialEquations
 # Export types
 export ControlAffineSystem
 export ControlBarrierFunction
+export HighOrderCBF
 export ExplicitSafetyFilter
 export QPSafetyFilter
 export TunableQPSafetyFilter
@@ -22,6 +23,7 @@ export simulate
 # Source code
 include("control_affine_system.jl")
 include("control_barrier_function.jl")
+include("high_order_cbf.jl")
 include("safety_filter.jl")
 include("explicit_safety_filter.jl")
 include("qp_safety_filter.jl")

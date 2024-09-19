@@ -1,5 +1,5 @@
 """
-    QPSafetyFilter <: SafetyFilter
+	QPSafetyFilter <: SafetyFilter
 
 Controller that solves a control barrier function-based quadratic program (CBF-QP).
 
@@ -9,169 +9,224 @@ Uses OSQP to solve the corresponding QP.
 - `k::Function` : function that computes safe control actions
 """
 struct QPSafetyFilter <: SafetyFilter
-    k::Function
+	k::Function
 end
 
+##### QPSafetyFilter functors #####
+
 """
-    (k::QPSafetyFilter)(x)
+	(k::QPSafetyFilter)(x)
 
 Functors for evaluating QP-based safety filter
 """
 (k::QPSafetyFilter)(x) = k.k(x)
 (k::QPSafetyFilter)(x, t) = k.k(x, t)
 
+##### QPSafetyFilter constructors #####
+
 """
-    QPSafetyFilter(cbfs::Vector{ControlBarrierFunction}, Σ::ControlAffineSystem, kd::Function)
+	QPSafetyFilter(cbfs::Vector{ControlBarrierFunction}, Σ::ControlAffineSystem, kd::Function)
 
 Construct an QPSafetyFilter from a cbf and a desired controller.
 """
 function QPSafetyFilter(
-    cbfs::Vector{ControlBarrierFunction}, Σ::ControlAffineSystem, kd::Function
+	cbfs::Vector{ControlBarrierFunction}, Σ::ControlAffineSystem, kd::Function,
 )
-    try
-        kd(Σ.n == 1 ? rand() : rand(Σ.n), 0.0) # See if desired controller is time-varying
-    catch e
-        if isa(e, MethodError) # If controller is not time-varying 
-            return QPSafetyFilter(x -> solve_cbf_qp(x, Σ, cbfs, kd))
-        else
-            return e
-        end
-    else # If controller is time-varying
-        return QPSafetyFilter((x, t) -> solve_time_varying_cbf_qp(x, t, Σ, cbfs, kd))
-    end
+	try
+		kd(Σ.n == 1 ? rand() : rand(Σ.n), 0.0) # See if desired controller is time-varying
+	catch e
+		if isa(e, MethodError) # If controller is not time-varying 
+			return QPSafetyFilter(x -> solve_cbf_qp(x, Σ, cbfs, kd))
+		else
+			return e
+		end
+	else # If controller is time-varying
+		return QPSafetyFilter((x, t) -> solve_time_varying_cbf_qp(x, t, Σ, cbfs, kd))
+	end
 end
 
 """
-    QPSafetyFilter(
-    cbfs::Vector{ControlBarrierFunction}, Σ::ControlAffineSystem, kd::Function, umin, umax
+	QPSafetyFilter(
+	cbfs::Vector{ControlBarrierFunction}, Σ::ControlAffineSystem, kd::Function, umin, umax
 )
 
 Construct an QPSafetyFilter from a cbf and a desired controller.
 """
 function QPSafetyFilter(
-    cbfs::Vector{ControlBarrierFunction}, Σ::ControlAffineSystem, kd::Function, umin, umax
+	cbfs::Vector{ControlBarrierFunction}, Σ::ControlAffineSystem, kd::Function, umin, umax,
 )
-    try
-        kd(Σ.n == 1 ? rand() : rand(Σ.n), 0.0) # See if desired controller is time-varying
-    catch e
-        if isa(e, MethodError) # If controller is not time-varying 
-            return QPSafetyFilter(x -> solve_cbf_qp(x, Σ, cbfs, kd, umin, umax))
-        else
-            return e
-        end
-    else # If controller is time-varying
-        return QPSafetyFilter((x, t) -> solve_time_varying_cbf_qp(x, t, Σ, cbfs, kd))
-    end
+	try
+		kd(Σ.n == 1 ? rand() : rand(Σ.n), 0.0) # See if desired controller is time-varying
+	catch e
+		if isa(e, MethodError) # If controller is not time-varying 
+			return QPSafetyFilter(x -> solve_cbf_qp(x, Σ, cbfs, kd, umin, umax))
+		else
+			return e
+		end
+	else # If controller is time-varying
+		return QPSafetyFilter((x, t) -> solve_time_varying_cbf_qp(x, t, Σ, cbfs, kd))
+	end
 end
 
 """
-    QPSafetyFilter(cbf::ControlBarrierFunction, Σ::ControlAffineSystem, kd::Function)
-    QPSafetyFilter(cbf::ControlBarrierFunction, Σ::ControlAffineSystem, kd::Function, umin, umax)
+	QPSafetyFilter(cbf::ControlBarrierFunction, Σ::ControlAffineSystem, kd::Function)
 
-Add ability to pass in single CBF.
+Construct a QP-based safety filter from a CBF with a single constraint and no input bounds.
 """
 function QPSafetyFilter(cbf::ControlBarrierFunction, Σ::ControlAffineSystem, kd::Function)
-    return QPSafetyFilter([cbf], Σ, kd)
-end
-function QPSafetyFilter(
-    cbf::ControlBarrierFunction, Σ::ControlAffineSystem, kd::Function, umin, umax
-)
-    return QPSafetyFilter([cbf], Σ, kd, umin, umax)
+	return QPSafetyFilter([cbf], Σ, kd)
 end
 
 """
-    solve_cbf_qp(x, Σ::ControlAffineSystem, cbfs::Vector{ControlBarrierFunction}, kd::Function)
+	QPSafetyFilter(cbf::ControlBarrierFunction, Σ::ControlAffineSystem, kd::Function, umin, umax)
+
+Construct a QP-based safety filter from a CBF with a single constraint and input bounds `umin ≤ u ≤ umax`.
+"""
+function QPSafetyFilter(
+	cbf::ControlBarrierFunction, Σ::ControlAffineSystem, kd::Function, umin, umax,
+)
+	return QPSafetyFilter([cbf], Σ, kd, umin, umax)
+end
+
+"""
+	QPSafetyFilter(hocbf::HighOrderCBF, Σ::ControlAffineSystem, kd::Function)
+
+Construct a QP-based safety filter from an HOCBF with a single constraint and no input bounds.
+"""
+function QPSafetyFilter(hocbf::HighOrderCBF, Σ::ControlAffineSystem, kd::Function)
+	return QPSafetyFilter([hocbf.cbf], Σ, kd)
+end
+
+"""
+	QPSafetyFilter(hocbf::HighOrderCBF, Σ::ControlAffineSystem, kd::Function, umin, umax)
+
+Construct a QP-based safety filter from an HOCBF with a single constraint and input bounds `umin ≤ u ≤ umax`.
+"""
+function QPSafetyFilter(
+	hocbf::HighOrderCBF, Σ::ControlAffineSystem, kd::Function, umin, umax,
+)
+	return QPSafetyFilter([[hocbf.cbf]], Σ, kd, umin, umax)
+end
+
+"""
+	QPSafetyFilter(hocbfs::Vector{HighOrderCBF}, Σ::ControlAffineSystem, kd::Function)
+
+Construct a QP-based safety filter using multiple HOCBFs.
+"""
+function QPSafetyFilter(hocbfs::Vector{HighOrderCBF}, Σ::ControlAffineSystem, kd::Function)
+	# Create vector of cbfs
+	cbfs = [hocbf.cbf for hocbf in hocbfs]
+
+	return QPSafetyFilter(cbfs, Σ, kd)
+end
+
+"""
+	QPSafetyFilter(hocbfs::Vector{HighOrderCBF}, Σ::ControlAffineSystem, kd::Function, umin, umax)
+
+Construct a QP-based safety filter using multiple HOCBFs and input bounds `umin ≤ u ≤ umax`.
+"""
+function QPSafetyFilter(hocbfs::Vector{HighOrderCBF}, Σ::ControlAffineSystem, kd::Function, umin, umax)
+	# Create vector of cbfs
+	cbfs = [hocbf.cbf for hocbf in hocbfs]
+
+	return QPSafetyFilter(cbfs, Σ, kd, umin, umax)
+end
+
+##### Functions for solving QPs #####
+
+"""
+	solve_cbf_qp(x, Σ::ControlAffineSystem, cbfs::Vector{ControlBarrierFunction}, kd::Function)
 
 Solve CBF-QP using OSQP and JuMP.
 """
 function solve_cbf_qp(
-    x, Σ::ControlAffineSystem, cbfs::Vector{ControlBarrierFunction}, kd::Function
+	x, Σ::ControlAffineSystem, cbfs::Vector{ControlBarrierFunction}, kd::Function,
 )
-    model = Model(OSQP.Optimizer)
-    set_silent(model)
-    u = Σ.m == 1 ? @variable(model, u) : @variable(model, u[1:(Σ.m)])
-    @objective(model, Min, 0.5 * (u - kd(x))' * (u - kd(x)))
-    for cbf in cbfs
-        @constraint(model, cbf.Lfh(x) + cbf.Lgh(x) * u ≥ -cbf.α(cbf(x)))
-    end
-    optimize!(model)
+	model = Model(OSQP.Optimizer)
+	set_silent(model)
+	u = Σ.m == 1 ? @variable(model, u) : @variable(model, u[1:(Σ.m)])
+	@objective(model, Min, 0.5 * (u - kd(x))' * (u - kd(x)))
+	for cbf in cbfs
+		@constraint(model, cbf.Lfh(x) + cbf.Lgh(x) * u ≥ -cbf.α(cbf(x)))
+	end
+	optimize!(model)
 
-    return Σ.m == 1 ? value(u) : value.(u)
+	return Σ.m == 1 ? value(u) : value.(u)
 end
 
 """
-    solve_cbf_qp(
-        x, Σ::ControlAffineSystem, cbfs::Vector{ControlBarrierFunction}, kd::Function, umin, umax
-    )
+	solve_cbf_qp(
+		x, Σ::ControlAffineSystem, cbfs::Vector{ControlBarrierFunction}, kd::Function, umin, umax
+	)
 
 Solve CBF-QP using OSQP and JuMP while satisfying input bounds `umin ≤ u ≤ umax`.
 """
 function solve_cbf_qp(
-    x,
-    Σ::ControlAffineSystem,
-    cbfs::Vector{ControlBarrierFunction},
-    kd::Function,
-    umin,
-    umax,
+	x,
+	Σ::ControlAffineSystem,
+	cbfs::Vector{ControlBarrierFunction},
+	kd::Function,
+	umin,
+	umax,
 )
-    model = Model(OSQP.Optimizer)
-    set_silent(model)
-    u = Σ.m == 1 ? @variable(model, u) : @variable(model, u[1:(Σ.m)])
-    Σ.m == 1 ? @constraint(model, u ≤ umax) : @constraint(model, u .≤ umax)
-    Σ.m == 1 ? @constraint(model, u ≥ umin) : @constraint(model, u .≥ umin)
-    @objective(model, Min, 0.5 * (u - kd(x))' * (u - kd(x)))
-    for cbf in cbfs
-        @constraint(model, cbf.Lfh(x) + cbf.Lgh(x) * u ≥ -cbf.α(cbf(x)))
-    end
-    optimize!(model)
+	model = Model(OSQP.Optimizer)
+	set_silent(model)
+	u = Σ.m == 1 ? @variable(model, u) : @variable(model, u[1:(Σ.m)])
+	Σ.m == 1 ? @constraint(model, u ≤ umax) : @constraint(model, u .≤ umax)
+	Σ.m == 1 ? @constraint(model, u ≥ umin) : @constraint(model, u .≥ umin)
+	@objective(model, Min, 0.5 * (u - kd(x))' * (u - kd(x)))
+	for cbf in cbfs
+		@constraint(model, cbf.Lfh(x) + cbf.Lgh(x) * u ≥ -cbf.α(cbf(x)))
+	end
+	optimize!(model)
 
-    return Σ.m == 1 ? value(u) : value.(u)
+	return Σ.m == 1 ? value(u) : value.(u)
 end
 
 """
-    solve_time_varying_cbf_qp(x, t, Σ::ControlAffineSystem, cbfs::Vector{ControlBarrierFunction}, kd::Function)
+	solve_time_varying_cbf_qp(x, t, Σ::ControlAffineSystem, cbfs::Vector{ControlBarrierFunction}, kd::Function)
 
 Solve CBF-QP where desired controller is time-varying
 """
 function solve_time_varying_cbf_qp(
-    x, t, Σ::ControlAffineSystem, cbfs::Vector{ControlBarrierFunction}, kd::Function
+	x, t, Σ::ControlAffineSystem, cbfs::Vector{ControlBarrierFunction}, kd::Function,
 )
-    model = Model(OSQP.Optimizer)
-    set_silent(model)
-    u = Σ.m == 1 ? @variable(model, u) : @variable(model, u[1:(Σ.m)])
-    @objective(model, Min, 0.5 * (u - kd(x, t))' * (u - kd(x, t)))
-    for cbf in cbfs
-        @constraint(model, cbf.Lfh(x) + cbf.Lgh(x) * u ≥ -cbf.α(cbf(x)))
-    end
-    optimize!(model)
+	model = Model(OSQP.Optimizer)
+	set_silent(model)
+	u = Σ.m == 1 ? @variable(model, u) : @variable(model, u[1:(Σ.m)])
+	@objective(model, Min, 0.5 * (u - kd(x, t))' * (u - kd(x, t)))
+	for cbf in cbfs
+		@constraint(model, cbf.Lfh(x) + cbf.Lgh(x) * u ≥ -cbf.α(cbf(x)))
+	end
+	optimize!(model)
 
-    return Σ.m == 1 ? value(u) : value.(u)
+	return Σ.m == 1 ? value(u) : value.(u)
 end
 
 """
-    solve_time_varying_cbf_qp(x, t, Σ::ControlAffineSystem, cbfs::Vector{ControlBarrierFunction}, kd::Function, umin, umax)
+	solve_time_varying_cbf_qp(x, t, Σ::ControlAffineSystem, cbfs::Vector{ControlBarrierFunction}, kd::Function, umin, umax)
 
 Solve CBF-QP where desired controller is time-varying with input bounds.
 """
 function solve_time_varying_cbf_qp(
-    x,
-    t,
-    Σ::ControlAffineSystem,
-    cbfs::Vector{ControlBarrierFunction},
-    kd::Function,
-    umin,
-    umax,
+	x,
+	t,
+	Σ::ControlAffineSystem,
+	cbfs::Vector{ControlBarrierFunction},
+	kd::Function,
+	umin,
+	umax,
 )
-    model = Model(OSQP.Optimizer)
-    set_silent(model)
-    u = Σ.m == 1 ? @variable(model, u) : @variable(model, u[1:(Σ.m)])
-    Σ.m == 1 ? @constraint(model, u ≤ umax) : @constraint(model, u .≤ umax)
-    Σ.m == 1 ? @constraint(model, u ≥ umin) : @constraint(model, u .≥ umin)
-    @objective(model, Min, 0.5 * (u - kd(x, t))' * (u - kd(x, t)))
-    for cbf in cbfs
-        @constraint(model, cbf.Lfh(x) + cbf.Lgh(x) * u ≥ -cbf.α(cbf(x)))
-    end
-    optimize!(model)
+	model = Model(OSQP.Optimizer)
+	set_silent(model)
+	u = Σ.m == 1 ? @variable(model, u) : @variable(model, u[1:(Σ.m)])
+	Σ.m == 1 ? @constraint(model, u ≤ umax) : @constraint(model, u .≤ umax)
+	Σ.m == 1 ? @constraint(model, u ≥ umin) : @constraint(model, u .≥ umin)
+	@objective(model, Min, 0.5 * (u - kd(x, t))' * (u - kd(x, t)))
+	for cbf in cbfs
+		@constraint(model, cbf.Lfh(x) + cbf.Lgh(x) * u ≥ -cbf.α(cbf(x)))
+	end
+	optimize!(model)
 
-    return Σ.m == 1 ? value(u) : value.(u)
+	return Σ.m == 1 ? value(u) : value.(u)
 end

@@ -1,5 +1,5 @@
 """
-    ExplicitSafetyFilter <: SafetyFilter
+	ExplicitSafetyFilter <: SafetyFilter
 
 Controller that uses the closed-form solution to a control barrier function quadratic program.
 
@@ -7,54 +7,78 @@ Controller that uses the closed-form solution to a control barrier function quad
 - `k::Function` : function that computes safe control actions
 """
 struct ExplicitSafetyFilter <: SafetyFilter
-    k::Function
+	k::Function
 end
 
+
+###### ExplicitSafetyFilter functors ######
+
 """
-    (k::ExplicitSafetyFilter)(x)
+	(k::ExplicitSafetyFilter)(x)
 
 Functors for evaluating explicit safety filter
 """
 (k::ExplicitSafetyFilter)(x) = k.k(x)
 (k::ExplicitSafetyFilter)(x, t) = k.k(x, t)
 
+##### ExplicitSafetyFilter constructors #####
+
 """
-    ExplicitSafetyFilter(cbf::ControlBarrierFunction, Σ::ControlAffineSystem, kd::Function)
+	ExplicitSafetyFilter(cbf::ControlBarrierFunction, Σ::ControlAffineSystem, kd::Function)
 
 Construct an ExplicitSafetyFilter from a cbf and a desired controller.
 """
 function ExplicitSafetyFilter(
-    cbf::ControlBarrierFunction, Σ::ControlAffineSystem, kd::Function
+	cbf::ControlBarrierFunction, Σ::ControlAffineSystem, kd::Function,
 )
-    try
-        kd(Σ.n == 1 ? rand() : rand(Σ.n), 0.0)
-    catch e
-        if isa(e, MethodError)
-            a(x) = cbf.Lfh(x) + cbf.Lgh(x) * kd(x) + cbf.α(cbf(x))
-            k(x) = kd(x) + λQP(a(x), norm(cbf.Lgh(x))^2) * cbf.Lgh(x)'
+	try
+		kd(Σ.n == 1 ? rand() : rand(Σ.n), 0.0)
+	catch e
+		if isa(e, MethodError)
+			a(x) = cbf.Lfh(x) + cbf.Lgh(x) * kd(x) + cbf.α(cbf(x))
+			k(x) = kd(x) + λQP(a(x), norm(cbf.Lgh(x))^2) * cbf.Lgh(x)'
 
-            return ExplicitSafetyFilter(k)
-        else
-            return e
-        end
-    else
-        a(x, t) = cbf.Lfh(x) + cbf.Lgh(x) * kd(x, t) + cbf.α(cbf(x))
-        k(x, t) = kd(x, t) + λQP(a(x, t), norm(cbf.Lgh(x))^2) * cbf.Lgh(x)'
+			return ExplicitSafetyFilter(k)
+		else
+			return e
+		end
+	else
+		a(x, t) = cbf.Lfh(x) + cbf.Lgh(x) * kd(x, t) + cbf.α(cbf(x))
+		k(x, t) = kd(x, t) + λQP(a(x, t), norm(cbf.Lgh(x))^2) * cbf.Lgh(x)'
 
-        return ExplicitSafetyFilter(k)
-    end
+		return ExplicitSafetyFilter(k)
+	end
 end
 
 """
-    ExplicitSafetyFilter(cbf::ControlBarrierFunction, Σ::ControlAffineSystem)
+	ExplicitSafetyFilter(cbf::ControlBarrierFunction, Σ::ControlAffineSystem)
 
 If no desired controller passed in then default it to zero.
 """
 function ExplicitSafetyFilter(cbf::ControlBarrierFunction, Σ::ControlAffineSystem)
-    kd(x) = Σ.m == 1 ? 0.0 : zeros(Σ.m)
+	kd(x) = Σ.m == 1 ? 0.0 : zeros(Σ.m)
 
-    return ExplicitSafetyFilter(cbf, Σ, kd)
+	return ExplicitSafetyFilter(cbf, Σ, kd)
 end
+
+"""
+	ExplicitSafetyFilter(hocbf::HighOrderCBF,, Σ::ControlAffineSystem, kd::Function)
+
+Construct an ExplicitSafetyFilter from a HOCBF and a desired controller.
+"""
+function ExplicitSafetyFilter(hocbf::HighOrderCBF, Σ::ControlAffineSystem, kd::Function)
+	return ExplicitSafetyFilter(hocbf.cbf, Σ, kd::Function)
+end
+
+"""
+	ExplicitSafetyFilter(hocbf::HighOrderCBF,, Σ::ControlAffineSystem)
+
+Construct an ExplicitSafetyFilter from a HOCBF with no desired controller.
+"""
+function ExplicitSafetyFilter(hocbf::HighOrderCBF, Σ::ControlAffineSystem)
+	return ExplicitSafetyFilter(hocbf.cbf, Σ)
+end
+
 
 # Some helper functions
 ReLU(x::Float64) = max(0.0, x)
