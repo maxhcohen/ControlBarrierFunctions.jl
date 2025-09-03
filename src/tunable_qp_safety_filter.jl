@@ -21,7 +21,7 @@ Functors for evaluating QP-based safety filter
 (k::TunableQPSafetyFilter)(x, t) = k.k(x, t)
 
 """
-    TunableQPSafetyFilter(cbfs::Vector{ControlBarrierFunction}, Σ::ControlAffineSystem, kd::Function; tunable=false)
+    TunableQPSafetyFilter(cbfs::Vector{<:ControlBarrierFunction}, Σ::ControlAffineSystem, kd::Function; tunable=false)
 
 Construct an TunableQPSafetyFilter from a cbf and a desired controller.
 
@@ -29,7 +29,7 @@ Construct an TunableQPSafetyFilter from a cbf and a desired controller.
 - `tunable::Bool` : boolean to decide if coefficients on extended class K functions should be decision variables
 """
 function TunableQPSafetyFilter(
-    cbfs::Vector{ControlBarrierFunction}, Σ::ControlAffineSystem, kd::Function
+    cbfs::Vector{<:ControlBarrierFunction}, Σ::ControlAffineSystem, kd::Function
 )
     try
         kd(Σ.n == 1 ? rand() : rand(Σ.n), 0.0) # See if desired controller is time-varying
@@ -55,12 +55,12 @@ TunableQPSafetyFilter(cbf::ControlBarrierFunction, Σ::ControlAffineSystem, kd::
     TunableQPSafetyFilter([cbf], Σ, kd)
 
 """
-    solve_tunable_cbf_qp(x, Σ::ControlAffineSystem, cbfs::Vector{ControlBarrierFunction}, kd::Function)
+    solve_tunable_cbf_qp(x, Σ::ControlAffineSystem, cbfs::Vector{<:ControlBarrierFunction}, kd::Function)
 
 Solve CBF-QP where coefficients on extended class K functions are decision variables
 """
 function solve_tunable_cbf_qp(
-    x, Σ::ControlAffineSystem, cbfs::Vector{ControlBarrierFunction}, kd::Function
+    x, Σ::ControlAffineSystem, cbfs::Vector{<:ControlBarrierFunction}, kd::Function
 )
     model = Model(OSQP.Optimizer)
     set_silent(model)
@@ -78,12 +78,12 @@ function solve_tunable_cbf_qp(
 end
 
 """
-    solve_time_varying_tunable_cbf_qp(x, t, Σ::ControlAffineSystem, cbfs::Vector{ControlBarrierFunction}, kd::Function)
+    solve_time_varying_tunable_cbf_qp(x, t, Σ::ControlAffineSystem, cbfs::Vector{<:ControlBarrierFunction}, kd::Function)
 
 Solve CBF-QP where coefficients on extended class K functions are decision variables and desired controller depends on time
 """
 function solve_time_varying_tunable_cbf_qp(
-    x, t, Σ::ControlAffineSystem, cbfs::Vector{ControlBarrierFunction}, kd::Function
+    x, t, Σ::ControlAffineSystem, cbfs::Vector{<:ControlBarrierFunction}, kd::Function
 )
     model = Model(OSQP.Optimizer)
     set_silent(model)

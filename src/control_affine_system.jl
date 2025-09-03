@@ -10,12 +10,12 @@ Control affine system described by the dynamics ``ẋ = f(x) + g(x)u`` where ``x
 - `f::Function` : drift dynamics
 - `g::Function` : control directions
 """
-struct ControlAffineSystem
+struct ControlAffineSystem{F,G}
     name::String
     n::Int
     m::Int
-    f::Function
-    g::Function
+    f::F
+    g::G
 end
 
 """

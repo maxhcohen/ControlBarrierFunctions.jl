@@ -6,8 +6,8 @@ Controller that uses the closed-form solution to a control barrier function quad
 # Fields
 - `k::Function` : function that computes safe control actions
 """
-struct ExplicitSafetyFilter <: SafetyFilter
-    k::Function
+struct ExplicitSafetyFilter{T} <: SafetyFilter
+    k::T
 end
 
 """
@@ -15,8 +15,7 @@ end
 
 Functors for evaluating explicit safety filter
 """
-(k::ExplicitSafetyFilter)(x) = k.k(x)
-(k::ExplicitSafetyFilter)(x, t) = k.k(x, t)
+(k::ExplicitSafetyFilter)(args...) = k.k(args...)
 
 """
     ExplicitSafetyFilter(cbf::ControlBarrierFunction, Σ::ControlAffineSystem, kd::Function)
@@ -26,23 +25,14 @@ Construct an ExplicitSafetyFilter from a cbf and a desired controller.
 function ExplicitSafetyFilter(
     cbf::ControlBarrierFunction, Σ::ControlAffineSystem, kd::Function
 )
-    try
-        kd(Σ.n == 1 ? rand() : rand(Σ.n), 0.0)
-    catch e
-        if isa(e, MethodError)
-            a(x) = cbf.Lfh(x) + cbf.Lgh(x) * kd(x) + cbf.α(cbf(x))
-            k(x) = kd(x) + λQP(a(x), norm(cbf.Lgh(x))^2) * cbf.Lgh(x)'
-
-            return ExplicitSafetyFilter(k)
-        else
-            return e
-        end
-    else
-        a(x, t) = cbf.Lfh(x) + cbf.Lgh(x) * kd(x, t) + cbf.α(cbf(x))
-        k(x, t) = kd(x, t) + λQP(a(x, t), norm(cbf.Lgh(x))^2) * cbf.Lgh(x)'
-
-        return ExplicitSafetyFilter(k)
+    function k(x, args...)
+        Lgh = cbf.Lgh(x)
+        Lfh = cbf.Lfh(x)
+        kdx = kd(x, args...)
+        a = Lfh + Lgh * kdx + cbf.α(cbf(x))
+        kdx + λQP(a, norm(Lgh)^2) * Lgh'
     end
+    ExplicitSafetyFilter{typeof(k)}(k)
 end
 
 """

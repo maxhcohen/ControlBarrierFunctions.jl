@@ -10,12 +10,12 @@ Control barrier function (CBF) defining a safe set as its zero superlevel set.
 - `Lfh::Function` : Lie derivative of CBF along drift vector field `f`
 - `Lgh::Function` : Lie derivative of CBF along control directions `g`
 """
-struct ControlBarrierFunction
-    h::Function
-    α::Function
-    ∇h::Function
-    Lfh::Function
-    Lgh::Function
+struct ControlBarrierFunction{Th, Tα, T∇h, TLfh, TLgh}
+    h::Th
+    α::Tα
+    ∇h::T∇h
+    Lfh::TLfh
+    Lgh::TLgh
 end
 
 """
@@ -44,4 +44,4 @@ end
 If no extended class K function provided, default to the identify function.
 """
 ControlBarrierFunction(h::Function, Σ::ControlAffineSystem) =
-    ControlBarrierFunction(h, Σ, r -> r)
+    ControlBarrierFunction(h, Σ, identity)
